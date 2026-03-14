@@ -1,5 +1,6 @@
-   {
-     "rewrites": [
-       { "source": "/(.*)", "destination": "/main.jsx" }
-     ]
-   }
+{
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
