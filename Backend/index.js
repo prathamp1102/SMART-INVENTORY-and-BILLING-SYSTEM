@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const https = require("https");
 const connectDB = require("./config/db");
 require("dotenv").config();
 
@@ -10,6 +11,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:4173",
   "https://evara-inventory.vercel.app",
+  "https://smart-inventory-and-billing-system.vercel.app",
   process.env.FRONTEND_URL,
 ].filter(Boolean);
 
@@ -75,4 +77,15 @@ app.use("/api/superadmin",       require("./routes/superAdminRoutes"));
 
 // Start Server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+
+  // Keep-alive ping every 14 minutes to prevent Render free tier hibernation
+  setInterval(() => {
+    https.get("https://smart-inventory-and-billing-system-qugm.onrender.com", (res) => {
+      console.log(`Keep-alive ping: ${res.statusCode}`);
+    }).on("error", (err) => {
+      console.error("Keep-alive ping failed:", err.message);
+    });
+  }, 14 * 60 * 1000); // 14 minutes
+});
