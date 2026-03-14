@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,700&family=Figtree:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Figtree', sans-serif;
+  background: #f5f3ee;
+  color: #1a1a2e;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden; /* Prevent body scroll — inner .page-main scrolls */
+}
+
+/* ── Main content area scrolls, not the body ─────────────────── */
+.page-main {
+  overflow-y: auto;
+  height: calc(100vh - 64px); /* subtract header height */
+}
+
+/* ── Mobile viewport height fix ─────────────────────────────────── */
+@media (max-width: 767px) {
+  body { overflow: auto; }
+  /* Prevent horizontal overflow on mobile */
+  * { max-width: 100%; box-sizing: border-box; }
+  img, table { max-width: 100%; }
+  /* Ensure inputs don't overflow on mobile */
+  input, select, textarea { max-width: 100% !important; min-width: 0 !important; }
+}
+
+@keyframes spin     { to { transform: rotate(360deg); } }
+@keyframes fadeUp   { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes popIn    { from { opacity: 0; transform: scale(.88) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes blobFloat { 0%,100%{transform:translate(0,0) scale(1);} 33%{transform:translate(20px,-18px) scale(1.04);} 66%{transform:translate(-14px,12px) scale(.97);} }
+@keyframes checkPop { 0%{transform:scale(0);} 70%{transform:scale(1.18);} 100%{transform:scale(1);} }
+@keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+input::placeholder { color: transparent; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.18); }
+
+a { text-decoration: none; }
+
+/* ── Responsive utilities ─────────────────────────────────────── */
+
+/* Sidebar overlay for mobile */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 46, 0.45);
+  z-index: 200;
+  animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Table wrapper — horizontal scroll on small screens */
+.table-scroll-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide/show helpers */
+.hide-mobile  { }
+.show-mobile  { display: none !important; }
+
+/* Responsive grid helpers */
+.grid-auto-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.grid-auto-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+.grid-3-2 {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .grid-auto-2  { grid-template-columns: 1fr !important; }
+  .grid-auto-3  { grid-template-columns: 1fr 1fr !important; }
+  .grid-3-2     { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 600px) {
+  .grid-auto-2  { grid-template-columns: 1fr !important; }
+  .grid-auto-3  { grid-template-columns: 1fr !important; }
+  .grid-3-2     { grid-template-columns: 1fr !important; }
+  .hide-mobile  { display: none !important; }
+  .show-mobile  { display: flex !important; }
+  .sidebar-overlay { display: block; }
+}
+
+@media (max-width: 768px) {
+  .sidebar-overlay { display: block; }
+}
