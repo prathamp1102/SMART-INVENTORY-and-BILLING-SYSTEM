@@ -54,19 +54,6 @@ export default function AuthLayout() {
       {/* ── Dot grid ── */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none", backgroundImage: "radial-gradient(circle, rgba(0,0,0,.06) 1px, transparent 1px)", backgroundSize: "28px 28px", WebkitMaskImage: "radial-gradient(ellipse 85% 85% at 50% 50%, black, transparent)", maskImage: "radial-gradient(ellipse 85% 85% at 50% 50%, black, transparent)" }} />
 
-      {/* ── Logo ── */}
-      <div style={{ position: "absolute", top: "28px", left: "50%", transform: "translateX(-50%)", zIndex: 30, display: "flex", alignItems: "center", gap: "12px", animation: "fadeDown .5s ease .1s both" }}>
-        <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "linear-gradient(135deg,#1a1a2e,#2d2d44)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 12px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06)" }}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" width="18" height="18">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3M9 11.25v1.5M12 9v3.75m3-6.75v6.75" />
-          </svg>
-        </div>
-        <div>
-          <div style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a2e" }}>EVARA</div>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "8.5px", color: "rgba(26,26,46,.38)", letterSpacing: ".18em", textTransform: "uppercase", marginTop: "2px" }}>Access Portal</div>
-        </div>
-      </div>
-
       {/* ── Page content (Login / ForgotPassword / ChangePassword) ── */}
       <div style={{ position: "relative", zIndex: 10, width: "100%", display: "flex", justifyContent: "center" }}>
         <Outlet context={{ selectedRole, setSelectedRole }} />
