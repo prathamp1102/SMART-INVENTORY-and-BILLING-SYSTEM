@@ -2,16 +2,15 @@ const nodemailer = require("nodemailer");
 const { generateInvoicePdf } = require("./generateInvoicePdf");
 const { generateReturnReceiptPdf } = require("./generateReturnReceiptPdf");
 
-// ── Create transporter lazily so missing env vars are caught at send-time, not startup
+// ── Create transporter — port 465 + secure:true works on Render free tier
 const getTransporter = () =>
   nodemailer.createTransport({
-    host:   process.env.SMTP_HOST || "smtp.gmail.com",
-    port:   parseInt(process.env.SMTP_PORT) || 587,
-    secure: (process.env.SMTP_PORT === "465"), // true only for port 465
-    requireTLS: true,
-    family: 4, // ✅ Force IPv4 — Render free tier blocks IPv6
+    host:   "smtp.gmail.com",
+    port:   465,
+    secure: true, // SSL from the start — required for port 465
+    family: 4,    // Force IPv4 — Render free tier blocks IPv6
     tls: {
-      rejectUnauthorized: false, // allow self-signed certs in dev
+      rejectUnauthorized: false,
     },
     auth: {
       user: process.env.SMTP_USER,
@@ -75,7 +74,7 @@ const sendInvoiceEmail = async (to, invoice) => {
     throw new Error("SMTP_USER and SMTP_PASS must be set in .env to send invoice emails.");
   }
 
-  const pdfBuffer = await generateInvoicePdf(invoice);
+  const pdfBuffer   = await generateInvoicePdf(invoice);
   const pdfFilename = `Invoice_${invoice.invoiceNo || "receipt"}.pdf`;
 
   const grandTotal = new Intl.NumberFormat("en-IN", {
@@ -94,17 +93,27 @@ const sendInvoiceEmail = async (to, invoice) => {
     <head><meta charset="utf-8"/></head>
     <body style="margin:0;padding:0;background:#f0ece4;font-family:Arial,sans-serif;">
       <div style="max-width:560px;margin:36px auto;background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 2px 16px rgba(45,36,22,.10);">
+
+        <!-- Header -->
         <div style="background:#2d2416;padding:32px 40px;">
           <div style="font-size:22px;font-weight:800;color:#f5f0e8;letter-spacing:-.3px;">${orgName}</div>
           ${orgGst ? `<div style="font-size:11px;color:rgba(245,240,232,.45);margin-top:4px;">GST: ${orgGst}</div>` : ""}
         </div>
+
+        <!-- Body -->
         <div style="padding:32px 40px;">
-          <p style="font-size:15px;font-weight:700;color:#2d2416;margin:0 0 8px;">Hi ${invoice.customerName || "Valued Customer"},</p>
+          <p style="font-size:15px;font-weight:700;color:#2d2416;margin:0 0 8px;">
+            Hi ${invoice.customerName || "Valued Customer"},
+          </p>
           <p style="font-size:13px;color:#5c4e3a;line-height:1.7;margin:0 0 20px;">
             Thank you for your purchase! Your invoice <strong>${invoice.invoiceNo || ""}</strong>
             dated <strong>${issueDate}</strong> for <strong>${grandTotal}</strong> is ready.
           </p>
-          <p style="font-size:13px;color:#5c4e3a;line-height:1.7;margin:0 0 24px;">Please find your invoice attached as a PDF.</p>
+          <p style="font-size:13px;color:#5c4e3a;line-height:1.7;margin:0 0 24px;">
+            Please find your invoice attached as a PDF. You can save or print it for your records.
+          </p>
+
+          <!-- Summary box -->
           <div style="background:#f7f4ef;border-radius:8px;padding:18px 22px;margin-bottom:24px;">
             <table width="100%" cellpadding="0" cellspacing="0">
               <tr>
@@ -115,11 +124,26 @@ const sendInvoiceEmail = async (to, invoice) => {
                 <td style="font-size:16px;font-weight:700;color:#2d2416;">${invoice.invoiceNo || "—"}</td>
                 <td style="font-size:16px;font-weight:700;color:#2d2416;text-align:right;">${grandTotal}</td>
               </tr>
+              <tr>
+                <td style="font-size:12px;color:#9e8c77;padding-top:6px;">Payment: ${invoice.paymentMode || "—"}</td>
+                <td style="font-size:12px;color:#9e8c77;text-align:right;padding-top:6px;">Status:
+                  <span style="font-weight:700;color:${invoice.status === "PAID" ? "#16a34a" : invoice.status === "PENDING" ? "#ca8a04" : "#dc2626"};">
+                    ${invoice.status || "PAID"}
+                  </span>
+                </td>
+              </tr>
             </table>
           </div>
+
+          <p style="font-size:12px;color:#9e8c77;font-style:italic;margin:0;">
+            ${invoice.notes || "Thank you for your business!"}
+          </p>
         </div>
+
+        <!-- Footer -->
         <div style="background:#f7f4ef;border-top:1px solid #e8e0d4;padding:16px 40px;font-size:11px;color:#b0a090;text-align:center;">
-          This is a computer-generated email. Please do not reply.
+          This is a computer-generated email. Please do not reply to this email.
+          ${orgGst ? " · GST No: " + orgGst : ""}
         </div>
       </div>
     </body>
@@ -132,58 +156,319 @@ const sendInvoiceEmail = async (to, invoice) => {
     to,
     subject: `Your Invoice ${invoice.invoiceNo || ""} from ${orgName}`,
     html,
-    attachments: [{ filename: pdfFilename, content: pdfBuffer, contentType: "application/pdf" }],
+    attachments: [
+      { filename: pdfFilename, content: pdfBuffer, contentType: "application/pdf" },
+    ],
   });
 };
 
-// ─── Return Receipt Email ─────────────────────────────────────────────────────
+// ─── Return Receipt Email (with PDF attachment) ───────────────────────────────
 const sendReturnReceiptEmail = async (to, ret) => {
   const orgName = ret.branch?.organization?.name || "EVARA";
+  const orgGst  = ret.branch?.organization?.gstNumber || "";
+
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
     throw new Error("SMTP_USER and SMTP_PASS must be set in .env to send return receipt emails.");
   }
-  const pdfBuffer  = await generateReturnReceiptPdf(ret);
+
+  const pdfBuffer   = await generateReturnReceiptPdf(ret);
   const pdfFilename = `Return_Receipt_${ret.returnNo || "receipt"}.pdf`;
+
+  const refundTotal = new Intl.NumberFormat("en-IN", {
+    style: "currency", currency: "INR", minimumFractionDigits: 2,
+  }).format(ret.returnAmount ?? 0);
+
+  const returnDate = ret.createdAt
+    ? new Date(ret.createdAt).toLocaleDateString("en-IN", {
+        day: "2-digit", month: "short", year: "numeric",
+      })
+    : "";
+
+  const STATUS_COLOR_HEX = {
+    PENDING:   "#b45309",
+    APPROVED:  "#059669",
+    COMPLETED: "#0284c7",
+    REJECTED:  "#dc2626",
+  };
+  const STATUS_LABEL = {
+    PENDING:   "Pending Review",
+    APPROVED:  "Approved",
+    COMPLETED: "Refund Issued",
+    REJECTED:  "Rejected",
+  };
+
+  const statusColor = STATUS_COLOR_HEX[ret.status] || "#b45309";
+  const statusLabel = STATUS_LABEL[ret.status]      || ret.status;
+
+  const REFUND_METHOD_LABELS = {
+    CASH:         "Cash Refund",
+    CARD:         "Card Refund",
+    UPI:          "UPI / Bank Transfer",
+    STORE_CREDIT: "Store Credit",
+    OTHER:        "Other",
+  };
+
+  const itemRows = (ret.items || []).map(item => `
+    <tr>
+      <td style="padding:8px 0;font-size:13px;color:#2d2416;border-bottom:1px solid #f0ece4;">${item.productName}</td>
+      <td style="padding:8px 0;font-size:13px;color:#5c4e3a;text-align:center;border-bottom:1px solid #f0ece4;">${item.qty}</td>
+      <td style="padding:8px 0;font-size:13px;color:#5c4e3a;text-align:right;border-bottom:1px solid #f0ece4;">
+        ₹${Number(item.unitPrice ?? 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+      </td>
+      <td style="padding:8px 0;font-size:13px;font-weight:700;color:#2d2416;text-align:right;border-bottom:1px solid #f0ece4;">
+        ₹${Number(item.total ?? 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+      </td>
+    </tr>
+  `).join("");
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="utf-8"/></head>
+    <body style="margin:0;padding:0;background:#f0ece4;font-family:Arial,sans-serif;">
+      <div style="max-width:580px;margin:36px auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 16px rgba(45,36,22,.10);">
+        <div style="background:#2d2416;padding:32px 40px;">
+          <div style="font-size:22px;font-weight:800;color:#f5f0e8;letter-spacing:-.3px;">${orgName}</div>
+          ${orgGst ? `<div style="font-size:11px;color:rgba(245,240,232,.45);margin-top:4px;">GST: ${orgGst}</div>` : ""}
+          <div style="margin-top:16px;display:inline-block;background:${statusColor};border-radius:20px;padding:4px 14px;">
+            <span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:.05em;">${statusLabel.toUpperCase()}</span>
+          </div>
+        </div>
+        <div style="padding:32px 40px;">
+          <p style="font-size:15px;font-weight:700;color:#2d2416;margin:0 0 6px;">
+            Hi ${ret.customerName || "Valued Customer"},
+          </p>
+          <p style="font-size:13px;color:#5c4e3a;line-height:1.7;margin:0 0 24px;">
+            Your return request <strong>${ret.returnNo}</strong> dated <strong>${returnDate}</strong>
+            has been received and is currently <strong style="color:${statusColor};">${statusLabel}</strong>.
+            Your return receipt is attached as a PDF for your records.
+          </p>
+          <div style="background:#f7f4ef;border-radius:8px;padding:20px 24px;margin-bottom:24px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
+              <tr>
+                <td style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9e8c77;padding-bottom:8px;">Return #</td>
+                <td style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9e8c77;text-align:right;padding-bottom:8px;">Refund Amount</td>
+              </tr>
+              <tr>
+                <td style="font-size:18px;font-weight:700;color:#2d2416;">${ret.returnNo}</td>
+                <td style="font-size:18px;font-weight:700;color:#059669;text-align:right;">${refundTotal}</td>
+              </tr>
+              <tr>
+                <td style="font-size:12px;color:#9e8c77;padding-top:6px;">
+                  ${ret.invoiceNo ? `Invoice: ${ret.invoiceNo}` : "No invoice reference"}
+                </td>
+                <td style="font-size:12px;color:#9e8c77;text-align:right;padding-top:6px;">
+                  Via: ${REFUND_METHOD_LABELS[ret.refundMethod] || ret.refundMethod || "—"}
+                </td>
+              </tr>
+            </table>
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <th style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9e8c77;text-align:left;padding-bottom:6px;">Item</th>
+                <th style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9e8c77;text-align:center;padding-bottom:6px;">Qty</th>
+                <th style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9e8c77;text-align:right;padding-bottom:6px;">Unit Price</th>
+                <th style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9e8c77;text-align:right;padding-bottom:6px;">Total</th>
+              </tr>
+              ${itemRows}
+              <tr>
+                <td colspan="3" style="padding-top:10px;font-size:13px;font-weight:700;color:#2d2416;">Total Refund</td>
+                <td style="padding-top:10px;font-size:15px;font-weight:800;color:#059669;text-align:right;">${refundTotal}</td>
+              </tr>
+            </table>
+          </div>
+          ${ret.reason ? `
+          <div style="background:#fef9f0;border-left:3px solid #b45309;border-radius:4px;padding:12px 16px;margin-bottom:20px;">
+            <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#b45309;margin-bottom:4px;">Return Reason</div>
+            <div style="font-size:13px;color:#5c4e3a;">${ret.reason}</div>
+          </div>` : ""}
+          ${ret.notes ? `
+          <p style="font-size:12px;color:#9e8c77;font-style:italic;margin:0 0 20px;">Notes: ${ret.notes}</p>` : ""}
+          <p style="font-size:13px;color:#5c4e3a;line-height:1.7;margin:0;">
+            Please find your return receipt attached as a PDF. If you have any questions, feel free to contact us.
+          </p>
+        </div>
+        <div style="background:#f7f4ef;border-top:1px solid #e8e0d4;padding:16px 40px;font-size:11px;color:#b0a090;text-align:center;">
+          This is a computer-generated email. Please do not reply to this email.
+          ${orgGst ? " · GST No: " + orgGst : ""}
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
   const transporter = getTransporter();
   await transporter.sendMail({
     from:    `"${orgName}" <${process.env.SMTP_USER}>`,
     to,
     subject: `Return Receipt ${ret.returnNo} from ${orgName}`,
-    html: `<p>Your return receipt is attached.</p>`,
-    attachments: [{ filename: pdfFilename, content: pdfBuffer, contentType: "application/pdf" }],
+    html,
+    attachments: [
+      { filename: pdfFilename, content: pdfBuffer, contentType: "application/pdf" },
+    ],
   });
 };
 
-// ─── Return Status Email ──────────────────────────────────────────────────────
+// ─── Return Approved / Rejected Email ────────────────────────────────────────
 const sendReturnStatusEmail = async (to, ret) => {
   const orgName = ret.branch?.organization?.name || "EVARA";
+  const orgGst  = ret.branch?.organization?.gstNumber || "";
+
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
     throw new Error("SMTP_USER and SMTP_PASS must be set in .env to send emails.");
   }
-  const statusLabel = ret.status === "APPROVED" ? "Approved" : "Rejected";
+
+  const isApproved = ret.status === "APPROVED";
+  const isRejected = ret.status === "REJECTED";
+
+  const STATUS_COLOR_HEX = { APPROVED: "#059669", REJECTED: "#dc2626" };
+  const statusColor = STATUS_COLOR_HEX[ret.status] || "#b45309";
+  const statusLabel = isApproved ? "Approved" : "Rejected";
+  const statusIcon  = isApproved ? "✅" : "❌";
+
+  const refundTotal = new Intl.NumberFormat("en-IN", {
+    style: "currency", currency: "INR", minimumFractionDigits: 2,
+  }).format(ret.returnAmount ?? 0);
+
+  const REFUND_METHOD_LABELS = {
+    CASH: "Cash Refund", CARD: "Card Refund",
+    UPI: "UPI / Bank Transfer", STORE_CREDIT: "Store Credit", OTHER: "Other",
+  };
+
+  const html = `
+    <!DOCTYPE html><html><head><meta charset="utf-8"/></head>
+    <body style="margin:0;padding:0;background:#f0ece4;font-family:Arial,sans-serif;">
+      <div style="max-width:560px;margin:36px auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 16px rgba(45,36,22,.10);">
+        <div style="background:#2d2416;padding:32px 40px;">
+          <div style="font-size:22px;font-weight:800;color:#f5f0e8;">${orgName}</div>
+          ${orgGst ? `<div style="font-size:11px;color:rgba(245,240,232,.45);margin-top:4px;">GST: ${orgGst}</div>` : ""}
+          <div style="margin-top:16px;display:inline-block;background:${statusColor};border-radius:20px;padding:4px 16px;">
+            <span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:.05em;">${statusLabel.toUpperCase()}</span>
+          </div>
+        </div>
+        <div style="padding:32px 40px;">
+          <p style="font-size:15px;font-weight:700;color:#2d2416;margin:0 0 8px;">Hi ${ret.customerName || "Valued Customer"},</p>
+          <p style="font-size:13px;color:#5c4e3a;line-height:1.7;margin:0 0 24px;">
+            ${statusIcon} Your return request <strong>${ret.returnNo}</strong> has been
+            <strong style="color:${statusColor};">${statusLabel.toLowerCase()}</strong> by our team.
+            ${isRejected ? "If you have any questions, please contact us." : ""}
+          </p>
+          <div style="background:#f7f4ef;border-radius:8px;padding:18px 22px;margin-bottom:24px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9e8c77;padding-bottom:8px;">Return #</td>
+                <td style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9e8c77;text-align:right;padding-bottom:8px;">Refund Amount</td>
+              </tr>
+              <tr>
+                <td style="font-size:16px;font-weight:700;color:#2d2416;">${ret.returnNo}</td>
+                <td style="font-size:16px;font-weight:700;color:${isApproved ? "#059669" : "#9e8c77"};text-align:right;">${isApproved ? refundTotal : "—"}</td>
+              </tr>
+              <tr>
+                <td style="font-size:12px;color:#9e8c77;padding-top:6px;">Reason: ${ret.reason || "—"}</td>
+                <td style="font-size:12px;color:#9e8c77;text-align:right;padding-top:6px;">
+                  ${isApproved ? `Via: ${REFUND_METHOD_LABELS[ret.refundMethod] || ret.refundMethod || "—"}` : ""}
+                </td>
+              </tr>
+            </table>
+          </div>
+          ${isApproved ? `
+          <div style="background:#f0fdf4;border-left:3px solid #059669;border-radius:4px;padding:12px 16px;margin-bottom:20px;">
+            <div style="font-size:12px;color:#059669;font-weight:700;">What happens next?</div>
+            <div style="font-size:13px;color:#5c4e3a;margin-top:4px;line-height:1.6;">
+              Your refund of <strong>${refundTotal}</strong> via <strong>${REFUND_METHOD_LABELS[ret.refundMethod] || ret.refundMethod}</strong>
+              will be processed shortly.
+            </div>
+          </div>` : `
+          <div style="background:#fef2f2;border-left:3px solid #dc2626;border-radius:4px;padding:12px 16px;margin-bottom:20px;">
+            <div style="font-size:12px;color:#dc2626;font-weight:700;">Return Rejected</div>
+            <div style="font-size:13px;color:#5c4e3a;margin-top:4px;line-height:1.6;">
+              Unfortunately your return request could not be approved.
+              ${ret.notes ? `<br/>Note: ${ret.notes}` : ""}
+            </div>
+          </div>`}
+          <p style="font-size:12px;color:#9e8c77;margin:0;">Please keep this email for your records.</p>
+        </div>
+        <div style="background:#f7f4ef;border-top:1px solid #e8e0d4;padding:16px 40px;font-size:11px;color:#b0a090;text-align:center;">
+          This is a computer-generated email. Please do not reply.
+          ${orgGst ? " · GST No: " + orgGst : ""}
+        </div>
+      </div>
+    </body></html>
+  `;
+
   await getTransporter().sendMail({
     from:    `"${orgName}" <${process.env.SMTP_USER}>`,
     to,
     subject: `Return ${ret.returnNo} — ${statusLabel} | ${orgName}`,
-    html: `<p>Your return request <strong>${ret.returnNo}</strong> has been <strong>${statusLabel.toLowerCase()}</strong>.</p>`,
+    html,
   });
 };
 
 // ─── Refund Payment Sent Email ────────────────────────────────────────────────
 const sendRefundPaymentEmail = async (to, ret) => {
   const orgName = ret.branch?.organization?.name || "EVARA";
+  const orgGst  = ret.branch?.organization?.gstNumber || "";
+
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
     throw new Error("SMTP_USER and SMTP_PASS must be set in .env to send emails.");
   }
+
+  const ONLINE_METHODS = ["UPI", "CARD"];
+  const isOnline = ONLINE_METHODS.includes(ret.refundMethod);
+
+  const REFUND_METHOD_LABELS = {
+    CASH: "Cash Refund", CARD: "Card Refund",
+    UPI: "UPI / Bank Transfer", STORE_CREDIT: "Store Credit", OTHER: "Other",
+  };
+
+  const refundTotal = new Intl.NumberFormat("en-IN", {
+    style: "currency", currency: "INR", minimumFractionDigits: 2,
+  }).format(ret.returnAmount ?? 0);
+
   const pdfBuffer   = await generateReturnReceiptPdf(ret);
   const pdfFilename = `Return_Receipt_${ret.returnNo || "receipt"}.pdf`;
-  const refundTotal = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", minimumFractionDigits: 2 }).format(ret.returnAmount ?? 0);
+
+  const html = `
+    <!DOCTYPE html><html><head><meta charset="utf-8"/></head>
+    <body style="margin:0;padding:0;background:#f0ece4;font-family:Arial,sans-serif;">
+      <div style="max-width:560px;margin:36px auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 16px rgba(45,36,22,.10);">
+        <div style="background:#2d2416;padding:32px 40px;">
+          <div style="font-size:22px;font-weight:800;color:#f5f0e8;">${orgName}</div>
+          ${orgGst ? `<div style="font-size:11px;color:rgba(245,240,232,.45);margin-top:4px;">GST: ${orgGst}</div>` : ""}
+          <div style="margin-top:16px;display:inline-block;background:#059669;border-radius:20px;padding:4px 16px;">
+            <span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:.05em;">💸 REFUND SENT</span>
+          </div>
+        </div>
+        <div style="padding:32px 40px;">
+          <p style="font-size:15px;font-weight:700;color:#2d2416;margin:0 0 8px;">Hi ${ret.customerName || "Valued Customer"},</p>
+          <p style="font-size:13px;color:#5c4e3a;line-height:1.7;margin:0 0 24px;">
+            Your refund of <strong style="color:#059669;">${refundTotal}</strong> for return
+            <strong>${ret.returnNo}</strong> has been
+            ${isOnline ? "<strong>sent to your account</strong>" : "<strong>processed successfully</strong>"}.
+            ${isOnline ? "Please allow 1–3 business days for the amount to reflect in your account." : ""}
+          </p>
+          <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;border-radius:10px;padding:20px 24px;margin-bottom:24px;text-align:center;">
+            <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#059669;margin-bottom:6px;">Refund Amount</div>
+            <div style="font-size:30px;font-weight:800;color:#059669;">${refundTotal}</div>
+            <div style="font-size:13px;color:#16a34a;margin-top:6px;">${REFUND_METHOD_LABELS[ret.refundMethod] || ret.refundMethod}</div>
+          </div>
+          <p style="font-size:12px;color:#9e8c77;margin:0;">Your return receipt is attached. Thank you for your patience.</p>
+        </div>
+        <div style="background:#f7f4ef;border-top:1px solid #e8e0d4;padding:16px 40px;font-size:11px;color:#b0a090;text-align:center;">
+          This is a computer-generated email. Please do not reply.
+          ${orgGst ? " · GST No: " + orgGst : ""}
+        </div>
+      </div>
+    </body></html>
+  `;
+
   await getTransporter().sendMail({
     from:    `"${orgName}" <${process.env.SMTP_USER}>`,
     to,
     subject: `Refund of ${refundTotal} Sent — ${ret.returnNo} | ${orgName}`,
-    html: `<p>Your refund of <strong>${refundTotal}</strong> has been processed.</p>`,
-    attachments: [{ filename: pdfFilename, content: pdfBuffer, contentType: "application/pdf" }],
+    html,
+    attachments: [
+      { filename: pdfFilename, content: pdfBuffer, contentType: "application/pdf" },
+    ],
   });
 };
 
@@ -204,21 +489,103 @@ const sendWelcomeEmail = async ({ to, name, password, role, orgName, branchName,
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
     throw new Error("SMTP_USER and SMTP_PASS must be set in .env to send welcome emails.");
   }
-  const roleLabel = role === "SUPER_ADMIN" ? "Super Administrator" : role === "ADMIN" ? "Administrator" : "Staff Member";
+
+  const today = new Date().toLocaleDateString("en-IN", {
+    day: "2-digit", month: "long", year: "numeric",
+  });
+
   const locationLine = branchCity ? `${branchName}, ${branchCity}` : branchName || "—";
+
+  const roleLabel =
+    role === "SUPER_ADMIN" ? "Super Administrator" :
+    role === "ADMIN"       ? "Administrator"        : "Staff Member";
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8" /></head>
+<body style="margin:0;padding:0;background:#f0f2f8;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f2f8;padding:32px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(79,70,229,.10);">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 100%);padding:40px 48px 36px;">
+            <p style="margin:0 0 6px;color:rgba(255,255,255,.75);font-size:13px;letter-spacing:.08em;text-transform:uppercase;">EVARA</p>
+            <h1 style="margin:0;color:#ffffff;font-size:28px;font-weight:800;line-height:1.2;">Welcome Aboard! 🎉</h1>
+            <p style="margin:10px 0 0;color:rgba(255,255,255,.8);font-size:14px;">Your account is ready — let's get started.</p>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:28px 48px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="color:#888;font-size:13px;">Date: <strong style="color:#1a1a2e;">${today}</strong></td>
+              </tr>
+            </table>
+            <p style="margin:20px 0;color:#1a1a2e;font-size:15px;line-height:1.7;">Dear <strong>${name}</strong>,</p>
+            <p style="margin:0 0 20px;color:#444;font-size:14px;line-height:1.8;">
+              We are pleased to welcome you to <strong style="color:#4f46e5;">${orgName || "our organization"}</strong>.
+              Your account has been created and you are now an official member of our team.
+            </p>
+
+            <!-- Assignment -->
+            <p style="margin:0 0 14px;font-size:13px;font-weight:700;color:#4f46e5;letter-spacing:.07em;text-transform:uppercase;">Your Assignment</p>
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f7f6ff;border-radius:14px;border:1.5px solid #e8e6ff;margin-bottom:24px;">
+              <tr><td style="padding:16px 24px;border-bottom:1px solid #e8e6ff;">
+                <p style="margin:0;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:.06em;">🏢 Organization</p>
+                <p style="margin:4px 0 0;font-size:15px;font-weight:700;color:#1a1a2e;">${orgName || "—"}</p>
+              </td></tr>
+              <tr><td style="padding:16px 24px;border-bottom:1px solid #e8e6ff;">
+                <p style="margin:0;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:.06em;">📍 Branch</p>
+                <p style="margin:4px 0 0;font-size:15px;font-weight:700;color:#1a1a2e;">${locationLine}</p>
+              </td></tr>
+              <tr><td style="padding:16px 24px;">
+                <p style="margin:0;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:.06em;">🎭 Role</p>
+                <p style="margin:4px 0 0;font-size:15px;font-weight:700;color:#1a1a2e;">${roleLabel}</p>
+              </td></tr>
+            </table>
+
+            <!-- Credentials -->
+            <p style="margin:0 0 14px;font-size:13px;font-weight:700;color:#4f46e5;letter-spacing:.07em;text-transform:uppercase;">Login Credentials</p>
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1a2e;border-radius:14px;margin-bottom:16px;">
+              <tr><td style="padding:18px 24px;border-bottom:1px solid rgba(255,255,255,.08);">
+                <p style="margin:0;font-size:12px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;">Email Address</p>
+                <p style="margin:4px 0 0;font-size:15px;font-weight:600;color:#a5b4fc;font-family:'Courier New',monospace;">${to}</p>
+              </td></tr>
+              <tr><td style="padding:18px 24px;">
+                <p style="margin:0;font-size:12px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;">Temporary Password</p>
+                <p style="margin:4px 0 0;font-size:20px;font-weight:800;color:#c4b5fd;font-family:'Courier New',monospace;letter-spacing:3px;">${password}</p>
+              </td></tr>
+            </table>
+            <p style="margin:0;font-size:12px;color:#f59e0b;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;">
+              ⚠️ <strong>Security Notice:</strong> Please change your password immediately after your first login.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="background:#f7f6ff;padding:24px 48px;text-align:center;border-top:1px solid #e8e6ff;">
+            <p style="margin:0 0 6px;color:#1a1a2e;font-size:13px;font-weight:600;">EVARA System</p>
+            <p style="margin:0;color:#aaa;font-size:12px;">This is an automated message. Please do not reply to this email.</p>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
   await getTransporter().sendMail({
     from:    `"EVARA" <${process.env.SMTP_USER}>`,
     to,
     subject: `Welcome to ${orgName || "EVARA"} — Your Account Details`,
-    html: `
-      <p>Dear <strong>${name}</strong>,</p>
-      <p>Welcome to <strong>${orgName || "EVARA"}</strong>!</p>
-      <p><strong>Role:</strong> ${roleLabel}</p>
-      <p><strong>Branch:</strong> ${locationLine}</p>
-      <p><strong>Email:</strong> ${to}</p>
-      <p><strong>Temporary Password:</strong> ${password}</p>
-      <p>Please change your password after first login.</p>
-    `,
+    html,
   });
 };
 
