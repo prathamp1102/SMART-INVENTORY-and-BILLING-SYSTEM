@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background rounded square -->
+  <rect width="32" height="32" rx="8" fill="#1a1a2e"/>
+  <!-- Green accent top-right dot -->
+  <circle cx="25" cy="7" r="3" fill="#059669"/>
+  <!-- Bold geometric E mark in white -->
+  <rect x="8" y="8" width="4" height="16" rx="1" fill="#ffffff"/>
+  <rect x="12" y="8" width="9" height="3.5" rx="1" fill="#ffffff"/>
+  <rect x="12" y="14.25" width="7" height="3.5" rx="1" fill="#ffffff"/>
+  <rect x="12" y="20.5" width="9" height="3.5" rx="1" fill="#ffffff"/>
+</svg>
