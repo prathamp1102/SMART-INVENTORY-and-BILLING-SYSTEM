@@ -38,7 +38,7 @@ function CategoryRow({c,onDelete,showOrgBranch}){
         </div>
         <div>
           <div style={{fontSize:"13.5px",fontWeight:700,color:"#1a1a2e"}}>{c.name}</div>
-          {c.description&&<div style={{fontSize:"11px",color:"rgba(26,26,46,.38)",marginTop:"2px",maxWidth:"180px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c.description}</div>}
+          {c.description&&<div style={{fontSize:"11px",color:"rgba(26,26,46,.38)",marginTop:"2px",maxWidth: "min(180px, 100%)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c.description}</div>}
         </div>
       </div>
     </td>

@@ -104,7 +104,7 @@ export default function GRN() {
           {success && <div style={{ padding: "12px 16px", borderRadius: "12px", background: "rgba(5,150,105,.08)", border: "1px solid rgba(5,150,105,.2)", color: "#059669", fontSize: "13px", fontWeight: 600, marginBottom: "16px" }}>✓ {success}</div>}
           <FormError message={apiError} />
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: "16px", marginBottom: "16px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(280px,100%), 1fr))", gap: "16px", marginBottom: "16px" }}>
             <Card>
               <div style={{ fontFamily: "'Fraunces',serif", fontSize: "15px", fontWeight: 800, color: "#1a1a2e", marginBottom: "16px" }}>GRN Details</div>
               <FieldLabel>Supplier *</FieldLabel>
@@ -147,13 +147,13 @@ export default function GRN() {
               </button>
             </div>
             {errors.items && <div style={{ color: "#dc2626", fontSize: "11px", fontFamily: "'DM Mono',monospace", marginBottom: "10px" }}>{errors.items}</div>}
-            <div style={{ display: "grid", gridTemplateColumns: "minmax(120px,3fr) minmax(80px,1fr) minmax(80px,1fr) auto", gap: "10px", marginBottom: "8px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(120px,3fr) minmax(min(80px,100%), 1fr) minmax(min(80px,100%), 1fr) auto", gap: "10px", marginBottom: "8px" }}>
               {["Product", "Quantity", "Cost Price (₹)", ""].map(h => (
                 <div key={h} style={{ fontFamily: "'DM Mono',monospace", fontSize: "9px", color: "rgba(26,26,46,.35)", letterSpacing: ".14em", textTransform: "uppercase" }}>{h}</div>
               ))}
             </div>
             {items.map((it, i) => (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "minmax(120px,3fr) minmax(80px,1fr) minmax(80px,1fr) auto", gap: "10px", marginBottom: "8px" }}>
+              <div key={i} style={{ display: "grid", gridTemplateColumns: "minmax(120px,3fr) minmax(min(80px,100%), 1fr) minmax(min(80px,100%), 1fr) auto", gap: "10px", marginBottom: "8px" }}>
                 <select value={it.product} onChange={e => setItem(i, "product", e.target.value)} style={{ ...SS, marginBottom: 0 }}>
                   <option value="">— Select Product —</option>
                   {products.map(p => <option key={p._id} value={p._id}>{p.name}</option>)}

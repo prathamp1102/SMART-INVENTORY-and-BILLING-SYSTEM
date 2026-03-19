@@ -90,7 +90,7 @@ function PrintReceipt({ ret, onClose }) {
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(26,26,46,.55)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }} onClick={onClose}>
-      <div style={{ background: "#fff", borderRadius: "20px", padding: "28px", maxWidth: "400px", width: "100%", boxShadow: "0 24px 80px rgba(26,26,46,.2)" }} onClick={e => e.stopPropagation()}>
+      <div style={{ background: "#fff", borderRadius: "20px", padding: "28px", maxWidth: "min(400px, 100%)", width: "100%", boxShadow: "0 24px 80px rgba(26,26,46,.2)" }} onClick={e => e.stopPropagation()}>
         <div style={{ fontSize: "17px", fontWeight: 800, color: "#1a1a2e", marginBottom: "18px", display: "flex", alignItems: "center", gap: "10px" }}>
           🧾 Return Receipt
           <span style={{ marginLeft: "auto", fontSize: "11px", color: "rgba(26,26,46,.4)", fontFamily: "'DM Mono',monospace" }}>{ret.returnNo}</span>
@@ -266,7 +266,7 @@ export default function MyReturns() {
       </div>
 
       {/* Stats */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: "12px", marginBottom: "22px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(140px, 100%), 1fr))", gap: "12px", marginBottom: "22px" }}>
         {stats.map(s => (
           <div key={s.label} style={{ background: "#fff", borderRadius: "16px", border: `1px solid ${s.border}`, padding: "16px 18px", boxShadow: "0 2px 10px rgba(26,26,46,.04)" }}>
             <div style={{ fontSize: "24px", fontWeight: 900, color: s.color, fontFamily: "'Fraunces',serif" }}>{s.value}</div>
@@ -403,7 +403,7 @@ export default function MyReturns() {
 
       {/* ─── NEW RETURN TAB ─── */}
       {tab === "new" && (
-        <div style={{ maxWidth: "640px" }}>
+        <div style={{ maxWidth: "min(640px, 100%)" }}>
           {success && (
             <div style={{ padding: "14px 18px", borderRadius: "12px", background: GL, border: `1px solid ${GB}`, color: G, fontSize: "13px", fontWeight: 600, marginBottom: "18px", display: "flex", alignItems: "flex-start", gap: "10px" }}>
               <span style={{ fontSize: "18px" }}>✅</span>

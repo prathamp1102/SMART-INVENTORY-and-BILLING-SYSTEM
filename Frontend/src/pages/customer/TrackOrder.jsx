@@ -62,7 +62,7 @@ export default function TrackOrder() {
   const isCancelled = order && ((order.status || order.paymentStatus || "").toUpperCase() === "CANCELLED");
 
   return (
-    <div style={{ maxWidth: "640px", margin: "0 auto", animation: "fadeUp .4s ease both" }}>
+    <div style={{ maxWidth: "min(640px, 100%)", margin: "0 auto", animation: "fadeUp .4s ease both" }}>
       <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}`}</style>
 
       <div style={{ marginBottom: "32px" }}>

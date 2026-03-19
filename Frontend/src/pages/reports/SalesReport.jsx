@@ -96,7 +96,7 @@ export default function SalesReport(){
       </div>
 
       {/* KPI cards */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:"10px",marginBottom:"18px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(140px, 100%), 1fr))",gap:"10px",marginBottom:"18px"}}>
         <KpiCard label="Total Revenue"   value={`₹${fmtK(kpis.totalRevenue)}`}  sub={`₹${fmt(kpis.totalRevenue)}`}  color={B}  bg={BL}  border={BB}/>
         <KpiCard label="Total Invoices"  value={kpis.totalInvoices||0}                                               color={"#059669"} bg={PL} border={PB}/>
         <KpiCard label="Avg Invoice"     value={`₹${fmtK(kpis.avgInvoice)}`}     sub={`₹${fmt(kpis.avgInvoice)}`}   color={V}  bg={VL}  border={VB}/>

@@ -374,7 +374,7 @@ export default function SuperAdminDashboard() {
         </div>
 
         {/* ════════════════════════════════════ KPI STRIP */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(170px,1fr))", gap: 12, marginBottom: 18 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(170px,100%), 1fr))", gap: 12, marginBottom: 18 }}>
           <MetricCard loading={loading} delay=".0s"
             icon="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0"
             label="Total Users" value={fmtNum(k.totalUsers)} sub={`${k.activeUsers ?? "—"} active`}
@@ -431,7 +431,7 @@ export default function SuperAdminDashboard() {
 
         {/* ════════════════════════════════════ TAB: OVERVIEW */}
         {activeTab === "overview" && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(300px,100%), 1fr))", gap: 16 }}>
 
             {/* Quick Actions */}
             <Card title="Quick Actions" icon="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75" iconColor={C.purple}
@@ -574,7 +574,7 @@ export default function SuperAdminDashboard() {
 
         {/* ════════════════════════════════════ TAB: ALERTS */}
         {activeTab === "alerts" && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(300px,100%), 1fr))", gap: 16 }}>
             <Card title="Inventory Alerts" icon="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126z" iconColor={C.red}
               right={<button onClick={() => navigate("/system-monitoring")} style={{ padding: "4px 12px", borderRadius: 8, border: `1.5px solid ${C.redB}`, background: C.redL, color: C.red, fontSize: 11.5, fontWeight: 700, cursor: "pointer" }}>View All →</button>}
             >

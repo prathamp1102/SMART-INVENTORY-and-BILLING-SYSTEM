@@ -174,7 +174,8 @@ function NotificationBell({ role }) {
 
       {/* ── Dropdown panel ── */}
       {open && (
-        <div style={{
+        <div className="notif-dropdown"
+          style={{
           position: "absolute",
           top: "calc(100% + 10px)",
           right: 0,
@@ -402,47 +403,6 @@ export default function Header({ onMenuClick }) {
   const showBell = user.role === "ADMIN" || user.role === "SUPER_ADMIN" || user.role === "STAFF";
 
   return (
-    <>
-      <style>{`
-        .app-header {
-          height: 62px;
-          flex-shrink: 0;
-          border-bottom: 1px solid rgba(26,26,46,.08);
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 0 28px;
-          background: #fff;
-          box-shadow: 0 1px 8px rgba(26,26,46,.05);
-          gap: 12px;
-        }
-        .hamburger-btn {
-          display: none;
-          width: 36px; height: 36px;
-          border-radius: 9px;
-          border: 1px solid rgba(26,26,46,.12);
-          background: transparent;
-          cursor: pointer;
-          align-items: center;
-          justify-content: center;
-          color: rgba(26,26,46,.6);
-          flex-shrink: 0;
-        }
-        .header-workspace {
-          font-family: 'DM Mono', monospace;
-          font-size: 9px;
-          color: rgba(26,26,46,.32);
-          letter-spacing: .14em;
-          text-transform: uppercase;
-          margin-top: 1px;
-        }
-        @media (max-width: 767px) {
-          .hamburger-btn { display: flex !important; }
-          .app-header { padding: 0 16px; }
-          .header-workspace { display: none; }
-        }
-      `}</style>
-
       <header className="app-header">
         {/* Left — hamburger + page title */}
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -476,6 +436,5 @@ export default function Header({ onMenuClick }) {
           {showBell && <NotificationBell role={user.role} />}
         </div>
       </header>
-    </>
   );
 }

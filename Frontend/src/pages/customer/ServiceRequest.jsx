@@ -1,3 +1,4 @@
+import { validateRequired, validatePhone, validateMinLength } from "../../utils/validators";
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axiosInstance from "../../services/axiosInstance";
@@ -98,10 +99,13 @@ export default function ServiceRequest() {
 
   const handleSubmit = async () => {
     setError("");
-    if (!form.productName.trim())     return setError("Product name is required.");
-    if (!form.issueDescription.trim()) return setError("Please describe the issue.");
-    if (!form.contactName.trim())     return setError("Contact name is required.");
-    if (!form.contactPhone.trim())    return setError("Contact phone is required.");
+    const nameErr    = validateRequired(form.productName, "Product name");
+    const issueErr   = validateMinLength(form.issueDescription, 10, "Issue description");
+    const contactErr = validateRequired(form.contactName, "Contact name");
+    const phoneErr   = validatePhone(form.contactPhone);
+    if (nameErr || issueErr || contactErr || phoneErr) {
+      return setError(nameErr || issueErr || contactErr || phoneErr);
+    }
 
     setSubmitting(true);
     try {
@@ -114,7 +118,7 @@ export default function ServiceRequest() {
 
   if (submitted) {
     return (
-      <div style={{ maxWidth: "540px", margin: "60px auto", textAlign: "center", animation: "fadeUp .4s ease both" }}>
+      <div style={{ maxWidth: "min(540px, 100%)", margin: "60px auto", textAlign: "center", animation: "fadeUp .4s ease both" }}>
         <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}`}</style>
         <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: "rgba(5,150,105,.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
           <svg width="34" height="34" fill="none" viewBox="0 0 24 24" stroke="#059669" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -136,7 +140,7 @@ export default function ServiceRequest() {
   }
 
   return (
-    <div style={{ maxWidth: "700px", margin: "0 auto", animation: "fadeUp .4s ease both" }}>
+    <div style={{ maxWidth: "min(700px, 100%)", margin: "0 auto", animation: "fadeUp .4s ease both" }}>
       <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}`}</style>
 
       {/* Header */}

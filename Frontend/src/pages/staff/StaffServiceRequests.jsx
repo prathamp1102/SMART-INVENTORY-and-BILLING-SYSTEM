@@ -90,7 +90,7 @@ function RequestCard({ request, onUpdated }) {
             </div>
           </div>
 
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))", gap:"8px 16px", marginBottom:10 }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(160px, 100%), 1fr))", gap:"8px 16px", marginBottom:10 }}>
             <div><span style={{ fontSize:11, color:C.inkSoft, textTransform:"uppercase", letterSpacing:".07em", fontWeight:700 }}>Product</span><div style={{ fontSize:13, fontWeight:700, color:C.ink, marginTop:2 }}>{request.productName}</div></div>
             {request.serialNumber && <div><span style={{ fontSize:11, color:C.inkSoft, textTransform:"uppercase", letterSpacing:".07em", fontWeight:700 }}>Serial</span><div style={{ fontSize:13, fontFamily:"'DM Mono',monospace", marginTop:2 }}>{request.serialNumber}</div></div>}
             <div><span style={{ fontSize:11, color:C.inkSoft, textTransform:"uppercase", letterSpacing:".07em", fontWeight:700 }}>Customer</span><div style={{ fontSize:13, fontWeight:600, marginTop:2 }}>{request.contactName}</div></div>

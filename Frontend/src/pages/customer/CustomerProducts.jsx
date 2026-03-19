@@ -178,7 +178,7 @@ export default function CustomerProducts() {
           <p>No products found</p>
         </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "16px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(220px, 100%), 1fr))", gap: "16px" }}>
           {filtered.map(p => <ProductCard key={p._id} product={p} onAddToCart={addToCart} currency={currency} />)}
         </div>
       )}

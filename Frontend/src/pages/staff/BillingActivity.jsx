@@ -138,7 +138,7 @@ export default function BillingActivity(){
   return(
     <PageShell title="Billing Activity" subtitle="Monitor invoices and sales performance by staff">
       {/* Stats */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:"10px",marginBottom:"18px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(140px, 100%), 1fr))",gap:"10px",marginBottom:"18px"}}>
         <StatCard label="Total Invoices" value={overallStats.count} color={B} bg={BL} border={BB}/>
         <StatCard label="Total Sales" value={`₹${overallStats.total>=100000?(overallStats.total/100000).toFixed(1)+"L":overallStats.total>=1000?(overallStats.total/1000).toFixed(1)+"k":overallStats.total.toLocaleString("en-IN")}`} color={V} bg={VL} border={VB}/>
         <StatCard label="Active Billers" value={overallStats.staffWithBilling} color={P} bg={PL} border={PB}/>

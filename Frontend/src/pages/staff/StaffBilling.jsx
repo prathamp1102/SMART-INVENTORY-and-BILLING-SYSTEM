@@ -193,7 +193,7 @@ function InvoicePrint({ inv, onClose, orgName }) {
       </div>
 
       {/* Printable invoice */}
-      <Card style={{ maxWidth: "680px", padding: "36px 40px" }}>
+      <Card style={{ maxWidth: "min(680px, 100%)", padding: "36px 40px" }}>
         <div ref={printRef}>
           {/* Header — Org Logo Badge + Invoice details */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "28px", paddingBottom: "24px", borderBottom: `2px solid ${C.inkA(.07)}` }}>

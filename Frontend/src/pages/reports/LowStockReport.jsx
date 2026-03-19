@@ -87,7 +87,7 @@ export default function LowStockReport() {
       </button>
 
       {/* KPIs */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: "12px", marginBottom: "20px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(150px, 100%), 1fr))", gap: "12px", marginBottom: "20px" }}>
         <KpiCard label="Out of Stock"    value={outCount}              color={RD}  bg={RDL}  border={RDB} />
         <KpiCard label="Low Stock"       value={lowCount}              color={AM}  bg={AML}  border={AMB} />
         <KpiCard label="Total Alerts"    value={alerts.length}         color={BL}  bg="rgba(2,132,199,.08)" border="rgba(2,132,199,.2)" />

@@ -37,7 +37,7 @@ export default function InventoryReports() {
     <PageShell title="Inventory Reports" subtitle="Stock movement history, GRN logs and damage entries">
 
       {/* Summary */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))",gap:"12px",marginBottom:"22px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(170px, 100%), 1fr))",gap:"12px",marginBottom:"22px"}}>
         {[
           ["Total Products",loading?"…":products.length,"#1a1a2e","rgba(26,26,46,.08)","rgba(26,26,46,.15)"],
           ["Total Units",loading?"…":totalStock.toLocaleString("en-IN"),"#0284c7","rgba(2,132,199,.08)","rgba(2,132,199,.2)"],
@@ -51,7 +51,7 @@ export default function InventoryReports() {
         ))}
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:"16px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(300px, 100%), 1fr))",gap:"16px"}}>
 
         {/* Movement Log */}
         <div>

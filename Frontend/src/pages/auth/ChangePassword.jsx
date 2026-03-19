@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { changePasswordSendOtpApi, changePasswordApi } from "../../services/authService";
+import { validateStrongPassword, validateConfirmPassword, validateOTP, validateRequired } from "../../utils/validators";
 
 const inputStyle = {
   width: "100%", height: "48px", borderRadius: "12px",
@@ -32,9 +33,13 @@ function StepRequestOtp({ onOtpSent }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [currentErr, setCurrentErr] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault(); setError("");
-    if (!current) { setError("Current password is required."); return; }
+    const err = validateRequired(current, "Current password");
+    setCurrentErr(err);
+    if (err) return;
     setLoading(true);
     try {
       await changePasswordSendOtpApi();
@@ -52,9 +57,10 @@ function StepRequestOtp({ onOtpSent }) {
       </p>
       <input
         type="password" value={current} placeholder="Current password"
-        onChange={(e) => setCurrent(e.target.value)}
-        style={inputStyle}
+        onChange={(e) => { setCurrent(e.target.value); setCurrentErr(""); }}
+        style={{ ...inputStyle, borderColor: currentErr ? "rgba(239,68,68,.5)" : undefined, marginBottom: currentErr ? "4px" : undefined }}
       />
+      {currentErr && <div style={{color:"#dc2626",fontSize:"11px",fontFamily:"'DM Mono',monospace",marginBottom:"10px"}}>{currentErr}</div>}
       <button type="submit" disabled={loading} style={{ ...btnPrimary, marginTop: "8px", cursor: loading ? "not-allowed" : "pointer" }}>
         {loading ? "Sending OTP…" : "Send OTP to Email"}
       </button>
@@ -72,11 +78,21 @@ function StepSetPassword({ currentPassword, onSuccess }) {
   const [resending, setResending] = useState(false);
   const [resendMsg, setResendMsg] = useState("");
 
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  const validate = () => {
+    const e = {
+      otp:     validateOTP(otp),
+      newPw:   validateStrongPassword(newPassword),
+      confirm: validateConfirmPassword(newPassword, confirm),
+    };
+    setFieldErrors(e);
+    return !Object.values(e).some(Boolean);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault(); setError("");
-    if (!otp || otp.length !== 6) { setError("Please enter the 6-digit OTP."); return; }
-    if (newPassword.length < 8) { setError("New password must be at least 8 characters."); return; }
-    if (newPassword !== confirm) { setError("Passwords do not match."); return; }
+    if (!validate()) return;
     setLoading(true);
     try {
       await changePasswordApi({ currentPassword, otp, newPassword });
@@ -105,11 +121,14 @@ function StepSetPassword({ currentPassword, onSuccess }) {
       <ErrorBox msg={error} />
       <input
         type="text" value={otp} maxLength={6} placeholder="6-digit OTP"
-        onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-        style={{ ...inputStyle, letterSpacing: "6px", fontSize: "18px", fontFamily: "'DM Mono',monospace", textAlign: "center" }}
+        onChange={(e) => { setOtp(e.target.value.replace(/\D/g, "").slice(0, 6)); setFieldErrors(p=>({...p,otp:""})); }}
+        style={{ ...inputStyle, letterSpacing: "6px", fontSize: "18px", fontFamily: "'DM Mono',monospace", textAlign: "center", borderColor: fieldErrors?.otp ? "rgba(239,68,68,.5)" : undefined, marginBottom: "4px" }}
       />
-      <input type="password" value={newPassword} placeholder="New password (min 8 chars)" onChange={(e) => setNewPassword(e.target.value)} style={inputStyle} />
-      <input type="password" value={confirm} placeholder="Confirm new password" onChange={(e) => setConfirm(e.target.value)} style={{ ...inputStyle, marginBottom: "20px" }} />
+      {fieldErrors?.otp && <div style={{color:"#dc2626",fontSize:"11px",fontFamily:"'DM Mono',monospace",marginBottom:"10px"}}>{fieldErrors.otp}</div>}
+      <input type="password" value={newPassword} placeholder="New password (min 8 chars)" onChange={(e) => { setNewPassword(e.target.value); setFieldErrors(p=>({...p,newPw:""})); }} style={{ ...inputStyle, borderColor: fieldErrors?.newPw ? "rgba(239,68,68,.5)" : undefined, marginBottom: "4px" }} />
+      {fieldErrors?.newPw && <div style={{color:"#dc2626",fontSize:"11px",fontFamily:"'DM Mono',monospace",marginBottom:"10px"}}>{fieldErrors.newPw}</div>}
+      <input type="password" value={confirm} placeholder="Confirm new password" onChange={(e) => { setConfirm(e.target.value); setFieldErrors(p=>({...p,confirm:""})); }} style={{ ...inputStyle, borderColor: fieldErrors?.confirm ? "rgba(239,68,68,.5)" : undefined, marginBottom: "4px" }} />
+      {fieldErrors?.confirm && <div style={{color:"#dc2626",fontSize:"11px",fontFamily:"'DM Mono',monospace",marginBottom:"20px"}}>{fieldErrors.confirm}</div>}
       <button type="submit" disabled={loading} style={{ ...btnPrimary, marginBottom: "10px", cursor: loading ? "not-allowed" : "pointer" }}>
         {loading ? "Updating…" : "Update Password"}
       </button>
@@ -134,7 +153,7 @@ export default function ChangePassword() {
   };
 
   return (
-    <div style={{ width: "100%", maxWidth: "400px", padding: "0 20px" }}>
+    <div style={{ width: "100%", maxWidth: "min(400px, 100%)", padding: "0 20px" }}>
       <div style={{ background: "#fff", borderRadius: "24px", border: "1.5px solid rgba(26,26,46,.08)", boxShadow: "0 8px 48px rgba(26,26,46,.1)", padding: "38px 36px 34px", animation: "popIn .55s cubic-bezier(.34,1.24,.64,1) both" }}>
         <div style={{ textAlign: "center", marginBottom: "28px" }}>
           <h2 style={{ fontFamily: "'Fraunces',serif", fontSize: "24px", fontWeight: 800, color: "#1a1a2e", marginBottom: "8px" }}>{titles[step].h}</h2>

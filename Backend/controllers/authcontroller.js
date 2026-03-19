@@ -184,14 +184,14 @@ exports.deleteUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     if (!["SUPER_ADMIN", "ADMIN"].includes(req.user.role)) return res.status(403).json({ message: "Access denied" });
-    const { name, role, isActive, organization, branch } = req.body;
+    const { name, role, isActive, organization, branch, phone, address } = req.body;
     if (req.user.role === "ADMIN" && role && role !== "STAFF") return res.status(403).json({ message: "Admin can only assign STAFF role" });
     if (req.user.role === "ADMIN") {
       const targetUser = await UserModel.findById(req.params.id).select("branch");
       if (!targetUser) return res.status(404).json({ message: "User not found" });
       if (String(targetUser.branch) !== String(req.user.branch)) return res.status(403).json({ message: "Access denied" });
     }
-    const updateData = { name, role, isActive };
+    const updateData = { name, role, isActive, phone: phone || "", address: address || "" };
     if (req.user.role === "SUPER_ADMIN") { updateData.organization = organization || null; updateData.branch = branch || null; }
     const updated = await UserModel.findByIdAndUpdate(req.params.id, updateData, { new: true, runValidators: true }).select("-password").populate("organization", "name city").populate({ path: "branch", select: "branchName city organization", populate: { path: "organization", select: "name city" } });
     if (!updated) return res.status(404).json({ message: "User not found" });
