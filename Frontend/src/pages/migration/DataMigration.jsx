@@ -208,7 +208,7 @@ export default function DataMigration() {
                 <span style={{ fontFamily:"'Figtree',sans-serif",fontSize:13,fontWeight:800,color:"#1a1a2e" }}>{orgName}</span>
                 <span style={{ fontFamily:"'DM Mono',monospace",fontSize:9.5,color:purple,background:purpleL,border:`1px solid ${purpleB}`,borderRadius:99,padding:"1px 8px" }}>{brs.length} branch{brs.length!==1?"es":""}</span>
               </div>
-              <div style={{ display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))",gap:8,marginLeft:32 }}>
+              <div style={{ display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(220px, 100%), 1fr))",gap:8,marginLeft:32 }}>
                 {brs.map(b=>(
                   <div key={b._id} style={{ padding:"12px 14px",borderRadius:12,border:`1px solid ${greenB}`,background:greenL,display:"flex",alignItems:"flex-start",gap:10 }}>
                     <div style={{ width:28,height:28,borderRadius:8,background:"#fff",border:`1px solid ${greenB}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0 }}>

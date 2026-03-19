@@ -102,7 +102,7 @@ export default function PlaceOrder() {
 
   if (success) {
     return (
-      <div style={{ maxWidth: "520px", margin: "60px auto", textAlign: "center", animation: "fadeUp .4s ease both" }}>
+      <div style={{ maxWidth: "min(520px, 100%)", margin: "60px auto", textAlign: "center", animation: "fadeUp .4s ease both" }}>
         <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}`}</style>
         <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: "rgba(5,150,105,.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
           <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="#059669" strokeWidth="2">
@@ -132,7 +132,7 @@ export default function PlaceOrder() {
   }
 
   return (
-    <div style={{ maxWidth: "680px", margin: "0 auto", animation: "fadeUp .4s ease both" }}>
+    <div style={{ maxWidth: "min(680px, 100%)", margin: "0 auto", animation: "fadeUp .4s ease both" }}>
       <style>{`
         @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
         @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}

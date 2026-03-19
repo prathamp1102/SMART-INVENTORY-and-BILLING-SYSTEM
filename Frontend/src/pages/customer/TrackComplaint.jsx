@@ -152,7 +152,7 @@ export default function TrackComplaint() {
                   <span style={{ fontSize: "12px", fontWeight: 700, padding: "5px 14px", borderRadius: "99px", background: PRIORITY_STYLE[selected.priority]?.bg, color: PRIORITY_STYLE[selected.priority]?.color }}>{PRIORITY_STYLE[selected.priority]?.label} Priority</span>
                 </div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: "12px", marginTop: "18px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(150px, 100%), 1fr))", gap: "12px", marginTop: "18px" }}>
                 {[
                   { l: "Product",        v: selected.productName },
                   { l: "Serial No.",     v: selected.serialNumber || "—" },

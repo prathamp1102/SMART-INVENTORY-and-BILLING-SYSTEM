@@ -6,6 +6,7 @@ import { PageShell } from "../../components/ui/PageShell";
 import { IS, FieldLabel, FormSuccess, FormError, FormDivider } from "../../components/forms/FormStyles";
 import axiosInstance from "../../services/axiosInstance";
 import { updateProfileApi, changePasswordSendOtpApi, changePasswordApi } from "../../services/authService";
+import { validateRequired, validatePhone, validateStrongPassword, validateConfirmPassword } from "../../utils/validators";
 
 /* ── Skeleton shimmer block ─────────────────────────────────── */
 const Skeleton = ({ w = "100%", h = "46px", r = "10px" }) => (
@@ -84,7 +85,9 @@ export default function Profile() {
   // ── Save profile ─────────────────────────────────────────────
   const handleSave = async () => {
     setSaved(""); setSaveErr("");
-    if (!form.name.trim()) { setSaveErr("Name is required."); return; }
+    const nameErr = validateRequired(form.name, "Name");
+    const phoneErr = form.phone.trim() ? validatePhone(form.phone) : "";
+    if (nameErr || phoneErr) { setSaveErr(nameErr || phoneErr); return; }
     setSaving(true);
     try {
       const { user: updated } = await updateProfileApi({
@@ -104,10 +107,10 @@ export default function Profile() {
   // ── OTP Step 1: send OTP ─────────────────────────────────────
   const handleSendOtp = async () => {
     setPwMsg({ ok: "", err: "" }); setResendMsg("");
-    if (!pwForm.current)                { setPwMsg({ ok: "", err: "Current password is required." }); return; }
-    if (!pwForm.newPw)                  { setPwMsg({ ok: "", err: "New password is required." }); return; }
-    if (pwForm.newPw.length < 6)        { setPwMsg({ ok: "", err: "New password must be at least 6 characters." }); return; }
-    if (pwForm.newPw !== pwForm.confirm) { setPwMsg({ ok: "", err: "New passwords don't match." }); return; }
+    const currErr = validateRequired(pwForm.current, "Current password");
+    const newPwErr = validateStrongPassword(pwForm.newPw);
+    const confirmErr = validateConfirmPassword(pwForm.newPw, pwForm.confirm);
+    if (currErr || newPwErr || confirmErr) { setPwMsg({ ok: "", err: currErr || newPwErr || confirmErr }); return; }
     setPwLoading(true);
     try {
       await changePasswordSendOtpApi();

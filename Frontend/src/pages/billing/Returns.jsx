@@ -69,7 +69,7 @@ function PrintReceipt({ret,onClose}){
   };
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(26,26,46,.55)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}} onClick={onClose}>
-      <div style={{background:"#fff",borderRadius:"20px",padding:"28px",maxWidth:"420px",width:"100%",boxShadow:"0 24px 80px rgba(26,26,46,.2)"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:"#fff",borderRadius:"20px",padding:"28px",maxWidth: "min(420px, 100%)",width:"100%",boxShadow:"0 24px 80px rgba(26,26,46,.2)"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontFamily:"'Fraunces',serif",fontSize:"17px",fontWeight:800,color:"#1a1a2e",marginBottom:"18px",display:"flex",alignItems:"center",gap:"10px"}}>
           🧾 Return Receipt
           <span style={{marginLeft:"auto",fontSize:"12px",fontWeight:500,color:"rgba(26,26,46,.4)",fontFamily:"'DM Mono',monospace"}}>{ret.returnNo}</span>
@@ -121,7 +121,7 @@ function RefundModal({ret,onConfirm,onClose,saving}){
   const [notes,setNotes]=useState(ret.notes||"");
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(26,26,46,.55)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}} onClick={onClose}>
-      <div style={{background:"#fff",borderRadius:"20px",padding:"28px",maxWidth:"420px",width:"100%",boxShadow:"0 24px 80px rgba(26,26,46,.2)"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:"#fff",borderRadius:"20px",padding:"28px",maxWidth: "min(420px, 100%)",width:"100%",boxShadow:"0 24px 80px rgba(26,26,46,.2)"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontFamily:"'Fraunces',serif",fontSize:"17px",fontWeight:800,color:"#1a1a2e",marginBottom:"6px"}}>💵 Issue Refund</div>
         <div style={{fontSize:"12px",color:"rgba(26,26,46,.45)",marginBottom:"20px",fontFamily:"'DM Mono',monospace"}}>Return #{ret.returnNo} · {ret.customerName||"Walk-in"}</div>
         <div style={{background:PL,border:`1px solid ${PB}`,borderRadius:"12px",padding:"14px",marginBottom:"18px"}}>
@@ -284,7 +284,7 @@ export default function Returns(){
       {refundRet&&<RefundModal ret={refundRet} saving={refundSaving} onConfirm={handleConfirmRefund} onClose={()=>setRefundRet(null)}/>}
 
       {/* Stats */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:"10px",marginBottom:"18px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(140px, 100%), 1fr))",gap:"10px",marginBottom:"18px"}}>
         {stats.map(([label,count,color,bg,border])=>(
           <div key={label} style={{background:"#fff",borderRadius:"14px",border:`1px solid ${border}`,padding:"16px 18px",boxShadow:"0 2px 10px rgba(26,26,46,.04)"}}>
             <div style={{fontFamily:"'Fraunces',serif",fontSize:"24px",fontWeight:900,color}}>{count}</div>
@@ -409,7 +409,7 @@ export default function Returns(){
 
       {/* ─── NEW RETURN TAB ─── */}
       {tab==="new"&&(
-        <Card style={{maxWidth:"640px"}}>
+        <Card style={{maxWidth: "min(640px, 100%)"}}>
           {success&&<div style={{padding:"11px 16px",borderRadius:"10px",background:PL,border:`1px solid ${PB}`,color:P,fontSize:"13px",fontWeight:600,marginBottom:"16px"}}>✓ {success}</div>}
           <FormError message={apiError}/>
           <div style={{fontFamily:"'Fraunces',serif",fontSize:"16px",fontWeight:800,color:"#1a1a2e",marginBottom:"16px"}}>New Return Request</div>

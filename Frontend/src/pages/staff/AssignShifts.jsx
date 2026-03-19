@@ -199,7 +199,7 @@ export default function AssignShifts(){
         <Card style={{marginBottom:"16px"}}>
           <div style={{fontFamily:"'Fraunces',serif",fontSize:"16px",fontWeight:800,color:"#1a1a2e",marginBottom:"14px"}}>{editShift?"Edit Shift":"Assign New Shift"}</div>
           <FormError message={apiErr}/>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))",gap:"12px",marginBottom:"12px"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(170px, 100%), 1fr))",gap:"12px",marginBottom:"12px"}}>
             <div><FieldLabel>Staff Member *</FieldLabel><select value={form.staff} onChange={setF("staff")} style={{...SS,height:"42px",marginBottom:0}}><option value="">— Select Staff —</option>{staff.map(s=><option key={s._id} value={s._id}>{s.name} ({s.role})</option>)}</select></div>
             <div><FieldLabel>Date *</FieldLabel><input type="date" value={form.date} onChange={setF("date")} style={{...IS}}/></div>
             <div><FieldLabel>Shift Type</FieldLabel><select value={form.shiftType} onChange={setF("shiftType")} style={{...SS,height:"42px",marginBottom:0}}>{SHIFTS.map(t=><option key={t} value={t}>{t}</option>)}</select></div>

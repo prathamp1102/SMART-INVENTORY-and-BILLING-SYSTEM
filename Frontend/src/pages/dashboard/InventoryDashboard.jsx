@@ -96,7 +96,7 @@ function OrgBranchBanner({ profile, loading }) {
   const branch = profile?.branch;
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: branch ? "repeat(auto-fit, minmax(280px, 1fr))" : "1fr", gap: 14, marginBottom: 22, animation: "fadeUp .35s ease both" }}>
+    <div style={{ display: "grid", gridTemplateColumns: branch ? "repeat(auto-fit, minmax(min(280px, 100%), 1fr))" : "1fr", gap: 14, marginBottom: 22, animation: "fadeUp .35s ease both" }}>
 
       <div style={{ background: "#fff", borderRadius: 18, border: `1px solid ${purpleBorder}`, padding: "18px 22px", boxShadow: `0 4px 20px ${purpleLight}` }}>
         <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: org ? 14 : 0 }}>
@@ -256,7 +256,7 @@ export default function InventoryDashboard() {
       <OrgBranchBanner profile={profile} loading={profileLoading} />
 
       {/* ── KPIs ────────────────────────────────────────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(175px,1fr))", gap: "14px", marginBottom: "22px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(175px,100%), 1fr))", gap: "14px", marginBottom: "22px" }}>
         <KpiCard icon="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18" label="Invoices Today" value={invoicesToday} delay="0s" onClick={() => navigate("/billing/invoice")} />
         <KpiCard icon="M2.25 18.75a60.07 60.07 0 0115.797 2.101" label="Sales Today" value={salesToday != null ? `₹${salesToday >= 1000 ? (salesToday / 1000).toFixed(1) + "k" : salesToday}` : "—"} delay=".06s" color={ac} onClick={() => navigate("/reports/sales")} />
         <KpiCard icon="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25" label="Low Stock Items" value={lowStockCount} trendUp={false} color={red} light="rgba(239,68,68,.08)" border="rgba(239,68,68,.2)" delay=".12s" onClick={() => navigate("/inventory/stock")} />
@@ -265,7 +265,7 @@ export default function InventoryDashboard() {
       </div>
 
       {/* ── Quick Actions ────────────────────────────────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: "16px", marginBottom: "16px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(280px,100%), 1fr))", gap: "16px", marginBottom: "16px" }}>
         <SectionBox title="Billing & Sales" icon="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18">
           <div style={{ display: "flex", flexDirection: "column", gap: "9px" }}>
             <ActionTile icon="M9 14.25l6-6m4.5-3.493V21.75l-4.125-2.625-3.375 2.25-3.375-2.25-4.125 2.625V4.757" label="Sales Desk" desc="Scan or search products, apply discount & generate bill" onClick={() => navigate("/sales/desk")} />

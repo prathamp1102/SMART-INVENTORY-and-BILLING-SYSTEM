@@ -24,7 +24,7 @@ export default function InvoiceDetails() {
   if (notFound || !invoice) {
     return (
       <PageShell title="Invoice Not Found" subtitle={`No invoice found with ID: ${id}`}>
-        <div style={{ background:"#fff", borderRadius:"18px", border:"1px solid rgba(26,26,46,.08)", padding:"48px", textAlign:"center", maxWidth:"440px" }}>
+        <div style={{ background:"#fff", borderRadius:"18px", border:"1px solid rgba(26,26,46,.08)", padding:"48px", textAlign:"center", maxWidth: "min(440px, 100%)" }}>
           <div style={{ fontSize:"48px", marginBottom:"16px" }}>🧾</div>
           <div style={{ fontFamily:"'Fraunces',serif", fontSize:"18px", fontWeight:800, color:"#1a1a2e", marginBottom:"8px" }}>Invoice Not Found</div>
           <div style={{ fontSize:"13px", color:"rgba(26,26,46,.45)", marginBottom:"20px" }}>The invoice you're looking for doesn't exist or has been deleted.</div>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { PageShell, Card } from "../../components/ui/PageShell";
 import Button from "../../components/ui/Button";
 import { IS, SS, FormError, FieldLabel, FormDivider } from "../../components/forms/FormStyles";
-import { validateRequired, validateEmail, validatePhone } from "../../utils/validators";
+import { validateRequired, validateEmail, validatePhone, validateGST, validateIFSC } from "../../utils/validators";
 import { createSupplier } from "../../services/productService";
 import { getOrganizations, getBranches } from "../../services/organizationService";
 import useAuth from "../../hooks/useAuth";
@@ -69,9 +69,11 @@ export default function AddSupplier() {
 
   const validate = () => {
     const e = {
-      supplierName: validateRequired(form.supplierName, "Supplier name"),
-      phoneNumber:  validatePhone(form.phoneNumber),
-      email:        form.email.trim() ? validateEmail(form.email) : "",
+      supplierName:  validateRequired(form.supplierName, "Supplier name"),
+      phoneNumber:   validatePhone(form.phoneNumber),
+      email:         form.email.trim() ? validateEmail(form.email) : "",
+      gstNumber:     validateGST(form.gstNumber),
+      ifscCode:      validateIFSC(form.ifscCode),
     };
     setErrors(e);
     return !Object.values(e).some(Boolean);
@@ -110,12 +112,12 @@ export default function AddSupplier() {
 
   return (
     <PageShell title="Add Supplier" subtitle="Register a new supplier">
-      <Card style={{ maxWidth: "600px" }}>
+      <Card style={{ maxWidth: "min(600px, 100%)" }}>
         <FormError message={apiError} />
         <form onSubmit={handleSubmit} noValidate>
 
           {/* Basic Info */}
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"12px" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(200px,100%), 1fr))", gap:"12px" }}>
             <div>
               <FieldLabel>Supplier Name *</FieldLabel>
               <input placeholder="e.g. Rajesh Kumar" value={form.supplierName} onChange={set("supplierName")}
@@ -130,7 +132,7 @@ export default function AddSupplier() {
 
           {/* Contact */}
           <FormDivider label="Contact Details" />
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"12px" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(200px,100%), 1fr))", gap:"12px" }}>
             <div>
               <FieldLabel>Phone Number *</FieldLabel>
               <input placeholder="10-digit mobile" value={form.phoneNumber} onChange={set("phoneNumber")}
@@ -149,7 +151,7 @@ export default function AddSupplier() {
           <FormDivider label="Address" />
           <FieldLabel>Street / Full Address</FieldLabel>
           <input placeholder="Building, Street, Area" value={form.address} onChange={set("address")} style={IS} />
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"12px" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(200px,100%), 1fr))", gap:"12px" }}>
             <div>
               <FieldLabel>City</FieldLabel>
               <input placeholder="e.g. Mumbai" value={form.city} onChange={set("city")} style={IS} />
@@ -165,11 +167,12 @@ export default function AddSupplier() {
 
           {/* Business Details */}
           <FormDivider label="Business Details" />
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"12px" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(200px,100%), 1fr))", gap:"12px" }}>
             <div>
               <FieldLabel>GST Number</FieldLabel>
               <input placeholder="e.g. 27AAPFU0939F1ZV" value={form.gstNumber} onChange={set("gstNumber")}
-                style={{ ...IS, textTransform:"uppercase" }} />
+                style={{ ...IS, textTransform:"uppercase", borderColor: errors.gstNumber ? "rgba(239,68,68,.5)" : undefined }} />
+              {errors.gstNumber && <ErrMsg>{errors.gstNumber}</ErrMsg>}
             </div>
             <div>
               <FieldLabel>Opening Balance (₹)</FieldLabel>
@@ -194,7 +197,7 @@ export default function AddSupplier() {
 
           {/* Bank Details */}
           <FormDivider label="Bank Details (Optional)" />
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"12px" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(200px,100%), 1fr))", gap:"12px" }}>
             <div>
               <FieldLabel>Bank Name</FieldLabel>
               <input placeholder="e.g. State Bank of India" value={form.bankName} onChange={set("bankName")} style={IS} />
@@ -206,7 +209,8 @@ export default function AddSupplier() {
             <div>
               <FieldLabel>IFSC Code</FieldLabel>
               <input placeholder="e.g. SBIN0001234" value={form.ifscCode} onChange={set("ifscCode")}
-                style={{ ...IS, textTransform:"uppercase" }} />
+                style={{ ...IS, textTransform:"uppercase", borderColor: errors.ifscCode ? "rgba(239,68,68,.5)" : undefined }} />
+              {errors.ifscCode && <ErrMsg>{errors.ifscCode}</ErrMsg>}
             </div>
             <div>
               <FieldLabel>Bank Branch Name</FieldLabel>
@@ -219,7 +223,7 @@ export default function AddSupplier() {
             <>
               <FormDivider label="Assign to Organization & Branch" />
 
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"12px" }}>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(200px,100%), 1fr))", gap:"12px" }}>
                 <div>
                   <FieldLabel>Organization</FieldLabel>
                   <select value={form.organization} onChange={set("organization")} style={SS} disabled={loadingMeta}>

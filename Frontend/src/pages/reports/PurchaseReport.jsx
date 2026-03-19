@@ -171,7 +171,7 @@ export default function PurchaseReport() {
       </div>
 
       {/* KPI cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: "12px", marginBottom: "18px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(150px, 100%), 1fr))", gap: "12px", marginBottom: "18px" }}>
         <KpiCard label="Total Orders"   value={fmt(kpis.totalOrders)}          color={V}  bg={VL}  border={VB} />
         <KpiCard label="Total PO Value" value={`₹${fmtK(kpis.totalValue)}`}    sub={`₹${fmt(kpis.totalValue)}`} color={B}  bg={BL}  border={BB} />
         <KpiCard label="Total Paid"     value={`₹${fmtK(kpis.totalPaid)}`}     sub={`₹${fmt(kpis.totalPaid)}`}  color={P}  bg={PL}  border={PB} />

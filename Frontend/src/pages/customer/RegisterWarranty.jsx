@@ -1,3 +1,4 @@
+import { validateRequired, validateDate } from "../../utils/validators";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../services/axiosInstance";
@@ -62,9 +63,10 @@ export default function RegisterWarranty() {
 
   const handleSubmit = async () => {
     setError(""); setSuccess("");
-    if (!form.productName.trim()) return setError("Product name is required.");
-    if (!form.serialNumber.trim()) return setError("Serial number is required.");
-    if (!form.purchaseDate) return setError("Purchase date is required.");
+    const nameErr   = validateRequired(form.productName, "Product name");
+    const serialErr = validateRequired(form.serialNumber, "Serial number");
+    const dateErr   = validateDate(form.purchaseDate, "Purchase date");
+    if (nameErr || serialErr || dateErr) return setError(nameErr || serialErr || dateErr);
     setSubmitting(true);
     try {
       await axiosInstance.post("/service/warranty", form);

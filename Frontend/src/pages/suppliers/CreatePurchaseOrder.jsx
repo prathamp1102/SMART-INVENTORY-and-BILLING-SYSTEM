@@ -87,12 +87,12 @@ export default function CreatePurchaseOrder() {
 
   return (
     <PageShell title="Create Purchase Order" subtitle="Place a new order with a supplier">
-      <Card style={{ maxWidth: "720px" }}>
+      <Card style={{ maxWidth: "min(720px, 100%)" }}>
         <FormError message={apiError} />
         {errors.items && <div style={{ padding: "10px 14px", borderRadius: "10px", marginBottom: "14px", background: RDL, border: `1px solid ${RDB}`, fontSize: "12px", color: RD, fontFamily: "'DM Mono',monospace" }}>{errors.items}</div>}
 
         {/* Supplier + Meta */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: "12px", marginBottom: "12px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(200px,100%), 1fr))", gap: "12px", marginBottom: "12px" }}>
           <div>
             <FieldLabel>Supplier *</FieldLabel>
             <select value={form.supplier} onChange={setF("supplier")} style={{ ...SS, height: "42px", marginBottom: 0, borderColor: errors.supplier ? "rgba(239,68,68,.5)" : undefined }}>

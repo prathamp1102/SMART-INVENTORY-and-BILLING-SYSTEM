@@ -158,7 +158,7 @@ function OrgBranchBanner({ profile, loading }) {
   const branch = profile?.branch;
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: branch ? "repeat(auto-fit, minmax(280px, 1fr))" : "1fr", gap: 14, marginBottom: 22, animation: "fadeUp .35s ease both" }}>
+    <div style={{ display: "grid", gridTemplateColumns: branch ? "repeat(auto-fit, minmax(min(280px, 100%), 1fr))" : "1fr", gap: 14, marginBottom: 22, animation: "fadeUp .35s ease both" }}>
       {/* Organization */}
       <div style={{ background: "#fff", borderRadius: 18, border: `1px solid ${purpleBorder}`, padding: "18px 22px", boxShadow: `0 4px 20px ${purpleLight}` }}>
         <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: org ? 14 : 0 }}>
@@ -584,7 +584,7 @@ export default function AdminDashboard() {
       <OrgBranchBanner profile={profile} loading={profileLoading} />
 
       {/* ── KPIs (real data) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(175px,1fr))", gap: 14, marginBottom: 22 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(175px, 100%), 1fr))", gap: 14, marginBottom: 22 }}>
         <KpiCard icon="M2.25 18.75a60.07 60.07 0 0115.797 2.101" label="Today's Sales"   value={kpiSales     ? fmtMoney(kpiSales.total)              : "—"} trend={kpiSales     ? `${kpiSales.count} invoices`                          : undefined} trendUp delay="0s"   onClick={() => navigate("/reports/sales")} />
         <KpiCard icon="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622"         label="Total Products"  value={kpiProducts  ? kpiProducts.total.toLocaleString("en-IN") : "—"} trend={kpiProducts  ? `${kpiProducts.lowStock} low stock`                   : undefined} trendUp={false} delay=".06s" onClick={() => navigate("/products")} />
         <KpiCard icon="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H3"    label="Active Suppliers" value={kpiSuppliers ? kpiSuppliers.total                        : "—"} delay=".12s" onClick={() => navigate("/suppliers")} />
@@ -594,7 +594,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* ── Inventory + Suppliers ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16, marginBottom: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))", gap: 16, marginBottom: 16 }}>
         <SectionBox title="Inventory Management" icon="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622">
           <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
             <ActionTile icon="M12 4.5v15m7.5-7.5h-15"             label="Add New Product"       desc="Add to catalogue with cost & sell price"    onClick={() => navigate("/products/add")} />
@@ -619,9 +619,9 @@ export default function AdminDashboard() {
       <StaffSection profile={profile} showToast={showToast} />
 
       {/* ── Reports + Activity ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16, marginTop: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))", gap: 16, marginTop: 16 }}>
         <SectionBox title="Reports" icon="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(140px, 100%), 1fr))", gap: 10 }}>
             <ReportCard icon="M20.25 7.5l-.625 10.632"                                               label="Stock Report"    desc="Current levels & movement"       onClick={() => navigate("/reports/stock")} />
             <ReportCard icon="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71"        label="Low Stock"       desc="Items below reorder point"       onClick={() => navigate("/reports/low-stock")} />
             <ReportCard icon="M2.25 18.75a60.07 60.07 0 0115.797 2.101"                              label="Sales Report"    desc="Daily, weekly, monthly"          onClick={() => navigate("/reports/sales")} />

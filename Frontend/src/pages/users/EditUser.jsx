@@ -4,6 +4,7 @@ import { PageShell, Card } from "../../components/ui/PageShell";
 import Button from "../../components/ui/Button";
 import Loader from "../../components/ui/Loader";
 import { IS, SS, FormError, FieldLabel } from "../../components/forms/FormStyles";
+import { validateRequired, validatePhone } from "../../utils/validators";
 import axiosInstance from "../../services/axiosInstance";
 import useAuth from "../../hooks/useAuth";
 
@@ -17,9 +18,10 @@ export default function EditUser() {
       ? ["SUPER_ADMIN", "ADMIN", "STAFF", "CUSTOMER"]
       : ["STAFF"];
 
-  const [form, setForm]         = useState({ name: "", email: "", role: "STAFF", isActive: true, organization: "", branch: "" });
+  const [form, setForm]         = useState({ name: "", email: "", role: "STAFF", isActive: true, phone: "", address: "", organization: "", branch: "" });
   const [loading, setLoading]   = useState(true);
   const [saving, setSaving]     = useState(false);
+  const [errors, setErrors]     = useState({});
   const [apiError, setApiError] = useState("");
 
   const [orgs, setOrgs]                       = useState([]);
@@ -33,8 +35,11 @@ export default function EditUser() {
   const showOrgBranchPicker = isSuperAdmin && ["ADMIN", "STAFF"].includes(form.role);
   const showAdminOrgInfo    = isAdmin;
 
-  const set = (k) => (e) =>
+  const set = (k) => (e) => {
     setForm(p => ({ ...p, [k]: e.target.type === "checkbox" ? e.target.checked : e.target.value }));
+    setErrors(p => ({ ...p, [k]: "" }));
+    setApiError("");
+  };
 
   // Load user
   useEffect(() => {
@@ -50,6 +55,8 @@ export default function EditUser() {
           email:        u.email,
           role:         u.role,
           isActive:     u.isActive,
+          phone:        u.phone || "",
+          address:      u.address || "",
           organization: orgId,
           branch:       branchId,
         });
@@ -84,12 +91,19 @@ export default function EditUser() {
       .finally(() => setLoadingBranches(false));
   }, [form.organization, showOrgBranchPicker]);
 
+  const validate = () => {
+    const e = { name: validateRequired(form.name, "Full name"), phone: form.phone.trim() ? validatePhone(form.phone) : "" };
+    setErrors(e);
+    return !Object.values(e).some(Boolean);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     setSaving(true);
     setApiError("");
     try {
-      const payload = { name: form.name, role: form.role, isActive: form.isActive };
+      const payload = { name: form.name, role: form.role, isActive: form.isActive, phone: form.phone.trim(), address: form.address.trim() };
       if (showOrgBranchPicker) {
         payload.organization = form.organization || null;
         payload.branch       = form.branch       || null;
@@ -127,13 +141,24 @@ export default function EditUser() {
 
   return (
     <PageShell title="Edit User" subtitle={"Editing: " + form.name}>
-      <Card style={{ maxWidth: "480px" }}>
+      <Card style={{ maxWidth: "min(480px, 100%)" }}>
         <FormError message={apiError} />
         <form onSubmit={handleSubmit}>
 
           {/* Name */}
           <FieldLabel>Full Name</FieldLabel>
-          <input placeholder="Full name" value={form.name} onChange={set("name")} style={IS} />
+          <input placeholder="Full name" value={form.name} onChange={set("name")} style={{ ...IS, borderColor: errors.name ? "rgba(239,68,68,.5)" : undefined }} />
+          {errors.name && <div style={{ color:"#dc2626",fontSize:"11px",fontFamily:"'DM Mono',monospace",marginTop:"-8px",marginBottom:"10px" }}>{errors.name}</div>}
+
+          {/* Phone */}
+          <FieldLabel>Phone Number</FieldLabel>
+          <input placeholder="10-digit mobile number (optional)" value={form.phone} onChange={set("phone")} type="tel"
+            style={{ ...IS, borderColor: errors.phone ? "rgba(239,68,68,.5)" : undefined }} />
+          {errors.phone && <div style={{ color:"#dc2626",fontSize:"11px",fontFamily:"'DM Mono',monospace",marginTop:"-8px",marginBottom:"10px" }}>{errors.phone}</div>}
+
+          {/* Address */}
+          <FieldLabel>Address</FieldLabel>
+          <input placeholder="Street, City, State (optional)" value={form.address} onChange={set("address")} style={IS} />
 
           {/* Email — read-only */}
           <FieldLabel>Email Address</FieldLabel>

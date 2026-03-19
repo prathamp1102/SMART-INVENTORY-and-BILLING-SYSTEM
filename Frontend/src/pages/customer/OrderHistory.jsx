@@ -69,7 +69,7 @@ export default function OrderHistory() {
       </div>
 
       {/* Summary Stats */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "14px", marginBottom: "24px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(160px, 100%), 1fr))", gap: "14px", marginBottom: "24px" }}>
         {[
           { label: "Total Orders", value: orders.length, icon: "M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108" },
           { label: "Completed", value: orders.filter(o => ["CONFIRMED","PAID"].includes(o.status || o.paymentStatus)).length, icon: "M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },

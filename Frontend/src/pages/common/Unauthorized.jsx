@@ -6,7 +6,7 @@ export default function Unauthorized() {
   const { homePath } = useAuth();
   return (
     <div style={{ width:"100vw",height:"100vh",background:"#f5f3ee",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",fontFamily:"'Figtree',sans-serif" }}>
-      <div style={{ background:"#fff",borderRadius:"24px",border:"1px solid rgba(26,26,46,.08)",boxShadow:"0 8px 40px rgba(26,26,46,.1)",padding:"48px 52px",textAlign:"center",maxWidth:"400px",width:"90%" }}>
+      <div style={{ background:"#fff",borderRadius:"24px",border:"1px solid rgba(26,26,46,.08)",boxShadow:"0 8px 40px rgba(26,26,46,.1)",padding:"48px 52px",textAlign:"center",maxWidth: "min(400px, 100%)",width:"90%" }}>
         <div style={{ fontSize:"52px",marginBottom:"16px" }}>🚫</div>
         <h1 style={{ fontFamily:"'Fraunces',serif",fontSize:"26px",fontWeight:800,color:"#1a1a2e",marginBottom:"10px" }}>Access Denied</h1>
         <p style={{ fontSize:"14px",color:"rgba(26,26,46,.45)",marginBottom:"28px",lineHeight:1.6 }}>You don't have permission to view this page.</p>
