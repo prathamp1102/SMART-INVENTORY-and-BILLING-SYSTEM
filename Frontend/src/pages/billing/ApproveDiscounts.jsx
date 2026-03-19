@@ -80,7 +80,7 @@ export default function ApproveDiscounts(){
       )}
 
       {/* Stats */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"10px",marginBottom:"18px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(150px, 100%), 1fr))",gap:"10px",marginBottom:"18px"}}>
         {[
           [pendingCount,"Awaiting Approval",AM,AML,AMB],
           [`₹${fmt(totalDiscountPending)}`, "Discount Value Pending",RD,RDL,RDB],

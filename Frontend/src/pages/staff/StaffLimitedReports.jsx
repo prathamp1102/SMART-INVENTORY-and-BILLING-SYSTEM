@@ -348,7 +348,7 @@ export default function StaffLimitedReports() {
           )}
 
           {/* Stat cards */}
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(160px, 100%), 1fr))",
             gap:10, marginBottom:18 }}>
             <StatCard loading={invLoading} label="Total Invoices"
               value={filteredInvoices.length} color={INK} bg={inkA(.04)} border={inkA(.12)} />
@@ -659,7 +659,7 @@ export default function StaffLimitedReports() {
           )}
 
           {/* Day stat cards */}
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(160px, 100%), 1fr))",
             gap:10, marginBottom:18 }}>
             <StatCard loading={dailyLoading} label="Invoices Raised"
               value={dailyCount} color={INK} bg={inkA(.04)} border={inkA(.12)} />

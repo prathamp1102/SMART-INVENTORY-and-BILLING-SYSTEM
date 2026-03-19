@@ -77,7 +77,7 @@ export default function AddCategory() {
 
   return (
     <PageShell title="Add Category" subtitle="Create a new product category">
-      <Card style={{ maxWidth: "480px" }}>
+      <Card style={{ maxWidth: "min(480px, 100%)" }}>
         <FormError message={apiError} />
         <form onSubmit={handleSubmit} noValidate>
 

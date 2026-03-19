@@ -98,19 +98,19 @@ export default function ProfitLossReport() {
         <div style={{ background: "#fff", borderRadius: "18px", border: "1px solid rgba(239,68,68,.25)", padding: "40px", textAlign: "center", boxShadow: "0 2px 12px rgba(0,0,0,.05)" }}>
           <div style={{ fontSize: "32px", marginBottom: "12px" }}>⚠️</div>
           <div style={{ fontSize: "15px", fontWeight: 700, color: "#dc2626", marginBottom: "8px" }}>Unable to load report</div>
-          <div style={{ fontSize: "13px", color: "rgba(26,26,46,.5)", maxWidth: "420px", margin: "0 auto", lineHeight: 1.6 }}>{error}</div>
+          <div style={{ fontSize: "13px", color: "rgba(26,26,46,.5)", maxWidth: "min(420px, 100%)", margin: "0 auto", lineHeight: 1.6 }}>{error}</div>
         </div>
       ) : (
         <>
           {/* KPIs */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "14px", marginBottom: "22px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(160px, 100%), 1fr))", gap: "14px", marginBottom: "22px" }}>
             <KpiCard label="Total Revenue"  value={`₹${fmtK(kpis.revenue)}`} sub={`₹${fmt(kpis.revenue)}`}  color={B}  border={BB}  changeUp={true}  change={`${grossMarginPct}% margin`} />
             <KpiCard label="Cost of Goods"  value={`₹${fmtK(kpis.cost)}`}    sub={`₹${fmt(kpis.cost)}`}     color={RD} border={RDB} />
             <KpiCard label="Gross Profit"   value={`₹${fmtK(kpis.gross)}`}   sub={`₹${fmt(kpis.gross)}`}    color={P}  border={PB}  changeUp={kpis.gross >= 0}  change={`${grossMarginPct}% gross`} />
             <KpiCard label="Net Profit"     value={`₹${fmtK(kpis.gross)}`}   sub={`₹${fmt(kpis.gross)}`}    color={V}  border={VB}  changeUp={kpis.gross >= 0}  change={`${netMarginPct}% net`} />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: "16px", marginBottom: "18px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(300px, 100%), 1fr))", gap: "16px", marginBottom: "18px" }}>
 
             {/* Bar chart */}
             {monthlyData.length > 0 && (

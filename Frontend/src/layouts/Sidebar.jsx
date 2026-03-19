@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import Logo from "../components/ui/Logo";
 import useAuth from "../hooks/useAuth";
 import { ROLE_CONFIG, ROLE_NAV } from "../utils/constants";
 
@@ -31,42 +32,6 @@ export default function Sidebar({ open, onClose }) {
 
   return (
     <>
-      <style>{`
-        .sidebar {
-          width: 248px;
-          background: #fff;
-          border-right: 1px solid rgba(26,26,46,.08);
-          box-shadow: 2px 0 16px rgba(26,26,46,.06);
-          display: flex;
-          flex-direction: column;
-          height: 100vh;
-          position: fixed;
-          top: 0; left: 0;
-          z-index: 300;
-          transition: transform .25s ease;
-        }
-        .sidebar-backdrop {
-          display: none;
-          position: fixed;
-          inset: 0;
-          background: rgba(26,26,46,.45);
-          z-index: 299;
-        }
-        .sidebar-close-btn {
-          display: none;
-        }
-        @media (max-width: 767px) {
-          .sidebar { transform: translateX(-100%); }
-          .sidebar.open { transform: translateX(0); }
-          .sidebar-backdrop.open { display: block; }
-          .sidebar-close-btn { display: flex !important; }
-        }
-        @media (min-width: 768px) {
-          .sidebar { transform: translateX(0) !important; }
-        }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-      `}</style>
-
       {/* Mobile backdrop */}
       <div
         className={`sidebar-backdrop${open ? " open" : ""}`}
@@ -81,20 +46,7 @@ export default function Sidebar({ open, onClose }) {
           padding: "22px 20px 20px",
           borderBottom: "1px solid rgba(26,26,46,.07)",
         }}>
-          <div style={{
-            width: "36px", height: "36px", borderRadius: "10px",
-            background: `linear-gradient(135deg,${role.btnFrom},${role.btnTo})`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: `0 4px 14px ${role.glow}`, flexShrink: 0,
-          }}>
-            <svg viewBox="0 0 24 24" fill="#fff" width="18" height="18">
-              <path d="M20 4H4v2l8 4 8-4V4zM4 10v10h4v-5h8v5h4V10l-8 4-8-4z" />
-            </svg>
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: "14px", fontWeight: 800, color: "#1a1a2e", fontFamily: "'Fraunces', serif", letterSpacing: "-.01em" }}>EVARA</div>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "8px", color: "rgba(26,26,46,.3)", letterSpacing: ".18em", textTransform: "uppercase", marginTop: "1px" }}>Access Portal</div>
-          </div>
+          <Logo size={34} variant="full" style={{ flex: 1, minWidth: 0 }} />
           <button
             className="sidebar-close-btn"
             onClick={onClose}

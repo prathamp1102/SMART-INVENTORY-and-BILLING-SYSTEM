@@ -156,7 +156,7 @@ export default function StaffReports() {
       </div>
 
       {/* ── Report Cards Grid ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: "16px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(min(300px, 100%), 1fr))", gap: "16px" }}>
         {reports.map((r) => (
           <div
             key={r.path}

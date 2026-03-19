@@ -150,7 +150,7 @@ export default function CashierDashboard() {
       </div>
 
       {/* KPIs */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(175px,1fr))", gap: "14px", marginBottom: "22px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(175px,100%), 1fr))", gap: "14px", marginBottom: "22px" }}>
         <KpiCard loading={loadingKpis} icon="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.09.85-.672 1.575-1.526 1.51l-15.626-1.183" label="Total Orders" value={totalOrders} trend="lifetime" trendUp delay="0s" />
         <KpiCard loading={loadingKpis} icon="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108" label="Total Invoices" value={totalInvoices} trend="all time" trendUp delay=".06s" onClick={() => navigate("/billing/invoice")} />
         <KpiCard loading={loadingKpis} icon="M2.25 18.75a60.07 60.07 0 0115.797 2.101" label="Total Spent" value={fmtMoney(totalSpent)} trend="lifetime" trendUp delay=".12s" />
@@ -158,7 +158,7 @@ export default function CashierDashboard() {
       </div>
 
       {/* Quick actions + Account */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: "16px", marginBottom: "16px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(280px,100%), 1fr))", gap: "16px", marginBottom: "16px" }}>
         <SectionBox title="My Orders & Payments" icon="M9 12h3.75M9 15h3.75M9 18h3.75">
           <div style={{ display: "flex", flexDirection: "column", gap: "9px" }}>
             <ActionTile icon="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25" label="Browse Products" desc="View catalog & add to cart" onClick={() => navigate("/customer/products")} />

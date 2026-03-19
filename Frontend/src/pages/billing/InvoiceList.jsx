@@ -201,7 +201,7 @@ export default function InvoiceList() {
     <PageShell title={isCustomer ? "My Invoices" : "Invoice List"} subtitle={isCustomer ? "Your purchase invoices and receipts" : "All sales invoices and billing records"}>
 
       {/* Stats */}
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))", gap:"12px", marginBottom:"22px" }}>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(170px, 100%), 1fr))", gap:"12px", marginBottom:"22px" }}>
         {[
           ["Total Invoices", data.length, "#0284c7", "rgba(2,132,199,.08)", "rgba(2,132,199,.2)"],
           ["Total Revenue", `₹${totalRevenue.toLocaleString("en-IN")}`, "#059669", "rgba(5,150,105,.08)", "rgba(5,150,105,.2)"],

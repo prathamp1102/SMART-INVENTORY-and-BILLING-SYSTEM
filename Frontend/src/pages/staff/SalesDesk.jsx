@@ -148,7 +148,7 @@ function InvoicePrint({ inv, onClose, orgName }) {
       </div>
 
       {/* Printable invoice card */}
-      <div ref={printRef} style={{ maxWidth: "680px", background: "#fff", borderRadius: "6px", overflow: "hidden", boxShadow: "0 4px 32px rgba(0,0,0,0.10)", border: "1px solid #e8e8e8" }}>
+      <div ref={printRef} style={{ maxWidth: "min(680px, 100%)", background: "#fff", borderRadius: "6px", overflow: "hidden", boxShadow: "0 4px 32px rgba(0,0,0,0.10)", border: "1px solid #e8e8e8" }}>
 
         {/* ── Dark header bar ── */}
         <div style={{ background: "#1e1b16", padding: "32px 40px", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>

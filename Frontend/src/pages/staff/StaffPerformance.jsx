@@ -164,7 +164,7 @@ export default function StaffPerformance(){
 
   return(
     <PageShell title="Staff Performance" subtitle={`${MONTHS[month-1]} ${year} · Attendance & billing overview`}>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))",gap:"10px",marginBottom:"18px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(130px, 100%), 1fr))",gap:"10px",marginBottom:"18px"}}>
         {[[stats.count,"Staff",V,VL,VB],[stats.totalPresent,"Present Days",P,PL,PB],[`${stats.totalHours}h`,"Hours Logged",B,BL,BB],[stats.perfect,"Full Attendance",AM,AML,AMB]].map(([val,label,color,bg,border])=>(
           <div key={label} style={{background:"#fff",borderRadius:"13px",border:`1px solid ${border}`,padding:"14px 16px",boxShadow:"0 2px 8px rgba(26,26,46,.04)"}}>
             <div style={{fontFamily:"'Fraunces',serif",fontSize:"20px",fontWeight:900,color}}>{val}</div>

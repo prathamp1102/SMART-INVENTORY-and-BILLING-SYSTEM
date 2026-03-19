@@ -159,12 +159,12 @@ function SalesTab() {
       </div>
 
       {/* KPIs */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: "14px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(180px, 100%), 1fr))", gap: "14px" }}>
         {kpis.map(k => <KpiCard key={k.label} {...k} />)}
       </div>
 
       {/* Bar Chart + Payment Methods */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: "16px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(300px, 100%), 1fr))", gap: "16px" }}>
         <Card>
           <CardHead title="Daily Sales (Last 7 Days)" />
           <div style={{ padding: "20px 22px" }}>
@@ -259,7 +259,7 @@ function InventoryTab() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       {/* KPIs */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "14px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(160px, 100%), 1fr))", gap: "14px" }}>
         <KpiCard label="Total Products" value={fmtN(s.totalProducts)} sub={`${fmtN(s.totalStock)} units in stock`} color={blue} bg={blueL} border={blueB} />
         <KpiCard label="Stock Value"    value={fmt(s.totalValue)}     sub={`${fmtN(s.totalCategories)} categories`} color={green} bg={greenL} border={greenB} />
         <KpiCard label="Low Stock"      value={fmtN(s.lowStockCount)} sub="≤ 10 units remaining" color={amber} bg={amberL} border={amberB} />
@@ -274,7 +274,7 @@ function InventoryTab() {
       </div>
 
       {view === "overview" && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: "16px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(300px, 100%), 1fr))", gap: "16px" }}>
           {/* By Category */}
           <Card>
             <CardHead title="Stock by Category" />
@@ -402,7 +402,7 @@ function BranchTab() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       {/* KPIs */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "14px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(160px, 100%), 1fr))", gap: "14px" }}>
         <KpiCard label="Total Branches"      value={fmtN(s.totalBranches)}      sub={`${fmtN(s.activeBranches)} active`}  color={blue}  bg={blueL}  border={blueB} />
         <KpiCard label="Organizations"       value={fmtN(s.totalOrganizations)} sub="Companies registered"                color={ac}    bg={acL}    border={acB}   />
         <KpiCard label="Total System Users"  value={fmtN(s.totalUsers)}         sub="Across all branches"                 color={green} bg={greenL} border={greenB}/>
@@ -501,7 +501,7 @@ function ProfitLossTab() {
       </div>
 
       {/* KPIs */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "14px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(160px, 100%), 1fr))", gap: "14px" }}>
         <KpiCard label="Total Revenue"  value={fmt(s.totalRevenue)} badge={`${s.revenueChange > 0 ? "+" : ""}${s.revenueChange}%`} badgeUp={s.revenueChange >= 0} color={blue}  bg={blueL}  border={blueB}  />
         <KpiCard label="Cost of Goods"  value={fmt(s.totalCost)}    sub="Direct product costs"                                       color={red}   bg={redL}   border={redB}   />
         <KpiCard label="Gross Profit"   value={fmt(s.grossProfit)}  sub={`Margin: ${s.grossMargin}%`}                                color={green} bg={greenL} border={greenB} />
@@ -524,7 +524,7 @@ function ProfitLossTab() {
         </div>
       </Card>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: "16px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(300px, 100%), 1fr))", gap: "16px" }}>
         {/* By Category */}
         <Card>
           <CardHead title="P&L by Category" />
@@ -653,7 +653,7 @@ function SystemLogsTab() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
       {/* Summary KPIs */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: "12px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(140px, 100%), 1fr))", gap: "12px" }}>
         {[
           { label: "Total Events",  value: fmtN(data.total), color: blue,  bg: blueL,  border: blueB  },
           { label: "Warnings",      value: fmtN(data.logs.filter(l => l.severity === "WARNING").length), color: amber, bg: amberL, border: amberB },
@@ -691,7 +691,7 @@ function SystemLogsTab() {
                     <Td><Badge color={sev.color} bg={sev.bg} border={sev.border}>{log.severity}</Badge></Td>
                     <Td><Badge color={typ.color} bg={typ.bg} border={typ.border}>{log.type}</Badge></Td>
                     <Td style={{ fontWeight: 600, fontSize: "12.5px" }}>{log.action}</Td>
-                    <Td style={{ fontSize: "12px", color: "rgba(26,26,46,.6)", maxWidth: "300px" }}>
+                    <Td style={{ fontSize: "12px", color: "rgba(26,26,46,.6)", maxWidth: "min(300px, 100%)" }}>
                       <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{log.detail}</div>
                     </Td>
                     <Td style={{ fontFamily: "'DM Mono',monospace", fontSize: "11px", color: "rgba(26,26,46,.4)", whiteSpace: "nowrap" }}>{formatTime(log.timestamp)}</Td>

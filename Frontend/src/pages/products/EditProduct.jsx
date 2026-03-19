@@ -81,7 +81,7 @@ export default function EditProduct() {
 
   return (
     <PageShell title="Edit Product" subtitle={"Editing: " + form.name}>
-      <Card style={{ maxWidth:"560px" }}>
+      <Card style={{ maxWidth: "min(560px, 100%)" }}>
         <FormError message={apiError} />
         <form onSubmit={handleSubmit} noValidate>
 
@@ -91,7 +91,7 @@ export default function EditProduct() {
           {errors.name && <ErrMsg>{errors.name}</ErrMsg>}
 
           <FormDivider label="Pricing" />
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"12px" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(200px,100%), 1fr))", gap:"12px" }}>
             <div>
               <FieldLabel>Cost Price (₹) *</FieldLabel>
               <input placeholder="0.00" value={form.costPrice} onChange={set("costPrice")} type="number" min="0" step="0.01"
@@ -152,7 +152,7 @@ export default function EditProduct() {
             })()}
 
           <FormDivider label="Inventory" />
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"12px" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(200px,100%), 1fr))", gap:"12px" }}>
             <div>
               <FieldLabel>Stock Qty</FieldLabel>
               <input placeholder="0" value={form.stock} onChange={set("stock")} type="number" min="0" style={IS} />

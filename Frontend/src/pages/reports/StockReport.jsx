@@ -44,7 +44,7 @@ export default function StockReport() {
       </button>
 
       {/* KPIs */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:"12px",marginBottom:"22px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(140px, 100%), 1fr))",gap:"12px",marginBottom:"22px"}}>
         {kpis.map(k=>(
           <div key={k.label} style={{background:"#fff",borderRadius:"16px",border:`1px solid ${k.border}`,padding:"18px 20px"}}>
             <div style={{fontFamily:"'Fraunces',serif",fontSize:"26px",fontWeight:900,color:k.color,letterSpacing:"-.03em"}}>{k.value}</div>

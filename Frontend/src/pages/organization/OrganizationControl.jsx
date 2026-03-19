@@ -42,7 +42,7 @@ function Modal({ title, onClose, children }) {
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(26,26,46,.45)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}
       onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div style={{ background:"#fff", borderRadius:"20px", width:"100%", maxWidth:"500px", boxShadow:"0 24px 80px rgba(26,26,46,.25)", animation:"fadeUp .22s ease both", maxHeight:"90vh", overflow:"auto" }}>
+      <div style={{ background:"#fff", borderRadius:"20px", width:"100%", maxWidth: "min(500px, 100%)", boxShadow:"0 24px 80px rgba(26,26,46,.25)", animation:"fadeUp .22s ease both", maxHeight:"90vh", overflow:"auto" }}>
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"20px 24px", borderBottom:"1px solid rgba(26,26,46,.07)", position:"sticky", top:0, background:"#fff", zIndex:1 }}>
           <span style={{ fontFamily:"'Fraunces',serif", fontSize:"16px", fontWeight:800, color:"#1a1a2e" }}>{title}</span>
           <button onClick={onClose} style={{ width:"28px", height:"28px", borderRadius:"8px", border:"1px solid rgba(26,26,46,.12)", background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", color:"rgba(26,26,46,.45)" }}>
@@ -98,7 +98,7 @@ function CancelBtn({ onClick }) {
 function Toast({ message, type="success" }) {
   const bg = type==="error"?red:green;
   return (
-    <div style={{ position:"fixed", bottom:"28px", right:"28px", background:bg, color:"#fff", padding:"12px 20px", borderRadius:"12px", fontSize:"13px", fontWeight:700, boxShadow:"0 8px 28px rgba(0,0,0,.2)", zIndex:9999, animation:"fadeUp .2s ease both", maxWidth:"320px" }}>
+    <div style={{ position:"fixed", bottom:"28px", right:"28px", background:bg, color:"#fff", padding:"12px 20px", borderRadius:"12px", fontSize:"13px", fontWeight:700, boxShadow:"0 8px 28px rgba(0,0,0,.2)", zIndex:9999, animation:"fadeUp .2s ease both", maxWidth: "min(320px, 100%)" }}>
       {type==="error"?"✗":"✓"} {message}
     </div>
   );
@@ -456,7 +456,7 @@ function AssignAdminTab({ branches, admins, onRefresh, showToast }) {
       {admins.length>0&&(
         <div style={{ marginTop:"28px", background:"#fff", borderRadius:"16px", border:"1px solid rgba(26,26,46,.08)", padding:"20px", boxShadow:"0 2px 10px rgba(26,26,46,.04)" }}>
           <div style={{ fontFamily:"'Fraunces',serif", fontSize:"14px", fontWeight:800, color:"#1a1a2e", marginBottom:"14px" }}>Admin Pool</div>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))", gap:"10px" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(min(200px, 100%), 1fr))", gap:"10px" }}>
             {admins.map(a=>{
               const assignedCount = branches.filter(b=>b.admin?._id===a._id||b.admin===a._id).length;
               return (

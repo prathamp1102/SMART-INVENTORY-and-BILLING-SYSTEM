@@ -57,6 +57,21 @@ function UserRow({u,onDelete,showOrgBranch,meId,isSA}){
         </div>
       </div>
     </td>
+    <td style={{padding:"12px 14px",minWidth:"160px"}}>
+      <div style={{display:"flex",flexDirection:"column",gap:"3px"}}>
+        {u.phone
+          ?<div style={{display:"flex",alignItems:"center",gap:"5px"}}>
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="rgba(26,26,46,.4)" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+            <span style={{fontSize:"11.5px",fontFamily:"'DM Mono',monospace",color:"rgba(26,26,46,.65)"}}>{u.phone}</span>
+          </div>
+          :<span style={{fontSize:"11px",color:"rgba(26,26,46,.2)"}}>—</span>
+        }
+        {u.address&&<div style={{display:"flex",alignItems:"flex-start",gap:"5px"}}>
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="rgba(26,26,46,.4)" strokeWidth="2" style={{marginTop:"1px",flexShrink:0}}><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0zM19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+          <span style={{fontSize:"11px",color:"rgba(26,26,46,.45)",lineHeight:1.4,maxWidth: "min(130px, 100%)",wordBreak:"break-word"}}>{u.address}</span>
+        </div>}
+      </div>
+    </td>
     <td style={{padding:"12px 14px"}}><RoleBadge role={u.role}/></td>
     {showOrgBranch&&<>
       <td style={{padding:"12px 14px"}}>
@@ -85,7 +100,7 @@ function UserRow({u,onDelete,showOrgBranch,meId,isSA}){
 
 function BranchBlock({brName,brCity,users,onDelete,meId,isSA}){
   const [open,setOpen]=useState(true);
-  const COLS=["User","Role","Status","Created","Actions"];
+  const COLS=["User","Phone & Address","Role","Status","Created","Actions"];
   const activeCount=users.filter(u=>u.isActive).length;
   const roleBreakdown=[...new Set(users.map(u=>u.role))].map(r=>({role:r,count:users.filter(u=>u.role===r).length}));
   return <div style={{border:`1px solid ${BB}`,borderRadius:"13px",overflow:"hidden"}}>
@@ -172,8 +187,8 @@ function GroupedView({users,onDelete,meId,isSA}){
 
 function FlatView({users,onDelete,meId,isSA}){
   const COLS=isSA
-    ?["User","Role","Organization","Branch","Status","Created","Actions"]
-    :["User","Role","Organization","Branch","Status","Created","Actions"];
+    ?["User","Phone & Address","Role","Organization","Branch","Status","Created","Actions"]
+    :["User","Phone & Address","Role","Organization","Branch","Status","Created","Actions"];
   return <div style={{background:"#fff",borderRadius:"18px",border:"1px solid rgba(26,26,46,.08)",overflow:"hidden",boxShadow:"0 2px 16px rgba(26,26,46,.05)"}}>
     <div style={{overflowX:"auto"}}>
       <table style={{width:"100%",borderCollapse:"collapse"}}>
@@ -194,7 +209,7 @@ function FlatView({users,onDelete,meId,isSA}){
 /* ─── Delete Modal ──────────────────────────────────────────────── */
 function DeleteModal({user,onConfirm,onClose,deleting}){
   return <div style={{position:"fixed",inset:0,zIndex:1000,background:"rgba(26,26,46,.5)",backdropFilter:"blur(4px)",display:"flex",alignItems:"center",justifyContent:"center",animation:"fadeUp .2s ease both"}} onClick={e=>e.target===e.currentTarget&&onClose()}>
-    <div style={{background:"#fff",borderRadius:"20px",padding:"32px",width:"100%",maxWidth:"400px",margin:"0 16px",boxShadow:"0 24px 64px rgba(0,0,0,.18)",border:`1px solid ${RDB}`}}>
+    <div style={{background:"#fff",borderRadius:"20px",padding:"32px",width:"100%",maxWidth: "min(400px, 100%)",margin:"0 16px",boxShadow:"0 24px 64px rgba(0,0,0,.18)",border:`1px solid ${RDB}`}}>
       <div style={{width:"52px",height:"52px",borderRadius:"14px",background:RDL,border:`1px solid ${RDB}`,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:"18px"}}>
         <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke={RD} strokeWidth="1.8"><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
       </div>
@@ -262,7 +277,7 @@ export default function UserList(){
   const filtered=useMemo(()=>{
     return users.filter(u=>{
       const q=search.toLowerCase();
-      const matchSearch=!q||u.name?.toLowerCase().includes(q)||u.email?.toLowerCase().includes(q)||u.organization?.name?.toLowerCase().includes(q)||u.branch?.organization?.name?.toLowerCase().includes(q)||u.branch?.branchName?.toLowerCase().includes(q);
+      const matchSearch=!q||u.name?.toLowerCase().includes(q)||u.email?.toLowerCase().includes(q)||u.phone?.toLowerCase().includes(q)||u.address?.toLowerCase().includes(q)||u.organization?.name?.toLowerCase().includes(q)||u.branch?.organization?.name?.toLowerCase().includes(q)||u.branch?.branchName?.toLowerCase().includes(q);
       const matchRole=roleFilter==="ALL"?true:u.role===roleFilter;
       const matchOrg=!isSA||selOrg==="all"?true:String(u.organization?._id||u.branch?.organization?._id)===selOrg;
       const matchBranch=!isSA||selBranch==="all"?true:String(u.branch?._id)===selBranch;

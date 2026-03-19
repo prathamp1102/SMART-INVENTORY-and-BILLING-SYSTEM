@@ -229,7 +229,7 @@ export default function PurchaseOrderDetail() {
       {/* Status update modal */}
       {showStatusModal && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(26,26,46,.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
-          <div style={{ background: "#fff", borderRadius: "18px", padding: "28px", maxWidth: "380px", width: "100%", boxShadow: "0 20px 60px rgba(26,26,46,.18)" }}>
+          <div style={{ background: "#fff", borderRadius: "18px", padding: "28px", maxWidth: "min(380px, 100%)", width: "100%", boxShadow: "0 20px 60px rgba(26,26,46,.18)" }}>
             <div style={{ fontFamily: "'Fraunces',serif", fontSize: "18px", fontWeight: 800, color: "#1a1a2e", marginBottom: "6px" }}>Update PO Status</div>
             <div style={{ fontSize: "12px", color: "rgba(26,26,46,.45)", marginBottom: "18px" }}>Current: <StatusChip status={po.status} /></div>
             <FormError message={error} />

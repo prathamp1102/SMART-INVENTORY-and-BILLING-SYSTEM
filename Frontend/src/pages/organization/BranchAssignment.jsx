@@ -253,7 +253,7 @@ function AssignStaffModal({ branch, onClose, onAssigned, showToast, currentStaff
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(26,26,46,.5)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}
       onClick={e => e.target === e.currentTarget && onClose()}>
-      <div style={{ background:"#fff", borderRadius:"20px", width:"100%", maxWidth:"480px", boxShadow:"0 24px 80px rgba(26,26,46,.2)", animation:"fadeUp .22s ease both", display:"flex", flexDirection:"column", maxHeight:"85vh" }}>
+      <div style={{ background:"#fff", borderRadius:"20px", width:"100%", maxWidth: "min(480px, 100%)", boxShadow:"0 24px 80px rgba(26,26,46,.2)", animation:"fadeUp .22s ease both", display:"flex", flexDirection:"column", maxHeight:"85vh" }}>
         {/* Header */}
         <div style={{ padding:"20px 24px", borderBottom:"1px solid rgba(26,26,46,.08)", display:"flex", alignItems:"center", gap:"12px" }}>
           <div style={{ width:36, height:36, borderRadius:"10px", background:`linear-gradient(135deg,${P},#6d28d9)`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
@@ -466,7 +466,7 @@ export default function BranchAssignment() {
         </div>
 
         {/* Search */}
-        <div style={{ position:"relative", marginTop:"16px", maxWidth:"340px" }}>
+        <div style={{ position:"relative", marginTop:"16px", maxWidth: "min(340px, 100%)" }}>
           <svg style={{ position:"absolute", left:"11px", top:"50%", transform:"translateY(-50%)", pointerEvents:"none" }} viewBox="0 0 24 24" fill="none" stroke="rgba(26,26,46,.35)" strokeWidth="2" width="14" height="14"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
           <input
             value={search}

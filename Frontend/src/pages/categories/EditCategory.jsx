@@ -114,7 +114,7 @@ export default function EditCategory() {
 
   return (
     <PageShell title="Edit Category" subtitle={"Editing: " + form.name}>
-      <Card style={{ maxWidth: "480px" }}>
+      <Card style={{ maxWidth: "min(480px, 100%)" }}>
         <FormError message={apiError} />
         <form onSubmit={handleSubmit} noValidate>
 

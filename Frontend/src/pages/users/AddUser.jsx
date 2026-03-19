@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { PageShell, Card } from "../../components/ui/PageShell";
 import Button from "../../components/ui/Button";
 import { IS, SS, FormError, FieldLabel } from "../../components/forms/FormStyles";
-import { validateEmail, validatePassword, validateRequired } from "../../utils/validators";
+import { validateEmail, validatePassword, validateRequired, validatePhone } from "../../utils/validators";
 import axiosInstance from "../../services/axiosInstance";
 import useAuth from "../../hooks/useAuth";
 
@@ -16,7 +16,7 @@ export default function AddUser() {
       ? ["ADMIN", "STAFF", "CUSTOMER"]
       : ["STAFF"];
 
-  const [form, setForm]         = useState({ name: "", email: "", password: "", role: allowedRoles[0], organization: "", branch: "" });
+  const [form, setForm]         = useState({ name: "", email: "", password: "", role: allowedRoles[0], phone: "", address: "", organization: "", branch: "" });
   const [errors, setErrors]     = useState({});
   const [loading, setLoading]   = useState(false);
   const [apiError, setApiError] = useState("");
@@ -71,6 +71,7 @@ export default function AddUser() {
     e.name     = validateRequired(form.name, "Name");
     e.email    = validateEmail(form.email);
     e.password = validatePassword(form.password);
+    e.phone    = form.phone.trim() ? validatePhone(form.phone) : "";
     setErrors(e);
     return !Object.values(e).some(Boolean);
   };
@@ -81,7 +82,7 @@ export default function AddUser() {
     setLoading(true);
     setApiError("");
     try {
-      const payload = { name: form.name, email: form.email, password: form.password, role: form.role };
+      const payload = { name: form.name, email: form.email, password: form.password, role: form.role, phone: form.phone.trim(), address: form.address.trim() };
       if (showOrgBranchPicker) {
         if (form.organization) payload.organization = form.organization;
         if (form.branch)       payload.branch       = form.branch;
@@ -115,7 +116,7 @@ export default function AddUser() {
 
   return (
     <PageShell title="Add User" subtitle="Create a new system user">
-      <Card style={{ maxWidth: "520px" }}>
+      <Card style={{ maxWidth: "min(520px, 100%)" }}>
         <FormError message={apiError} />
 
         <form onSubmit={handleSubmit} noValidate>
@@ -137,6 +138,17 @@ export default function AddUser() {
           <input placeholder="Minimum 6 characters" value={form.password} onChange={set("password")} type="password"
             style={{ ...IS, borderColor: errors.password ? "rgba(239,68,68,.5)" : IS.borderColor }} />
           {errors.password && <div style={{ color:"#dc2626",fontSize:"11px",fontFamily:"'DM Mono',monospace",marginTop:"-8px",marginBottom:"10px" }}>{errors.password}</div>}
+
+          {/* Phone */}
+          <FieldLabel>Phone Number</FieldLabel>
+          <input placeholder="10-digit mobile number (optional)" value={form.phone} onChange={set("phone")} type="tel"
+            style={{ ...IS, borderColor: errors.phone ? "rgba(239,68,68,.5)" : IS.borderColor }} />
+          {errors.phone && <div style={{ color:"#dc2626",fontSize:"11px",fontFamily:"'DM Mono',monospace",marginTop:"-8px",marginBottom:"10px" }}>{errors.phone}</div>}
+
+          {/* Address */}
+          <FieldLabel>Address</FieldLabel>
+          <input placeholder="Street, City, State (optional)" value={form.address} onChange={set("address")}
+            style={IS} />
 
           {/* Role */}
           <FieldLabel>Role *</FieldLabel>

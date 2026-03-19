@@ -1,4 +1,5 @@
 import { Outlet, Navigate } from "react-router-dom";
+import Logo from "../components/ui/Logo";
 import { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { ROLE_CONFIG } from "../utils/constants";
@@ -55,8 +56,14 @@ export default function AuthLayout() {
       <div style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none", backgroundImage: "radial-gradient(circle, rgba(0,0,0,.06) 1px, transparent 1px)", backgroundSize: "28px 28px", WebkitMaskImage: "radial-gradient(ellipse 85% 85% at 50% 50%, black, transparent)", maskImage: "radial-gradient(ellipse 85% 85% at 50% 50%, black, transparent)" }} />
 
       {/* ── Page content (Login / ForgotPassword / ChangePassword) ── */}
-      <div style={{ position: "relative", zIndex: 10, width: "100%", display: "flex", justifyContent: "center" }}>
-        <Outlet context={{ selectedRole, setSelectedRole }} />
+      <div style={{ position: "relative", zIndex: 10, width: "100%", display: "flex", justifyContent: "center", padding: "0 16px" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+          {/* Brand logo at top of auth pages */}
+          <div style={{ marginBottom: 28, animation: "fadeDown .5s ease both" }}>
+            <Logo size={36} variant="full" />
+          </div>
+          <Outlet context={{ selectedRole, setSelectedRole }} />
+        </div>
       </div>
     </div>
   );

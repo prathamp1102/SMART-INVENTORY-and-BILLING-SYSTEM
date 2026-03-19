@@ -202,10 +202,10 @@ export default function SupplierPayments() {
 
       {/* Inline form */}
       {showForm && (
-        <Card style={{ marginBottom: "16px", maxWidth: "640px" }}>
+        <Card style={{ marginBottom: "16px", maxWidth: "min(640px, 100%)" }}>
           <div style={{ fontFamily: "'Fraunces',serif", fontSize: "16px", fontWeight: 800, color: "#1a1a2e", marginBottom: "14px" }}>New Payment</div>
           <FormError message={apiError} />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: "12px", marginBottom: "12px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(200px, 100%), 1fr))", gap: "12px", marginBottom: "12px" }}>
             <div>
               <FieldLabel>Supplier *</FieldLabel>
               <select value={form.supplier} onChange={setF("supplier")} style={{ ...SS, height: "42px", marginBottom: 0, borderColor: errors.supplier ? "rgba(239,68,68,.5)" : undefined }}>

@@ -43,7 +43,7 @@ function ProductRow({p,onAdjust,showOrgBranch}){
   return <tr style={{borderBottom:"1px solid rgba(26,26,46,.042)",transition:"background .12s"}} onMouseEnter={e=>e.currentTarget.style.background="rgba(26,26,46,.016)"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
     <td style={{padding:"12px 13px"}}>
       <div style={{fontSize:"13.5px",fontWeight:600,color:"#1a1a2e"}}>{p.name}</div>
-      {p.description&&<div style={{fontSize:"11px",color:"rgba(26,26,46,.38)",marginTop:"2px",maxWidth:"170px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{p.description}</div>}
+      {p.description&&<div style={{fontSize:"11px",color:"rgba(26,26,46,.38)",marginTop:"2px",maxWidth: "min(170px, 100%)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{p.description}</div>}
     </td>
     <td style={{padding:"12px 13px"}}>
       {p.category?.name?<span style={{padding:"2px 9px",borderRadius:"99px",background:GL,border:"1px solid rgba(5,150,105,.18)",color:G,fontSize:"11px",fontFamily:"'DM Mono',monospace"}}>{p.category.name}</span>:<span style={{color:"rgba(26,26,46,.25)"}}>—</span>}
