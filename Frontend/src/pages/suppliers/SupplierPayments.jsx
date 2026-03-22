@@ -275,7 +275,6 @@ export default function SupplierPayments() {
         </div>
       )}
     </PageShell>
-  );
     </>
   );
 }
