@@ -7,6 +7,8 @@ import BranchScopeBanner from "../../components/ui/BranchScopeBanner";
 import useAuth from "../../hooks/useAuth";
 import axiosInstance from "../../services/axiosInstance";
 import ExcelExport from "../../components/ui/ExcelExport";
+import ConfirmModal from "../../components/ui/ConfirmModal";
+
 
 /* ─── palette ─────────────────────────────────────────────────── */
 const P="#059669",PL="rgba(5,150,105,.08)",PB="rgba(5,150,105,.2)";
@@ -70,7 +72,7 @@ function SupplierRow({s,onDelete,showOrgBranch,isSA}){
     <td style={{padding:"12px 14px"}}>
       <div style={{display:"flex",gap:"6px"}}>
         <button onClick={()=>navigate(`/suppliers/edit/${s._id}`)} style={{padding:"5px 12px",borderRadius:"8px",border:"1.5px solid rgba(26,26,46,.14)",background:"#fff",color:"rgba(26,26,46,.7)",fontSize:"12px",fontWeight:600,cursor:"pointer"}} onMouseEnter={e=>{e.currentTarget.style.borderColor=PB;e.currentTarget.style.color=P;}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(26,26,46,.14)";e.currentTarget.style.color="rgba(26,26,46,.7)";}}>Edit</button>
-        {isSA&&<button onClick={()=>onDelete(s._id)} style={{padding:"5px 12px",borderRadius:"8px",border:`1.5px solid ${RDB}`,background:RDL,color:RD,fontSize:"12px",fontWeight:600,cursor:"pointer"}}>Delete</button>}
+        {isSA&&<button onClick={()=>onDelete(s._id, s.name)} style={{padding:"5px 12px",borderRadius:"8px",border:`1.5px solid ${RDB}`,background:RDL,color:RD,fontSize:"12px",fontWeight:600,cursor:"pointer"}}>Delete</button>}
       </div>
     </td>
   </tr>;
@@ -184,6 +186,9 @@ export default function SupplierList(){
   const [suppliers,setSuppliers]=useState([]);
   const [loading,setLoading]=useState(true);
   const [search,setSearch]=useState("");
+  const [delModal,setDelModal]=useState(null);
+  const [deleting,setDeleting]=useState(false);
+  const [delError,setDelError]=useState(null);
   const [statusFilter,setStatusFilter]=useState("all");
   const [orgs,setOrgs]=useState([]);
   const [branches,setBranches]=useState([]);
@@ -223,10 +228,13 @@ export default function SupplierList(){
     });
   },[suppliers,search,statusFilter,selOrg,selBranch,isSA]);
 
-  const handleDelete=async(id)=>{
-    if(!window.confirm("Delete this supplier?"))return;
-    try{await deleteSupplier(id);setSuppliers(prev=>prev.filter(s=>s._id!==id));}
-    catch(err){alert(err?.response?.data?.message||"Failed to delete.");}
+  const handleDelete=(id,name)=>{ setDelError(null); setDelModal({id,name}); };
+  const confirmDelete=async()=>{
+    if(!delModal)return;
+    setDeleting(true); setDelError(null);
+    try{ await deleteSupplier(delModal.id); setSuppliers(prev=>prev.filter(s=>s._id!==delModal.id)); setDelModal(null); }
+    catch(err){ setDelError(err?.response?.data?.message||"Failed to delete."); }
+    finally{ setDeleting(false); }
   };
 
   const totalOrgs=isSA?new Set(suppliers.map(s=>s.branch?.organization?._id).filter(Boolean)).size:0;
@@ -238,7 +246,9 @@ export default function SupplierList(){
   const orgName=profile?.organization?.name||profile?.branch?.organization?.name;
   const branchName=profile?.branch?.branchName;
 
-  return <PageShell title="Suppliers" subtitle={isSA?"All suppliers across all organizations & branches":"Manage your branch supplier network"}>
+  return <>
+    {delModal&&<ConfirmModal title="Delete Supplier" message="You're about to permanently delete" itemName={delModal.name} variant="danger" loading={deleting} error={delError} onConfirm={confirmDelete} onCancel={()=>{setDelModal(null);setDelError(null);}} confirmLabel="Delete Supplier"/>}
+    <PageShell title="Suppliers" subtitle={isSA?"All suppliers across all organizations & branches":"Manage your branch supplier network"}>
 
     {/* SA summary pills */}
     {isSA&&<div style={{display:"flex",gap:"10px",marginBottom:"16px",flexWrap:"wrap",alignItems:"center"}}>
@@ -294,7 +304,7 @@ export default function SupplierList(){
       <div style={{marginLeft:"auto",display:"flex",gap:"8px",alignItems:"center"}}>
         <div style={{position:"relative"}}>
           <svg style={{position:"absolute",left:"10px",top:"50%",transform:"translateY(-50%)"}} width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="rgba(26,26,46,.3)" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input placeholder="Search suppliers…" value={search} onChange={e=>setSearch(e.target.value)} style={{height:"36px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.12)",outline:"none",paddingLeft:"32px",paddingRight:"12px",fontSize:"13px",fontFamily:"'Figtree',sans-serif",color:"#1a1a2e",background:"#fff",width:"210px"}}
+          <input placeholder="Search suppliers…" value={search} onChange={e=>setSearch(e.target.value)} style={{height:"36px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.12)",outline:"none",paddingLeft:"32px",paddingRight:"12px",fontSize:"13px",fontFamily:"'Poppins',sans-serif",color:"#1a1a2e",background:"#fff",width:"210px"}}
             onFocus={e=>e.target.style.borderColor=PB} onBlur={e=>e.target.style.borderColor="rgba(26,26,46,.12)"}/>
         </div>
         <span style={{fontSize:"12px",color:"rgba(26,26,46,.4)",fontFamily:"'DM Mono',monospace",whiteSpace:"nowrap"}}>{filtered.length} supplier{filtered.length!==1?"s":""}</span>
@@ -319,7 +329,7 @@ export default function SupplierList(){
             {key:"branch.organization.name",label:"Organization"},
           ]}
         />
-        <button onClick={()=>navigate("/suppliers/add")} style={{display:"flex",alignItems:"center",gap:"7px",padding:"8px 16px",borderRadius:"10px",border:"none",cursor:"pointer",background:`linear-gradient(135deg,${P},#047857)`,color:"#fff",fontSize:"13px",fontWeight:700,fontFamily:"'Figtree',sans-serif",boxShadow:"0 4px 14px rgba(5,150,105,.3)",whiteSpace:"nowrap"}}>
+        <button onClick={()=>navigate("/suppliers/add")} style={{display:"flex",alignItems:"center",gap:"7px",padding:"8px 16px",borderRadius:"10px",border:"none",cursor:"pointer",background:`linear-gradient(135deg,${P},#047857)`,color:"#fff",fontSize:"13px",fontWeight:700,fontFamily:"'Poppins',sans-serif",boxShadow:"0 4px 14px rgba(5,150,105,.3)",whiteSpace:"nowrap"}}>
           <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
           Add Supplier
         </button>
@@ -333,5 +343,6 @@ export default function SupplierList(){
         :<FlatView suppliers={filtered} onDelete={handleDelete} isSA={isSA}/>
     }
     <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`}</style>
-  </PageShell>;
+  </PageShell>
+  </>;
 }

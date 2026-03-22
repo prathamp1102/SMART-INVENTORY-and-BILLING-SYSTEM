@@ -8,7 +8,7 @@ const inputStyle = {
   width: "100%", height: "50px", borderRadius: "12px",
   border: "1.5px solid rgba(26,26,46,.14)", outline: "none",
   padding: "0 14px", fontSize: "14px",
-  fontFamily: "'Figtree',sans-serif", color: "#1a1a2e",
+  fontFamily: "'Poppins',sans-serif", color: "#1a1a2e",
   background: "#fff", marginBottom: "12px",
   boxShadow: "0 1px 3px rgba(26,26,46,.05)",
 };
@@ -16,7 +16,7 @@ const inputStyle = {
 const btnStyle = {
   width: "100%", height: "50px", borderRadius: "12px",
   border: "none", cursor: "pointer",
-  fontFamily: "'Figtree',sans-serif", fontSize: "14px", fontWeight: 700,
+  fontFamily: "'Poppins',sans-serif", fontSize: "14px", fontWeight: 700,
   background: "linear-gradient(135deg,#4f46e5,#7c3aed)", color: "#fff",
   marginTop: "4px", boxShadow: "0 4px 16px rgba(79,70,229,.3)",
 };
@@ -130,7 +130,7 @@ function StepReset({ email, onSuccess }) {
         {loading ? "Resetting…" : "Reset Password"}
       </button>
       <button type="button" onClick={handleResend} disabled={resending}
-        style={{ width: "100%", height: "40px", borderRadius: "10px", border: "1.5px solid rgba(79,70,229,.3)", background: "transparent", color: "#4f46e5", fontFamily: "'Figtree',sans-serif", fontSize: "13px", fontWeight: 600, cursor: resending ? "not-allowed" : "pointer" }}>
+        style={{ width: "100%", height: "40px", borderRadius: "10px", border: "1.5px solid rgba(79,70,229,.3)", background: "transparent", color: "#4f46e5", fontFamily: "'Poppins',sans-serif", fontSize: "13px", fontWeight: 600, cursor: resending ? "not-allowed" : "pointer" }}>
         {resending ? "Resending…" : "Resend OTP"}
       </button>
     </form>

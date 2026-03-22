@@ -1,3 +1,4 @@
+import ConfirmModal from "../../components/ui/ConfirmModal";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { PageShell, Card } from "../../components/ui/PageShell";
@@ -25,7 +26,18 @@ const FLOW = ["DRAFT","ORDERED","PARTIAL","RECEIVED"];
 
 function StatusChip({ status, large }) {
   const m = STATUS_META[status] || STATUS_META.DRAFT;
+  const confirmCancel=async()=>{
+    setCancelling(true); setCancelError(null);
+    try{
+      await axiosInstance.patch(`/purchase-orders/${id}/cancel`);
+      setOrder(prev=>({...prev,status:"CANCELLED"}));
+      setCancelModal(false);
+    }catch(e){ setCancelError(e?.response?.data?.message||"Failed to cancel order."); }
+    finally{ setCancelling(false); }
+  };
+
   return (
+
     <span style={{ padding: large ? "5px 14px" : "3px 10px", borderRadius: "99px", background: m.bg, border: `1px solid ${m.border}`, color: m.color, fontSize: large ? "13px" : "11px", fontFamily: "'DM Mono',monospace", fontWeight: 700 }}>
       {m.label}
     </span>
@@ -36,7 +48,7 @@ function InfoField({ label, value, mono }) {
   return (
     <div>
       <div style={{ fontFamily: "'DM Mono',monospace", fontSize: "9px", color: "rgba(26,26,46,.35)", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: "4px" }}>{label}</div>
-      <div style={{ fontSize: "13px", fontWeight: 600, color: "#1a1a2e", fontFamily: mono ? "'DM Mono',monospace" : "'Figtree',sans-serif" }}>{value || "—"}</div>
+      <div style={{ fontSize: "13px", fontWeight: 600, color: "#1a1a2e", fontFamily: mono ? "'DM Mono',monospace" : "'Poppins',sans-serif" }}>{value || "—"}</div>
     </div>
   );
 }
@@ -78,6 +90,7 @@ export default function PurchaseOrderDetail() {
   const pct = po.totalAmount > 0 ? Math.min(100, (po.paidAmount / po.totalAmount) * 100) : 0;
 
   return (
+    <>{cancelModal&&<ConfirmModal title="Cancel Purchase Order" message="This purchase order will be marked as cancelled." variant="warning" loading={cancelling} error={cancelError} onConfirm={confirmCancel} onCancel={()=>{setCancelModal(false);setCancelError(null);}} confirmLabel="Yes, Cancel Order"/>}
     <PageShell title={po.poNumber} subtitle={`Purchase order · ${new Date(po.createdAt).toLocaleDateString("en-IN", { dateStyle: "long" })}`}>
       <FormError message={error} />
 
@@ -96,7 +109,7 @@ export default function PurchaseOrderDetail() {
           )}
           {canEdit && po.status !== "CANCELLED" && (
             <button onClick={async () => {
-              if (!window.confirm("Cancel this purchase order?")) return;
+              setCancelError(null); setCancelModal(true); return;
               setUpdating(true);
               try { const r = await axiosInstance.put(`/purchase-orders/${id}`, { status: "CANCELLED" }); setPO(r.data); } catch (e) { setError(e?.response?.data?.message || "Failed."); } finally { setUpdating(false); }
             }} style={{ padding: "8px 14px", borderRadius: "10px", border: `1.5px solid ${RDB}`, background: RDL, color: RD, fontSize: "12px", fontWeight: 700, cursor: "pointer" }}>
@@ -251,5 +264,6 @@ export default function PurchaseOrderDetail() {
         </div>
       )}
     </PageShell>
+    </>
   );
 }

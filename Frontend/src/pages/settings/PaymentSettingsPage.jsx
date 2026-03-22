@@ -62,7 +62,7 @@ const inputStyle = {
   width: "100%", height: "44px", borderRadius: "11px",
   border: "1.5px solid rgba(26,26,46,.12)", outline: "none",
   padding: "0 14px", fontSize: "14px",
-  fontFamily: "'Figtree',sans-serif", color: "#1a1a2e",
+  fontFamily: "'Poppins',sans-serif", color: "#1a1a2e",
   background: "#fafaf9", boxSizing: "border-box",
   transition: "border-color .2s",
 };
@@ -110,7 +110,7 @@ export default function PaymentSettingsPage() {
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (e) {
-      alert(e?.response?.data?.message || "Save failed");
+      console.error("Save failed", e);
     } finally {
       setSaving(false);
     }
@@ -252,7 +252,7 @@ export default function PaymentSettingsPage() {
                 ? `linear-gradient(135deg,${P},#047857)`
                 : "linear-gradient(135deg,#1a1a2e,#2d2d44)",
               color: "#fff", fontSize: "14px", fontWeight: 800,
-              fontFamily: "'Figtree',sans-serif",
+              fontFamily: "'Poppins',sans-serif",
               boxShadow: "0 4px 20px rgba(26,26,46,.2)",
               transition: "all .25s", display: "flex", alignItems: "center",
               justifyContent: "center", gap: "8px",
@@ -350,7 +350,7 @@ export default function PaymentSettingsPage() {
                     ].filter(([,v]) => v).map(([l, v]) => (
                       <div key={l} style={{ display: "flex", justifyContent: "space-between", background: "#fff", borderRadius: "9px", border: "1px solid rgba(26,26,46,.07)", padding: "9px 12px", marginBottom: "7px" }}>
                         <span style={{ fontSize: "10px", fontFamily: "'DM Mono',monospace", color: "rgba(26,26,46,.38)", textTransform: "uppercase", letterSpacing: ".08em" }}>{l}</span>
-                        <span style={{ fontFamily: l === "Account No." || l === "IFSC" ? "'DM Mono',monospace" : "'Figtree',sans-serif", fontSize: "13px", fontWeight: 700, color: l === "Account No." || l === "IFSC" ? "#0284c7" : "#1a1a2e" }}>{v}</span>
+                        <span style={{ fontFamily: l === "Account No." || l === "IFSC" ? "'DM Mono',monospace" : "'Poppins',sans-serif", fontSize: "13px", fontWeight: 700, color: l === "Account No." || l === "IFSC" ? "#0284c7" : "#1a1a2e" }}>{v}</span>
                       </div>
                     ))}
                   </div>

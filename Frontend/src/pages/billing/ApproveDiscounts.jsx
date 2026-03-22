@@ -1,3 +1,4 @@
+import ConfirmModal from "../../components/ui/ConfirmModal";
 import { useState, useEffect, useMemo } from "react";
 import { PageShell } from "../../components/ui/PageShell";
 import axiosInstance from "../../services/axiosInstance";
@@ -12,6 +13,9 @@ function fmt(n){return(n||0).toLocaleString("en-IN");}
 
 export default function ApproveDiscounts(){
   const [invoices,setInvoices]=useState([]);
+  const [rejectModal,setRejectModal]=useState(null);
+  const [rejecting,setRejecting]=useState(false);
+  const [rejectError,setRejectError]=useState(null);
   const [loading,setLoading]=useState(true);
   const [saving,setSaving]=useState("");
   const [tab,setTab]=useState("pending"); // pending | all
@@ -38,17 +42,17 @@ export default function ApproveDiscounts(){
     try{
       await axiosInstance.put(`/invoices/${id}`,{approveDiscount:true});
       setInvoices(p=>p.filter(i=>i._id!==id));
-    }catch(err){alert(err?.response?.data?.message||"Failed to approve.");}
+    }catch(err){ /* show inline if needed */ }
     finally{setSaving("");}
   };
 
   const handleReject=async(id)=>{
-    if(!window.confirm("Reject this discount? Invoice will be cancelled."))return;
+    setRejectError(null); setRejectModal({id}); return;
     setSaving(id+"-reject");
     try{
       await axiosInstance.put(`/invoices/${id}`,{status:"CANCELLED"});
       setInvoices(p=>p.filter(i=>i._id!==id));
-    }catch(err){alert(err?.response?.data?.message||"Failed to reject.");}
+    }catch(err){ setRejectError(err?.response?.data?.message||"Failed to reject."); }
     finally{setSaving("");}
   };
 
@@ -69,6 +73,7 @@ export default function ApproveDiscounts(){
   const thS={padding:"10px 14px",textAlign:"left",fontFamily:"'DM Mono',monospace",fontSize:"9px",color:"rgba(26,26,46,.38)",letterSpacing:".14em",textTransform:"uppercase"};
 
   return(
+    <>{rejectModal&&<ConfirmModal title="Reject Discount" message="The invoice will be cancelled and the discount rejected." variant="danger" loading={rejecting} error={rejectError} onConfirm={confirmReject} onCancel={()=>{setRejectModal(null);setRejectError(null);}} confirmLabel="Reject Discount"/>}
     <PageShell title="Approve Discounts" subtitle="Review and approve invoices with high discounts pending approval">
 
       {/* Alert banner if pending */}
@@ -187,5 +192,6 @@ export default function ApproveDiscounts(){
         Invoices with discount &gt; 20% are automatically held for admin approval before payment is processed.
       </div>
     </PageShell>
+    </>
   );
 }

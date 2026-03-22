@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { PageShell } from "../../components/ui/PageShell";
 import { BillingContext } from "../../context/BillingContext";
 import useAuth from "../../hooks/useAuth";
+import { markInvoicePaid } from "../../services/billingService";
+import ConfirmModal from "../../components/ui/ConfirmModal";
 
 // ── Print a single invoice in a clean popup window ───────────────────────────
 function printInvoice(inv) {
@@ -175,10 +177,30 @@ export default function InvoiceList() {
   const { invoices, fetchInvoices } = useContext(BillingContext);
   const { user } = useAuth();
   const isCustomer = user?.role === "CUSTOMER";
+  const canConfirmPayment = ["ADMIN", "SUPER_ADMIN", "STAFF"].includes(user?.role);
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [payModal, setPayModal] = useState(null); // { id, grandTotal, customerName }
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState(null);
   const navigate = useNavigate();
+
+  const handleConfirmPayment = async () => {
+    if (!payModal) return;
+    setPaying(true); setPayError(null);
+    try {
+      await markInvoicePaid(payModal.id);
+      setData(prev => prev.map(inv =>
+        inv._id === payModal.id ? { ...inv, status: "PAID", amountPaid: inv.grandTotal } : inv
+      ));
+      setPayModal(null);
+    } catch (err) {
+      setPayError(err?.response?.data?.message || "Failed to confirm payment.");
+    } finally {
+      setPaying(false);
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -199,6 +221,19 @@ export default function InvoiceList() {
 
   return (
     <PageShell title={isCustomer ? "My Invoices" : "Invoice List"} subtitle={isCustomer ? "Your purchase invoices and receipts" : "All sales invoices and billing records"}>
+      {payModal && (
+        <ConfirmModal
+          title="Confirm Cash Payment"
+          message={`Confirm that cash payment of ₹${payModal.grandTotal?.toLocaleString("en-IN")} has been received from`}
+          itemName={payModal.customerName}
+          variant="info"
+          confirmLabel="Mark as Paid"
+          loading={paying}
+          error={payError}
+          onConfirm={handleConfirmPayment}
+          onCancel={() => { setPayModal(null); setPayError(null); }}
+        />
+      )}
 
       {/* Stats */}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(min(170px, 100%), 1fr))", gap:"12px", marginBottom:"22px" }}>
@@ -220,12 +255,12 @@ export default function InvoiceList() {
         <div style={{ position:"relative", flex:1, minWidth:"220px" }}>
           <svg style={{ position:"absolute", left:"12px", top:"50%", transform:"translateY(-50%)" }} width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="rgba(26,26,46,.3)" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <input placeholder="Search by customer name or invoice ID…" value={search} onChange={e => setSearch(e.target.value)}
-            style={{ width:"100%", height:"40px", borderRadius:"10px", border:"1.5px solid rgba(26,26,46,.12)", outline:"none", paddingLeft:"34px", paddingRight:"12px", fontSize:"13px", fontFamily:"'Figtree',sans-serif", color:"#1a1a2e", background:"#fff" }}/>
+            style={{ width:"100%", height:"40px", borderRadius:"10px", border:"1.5px solid rgba(26,26,46,.12)", outline:"none", paddingLeft:"34px", paddingRight:"12px", fontSize:"13px", fontFamily:"'Poppins',sans-serif", color:"#1a1a2e", background:"#fff" }}/>
         </div>
         <span style={{ fontFamily:"'DM Mono',monospace", fontSize:"10px", color:"rgba(26,26,46,.35)" }}>{filtered.length} invoices</span>
         {isCustomer
-          ? <button onClick={() => navigate("/customer/products")} style={{ padding:"9px 18px", borderRadius:"11px", border:"none", background:"linear-gradient(135deg,#b45309,#92400e)", color:"#fff", fontSize:"13px", fontWeight:700, cursor:"pointer", fontFamily:"'Figtree',sans-serif", boxShadow:"0 4px 14px rgba(180,83,9,.25)" }}>+ New Order</button>
-          : <button onClick={() => navigate("/sales/desk")} style={{ padding:"9px 18px", borderRadius:"11px", border:"none", background:"linear-gradient(135deg,#0284c7,#0369a1)", color:"#fff", fontSize:"13px", fontWeight:700, cursor:"pointer", fontFamily:"'Figtree',sans-serif", boxShadow:"0 4px 14px rgba(2,132,199,.25)" }}>+ New Invoice</button>
+          ? <button onClick={() => navigate("/customer/products")} style={{ padding:"9px 18px", borderRadius:"11px", border:"none", background:"linear-gradient(135deg,#b45309,#92400e)", color:"#fff", fontSize:"13px", fontWeight:700, cursor:"pointer", fontFamily:"'Poppins',sans-serif", boxShadow:"0 4px 14px rgba(180,83,9,.25)" }}>+ New Order</button>
+          : <button onClick={() => navigate("/sales/desk")} style={{ padding:"9px 18px", borderRadius:"11px", border:"none", background:"linear-gradient(135deg,#0284c7,#0369a1)", color:"#fff", fontSize:"13px", fontWeight:700, cursor:"pointer", fontFamily:"'Poppins',sans-serif", boxShadow:"0 4px 14px rgba(2,132,199,.25)" }}>+ New Invoice</button>
         }
       </div>
 
@@ -235,7 +270,7 @@ export default function InvoiceList() {
         <table style={{ width:"100%", borderCollapse:"collapse" }}>
           <thead>
             <tr style={{ background:"rgba(26,26,46,.03)", borderBottom:"1px solid rgba(26,26,46,.07)" }}>
-              {["Invoice ID","Customer","Items","Amount","Payment","Date","Actions"].map(h => (
+              {["Invoice ID","Customer","Items","Amount","Payment","Status","Date","Actions"].map(h => (
                 <th key={h} style={{ padding:"12px 16px", textAlign:"left", fontFamily:"'DM Mono',monospace", fontSize:"9px", color:"rgba(26,26,46,.35)", letterSpacing:".14em", textTransform:"uppercase", fontWeight:500 }}>{h}</th>
               ))}
             </tr>
@@ -267,18 +302,36 @@ export default function InvoiceList() {
                         <div style={{ width:"5px", height:"5px", borderRadius:"50%", background:"currentColor" }}/>{inv.paymentMethod}
                       </span>
                     </td>
+                    <td style={{ padding:"14px 16px" }}>
+                      {(() => {
+                        const s = inv.status || "PAID";
+                        const sc = { PAID:["#059669","rgba(5,150,105,.08)","rgba(5,150,105,.2)"], PENDING:["#d97706","rgba(217,119,6,.08)","rgba(217,119,6,.25)"], CANCELLED:["#dc2626","rgba(239,68,68,.08)","rgba(239,68,68,.2)"] }[s] || ["#059669","rgba(5,150,105,.08)","rgba(5,150,105,.2)"];
+                        return (
+                          <span style={{ display:"inline-flex", alignItems:"center", gap:"5px", padding:"3px 10px", borderRadius:"99px", background:sc[1], border:`1px solid ${sc[2]}`, color:sc[0], fontSize:"10.5px", fontFamily:"'DM Mono',monospace", fontWeight:700 }}>
+                            <div style={{ width:"5px", height:"5px", borderRadius:"50%", background:"currentColor" }}/>{s}
+                          </span>
+                        );
+                      })()}
+                    </td>
                     <td style={{ padding:"14px 16px", fontSize:"12px", color:"rgba(26,26,46,.5)" }}>
                       {isNaN(d.getTime()) ? "—" : d.toLocaleDateString("en-IN", { day:"2-digit", month:"short", year:"numeric" })}
                       <div style={{ fontSize:"10.5px", color:"rgba(26,26,46,.3)", fontFamily:"'DM Mono',monospace", marginTop:"2px" }}>{isNaN(d.getTime()) ? "" : d.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})}</div>
                     </td>
                     <td style={{ padding:"14px 16px" }}>
-                      <div style={{ display:"flex", gap:"6px" }}>
-                        <button onClick={() => navigate(`/billing/invoice/${inv._id}`)} style={{ padding:"5px 12px", borderRadius:"8px", border:"1.5px solid rgba(2,132,199,.25)", background:"rgba(2,132,199,.08)", color:"#0284c7", fontSize:"11px", fontWeight:700, cursor:"pointer", fontFamily:"'Figtree',sans-serif" }}>View</button>
+                      <div style={{ display:"flex", gap:"6px", flexWrap:"wrap" }}>
+                        <button onClick={() => navigate(`/billing/invoice/${inv._id}`)} style={{ padding:"5px 12px", borderRadius:"8px", border:"1.5px solid rgba(2,132,199,.25)", background:"rgba(2,132,199,.08)", color:"#0284c7", fontSize:"11px", fontWeight:700, cursor:"pointer", fontFamily:"'Poppins',sans-serif" }}>View</button>
                         <button
                           onClick={(e) => { e.stopPropagation(); printInvoice(inv); }}
-                          style={{ padding:"5px 12px", borderRadius:"8px", border:"1.5px solid rgba(26,46,26,.14)", background:"#fff", color:"rgba(26,26,46,.6)", fontSize:"11px", fontWeight:600, cursor:"pointer", fontFamily:"'Figtree',sans-serif" }}>
+                          style={{ padding:"5px 12px", borderRadius:"8px", border:"1.5px solid rgba(26,46,26,.14)", background:"#fff", color:"rgba(26,26,46,.6)", fontSize:"11px", fontWeight:600, cursor:"pointer", fontFamily:"'Poppins',sans-serif" }}>
                           🖨️ Print
                         </button>
+                        {canConfirmPayment && inv.status === "PENDING" && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setPayError(null); setPayModal({ id: inv._id, grandTotal: inv.grandTotal || inv.total || 0, customerName: inv.customerName || "Customer" }); }}
+                            style={{ padding:"5px 12px", borderRadius:"8px", border:"1.5px solid rgba(5,150,105,.3)", background:"rgba(5,150,105,.1)", color:"#059669", fontSize:"11px", fontWeight:700, cursor:"pointer", fontFamily:"'Poppins',sans-serif", display:"flex", alignItems:"center", gap:"4px" }}>
+                            ✓ Confirm Payment
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

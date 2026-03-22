@@ -244,8 +244,8 @@ export default function StaffServiceRequests() {
   const inp = { padding:"9px 12px", borderRadius:9, border:"1.5px solid rgba(15,18,42,.1)", fontSize:13, fontFamily:"inherit", outline:"none", background:"#fff" };
 
   return (
-    <div style={{ fontFamily:"'Figtree',sans-serif", animation:"fadeUp .35s ease both" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}`}</style>
+    <div style={{ fontFamily:"'Poppins',sans-serif", animation:"fadeUp .35s ease both" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}`}</style>
 
       {/* Header */}
       <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:22, flexWrap:"wrap", gap:12 }}>

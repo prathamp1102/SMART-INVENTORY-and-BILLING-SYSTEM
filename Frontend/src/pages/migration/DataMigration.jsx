@@ -16,7 +16,7 @@ function Spinner({ size=18, color=blue }) {
 function StatPill({ label, value, color, bg, border }) {
   return (
     <div style={{ background:bg,border:`1.5px solid ${border}`,borderRadius:14,padding:"16px 20px",display:"flex",alignItems:"center",gap:14,flex:1,minWidth:140 }}>
-      <div style={{ fontSize:32,fontWeight:800,color,fontFamily:"'Figtree',sans-serif",lineHeight:1 }}>{value}</div>
+      <div style={{ fontSize:32,fontWeight:800,color,fontFamily:"'Poppins',sans-serif",lineHeight:1 }}>{value}</div>
       <div style={{ fontSize:11,fontWeight:700,color,fontFamily:"'DM Mono',monospace",textTransform:"uppercase",letterSpacing:".1em",lineHeight:1.4 }}>{label}<br/>Unassigned</div>
     </div>
   );
@@ -82,7 +82,7 @@ export default function DataMigration() {
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke={red} strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
           </div>
           <div>
-            <div style={{ fontFamily:"'Figtree',sans-serif",fontSize:14,fontWeight:800,color:red,marginBottom:4 }}>{totalUnassigned} record{totalUnassigned!==1?"s":""} have no branch assigned</div>
+            <div style={{ fontFamily:"'Poppins',sans-serif",fontSize:14,fontWeight:800,color:red,marginBottom:4 }}>{totalUnassigned} record{totalUnassigned!==1?"s":""} have no branch assigned</div>
             <div style={{ fontSize:12.5,color:"rgba(26,26,46,.55)",lineHeight:1.6 }}>These records were created before branch scoping was enabled. Use the tool below to bulk-assign them to the correct branch. Products, Categories and Suppliers pages will show "Unassigned" until fixed.</div>
           </div>
         </div>
@@ -103,7 +103,7 @@ export default function DataMigration() {
             <StatPill label="Categories" value={summary?.categories||0} color={purple} bg={purpleL} border={purpleB} />
             <StatPill label="Suppliers"  value={summary?.suppliers||0}  color={green}  bg={greenL}  border={greenB} />
             <div style={{ background:"rgba(26,26,46,.04)",border:"1.5px solid rgba(26,26,46,.1)",borderRadius:14,padding:"16px 20px",display:"flex",alignItems:"center",gap:14,flex:1,minWidth:140 }}>
-              <div style={{ fontSize:32,fontWeight:800,color:totalUnassigned>0?red:green,fontFamily:"'Figtree',sans-serif",lineHeight:1 }}>{totalUnassigned}</div>
+              <div style={{ fontSize:32,fontWeight:800,color:totalUnassigned>0?red:green,fontFamily:"'Poppins',sans-serif",lineHeight:1 }}>{totalUnassigned}</div>
               <div style={{ fontSize:11,fontWeight:700,color:totalUnassigned>0?red:green,fontFamily:"'DM Mono',monospace",textTransform:"uppercase",letterSpacing:".1em",lineHeight:1.4 }}>Total<br/>Unassigned</div>
             </div>
           </div>
@@ -117,7 +117,7 @@ export default function DataMigration() {
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke={blue} strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.75M3.75 21V10.5a9 9 0 0118 0V21"/></svg>
           </div>
           <div>
-            <div style={{ fontFamily:"'Figtree',sans-serif",fontSize:15,fontWeight:800,color:"#1a1a2e" }}>Bulk Branch Assignment</div>
+            <div style={{ fontFamily:"'Poppins',sans-serif",fontSize:15,fontWeight:800,color:"#1a1a2e" }}>Bulk Branch Assignment</div>
             <div style={{ fontSize:11.5,color:"rgba(26,26,46,.4)",marginTop:1 }}>Assign all unassigned records to a selected branch at once</div>
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function DataMigration() {
           <div style={{ marginBottom:24 }}>
             <div style={{ fontFamily:"'DM Mono',monospace",fontSize:10,fontWeight:700,color:"rgba(26,26,46,.45)",letterSpacing:".12em",textTransform:"uppercase",marginBottom:10 }}>Step 1 — Select Target Branch</div>
             <select value={selectedBranch} onChange={e=>setSelectedBranch(e.target.value)}
-              style={{ width:"100%",maxWidth:500,padding:"10px 14px",borderRadius:12,border:`1.5px solid ${selectedBranch?blueB:"rgba(26,26,46,.12)"}`,fontSize:13,outline:"none",color:"#1a1a2e",fontFamily:"'Figtree',sans-serif",background:"#fafafa",cursor:"pointer" }}>
+              style={{ width:"100%",maxWidth:500,padding:"10px 14px",borderRadius:12,border:`1.5px solid ${selectedBranch?blueB:"rgba(26,26,46,.12)"}`,fontSize:13,outline:"none",color:"#1a1a2e",fontFamily:"'Poppins',sans-serif",background:"#fafafa",cursor:"pointer" }}>
               <option value="">— Choose a branch —</option>
               {Object.entries(orgGroups).map(([orgName, brs]) => (
                 <optgroup key={orgName} label={`📍 ${orgName}`}>
@@ -176,12 +176,12 @@ export default function DataMigration() {
           {/* Assign button */}
           <div style={{ display:"flex",alignItems:"center",gap:14 }}>
             <button onClick={handleBulkAssign} disabled={assigning||!selectedBranch||totalUnassigned===0}
-              style={{ display:"flex",alignItems:"center",gap:8,padding:"12px 28px",borderRadius:13,border:"none",cursor:(assigning||!selectedBranch||totalUnassigned===0)?"not-allowed":"pointer",background:selectedBranch&&totalUnassigned>0?`linear-gradient(135deg,${blue},#0369a1)`:"rgba(26,26,46,.08)",color:selectedBranch&&totalUnassigned>0?"#fff":"rgba(26,26,46,.3)",fontSize:14,fontWeight:700,fontFamily:"'Figtree',sans-serif",boxShadow:selectedBranch&&totalUnassigned>0?`0 4px 18px ${blueB}`:"none",transition:"all .2s",opacity:assigning?.8:1 }}>
+              style={{ display:"flex",alignItems:"center",gap:8,padding:"12px 28px",borderRadius:13,border:"none",cursor:(assigning||!selectedBranch||totalUnassigned===0)?"not-allowed":"pointer",background:selectedBranch&&totalUnassigned>0?`linear-gradient(135deg,${blue},#0369a1)`:"rgba(26,26,46,.08)",color:selectedBranch&&totalUnassigned>0?"#fff":"rgba(26,26,46,.3)",fontSize:14,fontWeight:700,fontFamily:"'Poppins',sans-serif",boxShadow:selectedBranch&&totalUnassigned>0?`0 4px 18px ${blueB}`:"none",transition:"all .2s",opacity:assigning?.8:1 }}>
               {assigning?<Spinner size={14} color="#fff"/>:<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.75M3.75 21V10.5a9 9 0 0118 0V21"/></svg>}
               {assigning?"Assigning…":"Assign Branch to All Unassigned"}
             </button>
             <button onClick={loadSummary} disabled={loading}
-              style={{ padding:"12px 18px",borderRadius:13,border:"1.5px solid rgba(26,26,46,.12)",background:"transparent",color:"rgba(26,26,46,.5)",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"'Figtree',sans-serif" }}>
+              style={{ padding:"12px 18px",borderRadius:13,border:"1.5px solid rgba(26,26,46,.12)",background:"transparent",color:"rgba(26,26,46,.5)",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"'Poppins',sans-serif" }}>
               ↻ Refresh
             </button>
           </div>
@@ -194,7 +194,7 @@ export default function DataMigration() {
           <div style={{ width:32,height:32,borderRadius:9,background:purpleL,border:`1px solid ${purpleB}`,display:"flex",alignItems:"center",justifyContent:"center" }}>
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke={purple} strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18"/></svg>
           </div>
-          <span style={{ fontFamily:"'Figtree',sans-serif",fontSize:15,fontWeight:800,color:"#1a1a2e" }}>All Branches ({branches.length})</span>
+          <span style={{ fontFamily:"'Poppins',sans-serif",fontSize:15,fontWeight:800,color:"#1a1a2e" }}>All Branches ({branches.length})</span>
         </div>
         <div style={{ padding:"20px 24px" }}>
           {loading ? <div style={{ display:"flex",justifyContent:"center",padding:30 }}><Spinner size={20} /></div>
@@ -205,7 +205,7 @@ export default function DataMigration() {
                 <div style={{ width:24,height:24,borderRadius:7,background:purpleL,border:`1px solid ${purpleB}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0 }}>
                   <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke={purple} strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18"/></svg>
                 </div>
-                <span style={{ fontFamily:"'Figtree',sans-serif",fontSize:13,fontWeight:800,color:"#1a1a2e" }}>{orgName}</span>
+                <span style={{ fontFamily:"'Poppins',sans-serif",fontSize:13,fontWeight:800,color:"#1a1a2e" }}>{orgName}</span>
                 <span style={{ fontFamily:"'DM Mono',monospace",fontSize:9.5,color:purple,background:purpleL,border:`1px solid ${purpleB}`,borderRadius:99,padding:"1px 8px" }}>{brs.length} branch{brs.length!==1?"es":""}</span>
               </div>
               <div style={{ display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(220px, 100%), 1fr))",gap:8,marginLeft:32 }}>

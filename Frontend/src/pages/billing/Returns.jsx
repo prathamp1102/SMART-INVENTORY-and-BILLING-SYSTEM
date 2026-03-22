@@ -145,7 +145,7 @@ function RefundModal({ret,onConfirm,onClose,saving}){
           <option value="OTHER">💰 Other</option>
         </select>
         <FieldLabel>Refund Notes (optional)</FieldLabel>
-        <textarea value={notes} onChange={e=>setNotes(e.target.value)} placeholder="e.g. Transferred to account ending 4567…" style={{width:"100%",minHeight:"60px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.14)",outline:"none",padding:"10px 14px",fontSize:"13px",fontFamily:"'Figtree',sans-serif",color:"#1a1a2e",background:"#fff",resize:"vertical",marginBottom:"18px",boxSizing:"border-box"}}/>
+        <textarea value={notes} onChange={e=>setNotes(e.target.value)} placeholder="e.g. Transferred to account ending 4567…" style={{width:"100%",minHeight:"60px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.14)",outline:"none",padding:"10px 14px",fontSize:"13px",fontFamily:"'Poppins',sans-serif",color:"#1a1a2e",background:"#fff",resize:"vertical",marginBottom:"18px",boxSizing:"border-box"}}/>
         <div style={{display:"flex",gap:"10px"}}>
           <button onClick={()=>onConfirm(method,notes)} disabled={saving} style={{flex:1,padding:"11px",borderRadius:"11px",border:`1.5px solid ${PB}`,background:P,color:"#fff",fontSize:"13px",fontWeight:700,cursor:saving?"not-allowed":"pointer",opacity:saving?0.7:1}}>
             {saving?"Processing…":"✓ Confirm & Issue Refund"}
@@ -503,7 +503,7 @@ export default function Returns(){
             </div>
 
             <FieldLabel>Additional Notes</FieldLabel>
-            <textarea placeholder="Any additional notes…" value={form.notes} onChange={set("notes")} style={{width:"100%",minHeight:"70px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.14)",outline:"none",padding:"10px 14px",fontSize:"13px",fontFamily:"'Figtree',sans-serif",color:"#1a1a2e",background:"#fff",resize:"vertical",marginBottom:"16px",boxSizing:"border-box"}}/>
+            <textarea placeholder="Any additional notes…" value={form.notes} onChange={set("notes")} style={{width:"100%",minHeight:"70px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.14)",outline:"none",padding:"10px 14px",fontSize:"13px",fontFamily:"'Poppins',sans-serif",color:"#1a1a2e",background:"#fff",resize:"vertical",marginBottom:"16px",boxSizing:"border-box"}}/>
 
             <div style={{display:"flex",gap:"10px"}}>
               <Button type="submit" loading={submitting} accent={RD} glow="rgba(239,68,68,.2)">Submit Return</Button>

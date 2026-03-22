@@ -8,8 +8,9 @@ router.post("/",                protect, branchScope, ctrl.createInvoice);
 router.get("/",                 protect, branchScope, ctrl.getInvoices);
 router.get("/summary/today",    protect, branchScope, ctrl.getTodaySummary);
 router.get("/smtp-test",        protect, authorize("ADMIN","SUPER_ADMIN"), ctrl.smtpTest);
+router.patch("/:id/mark-paid",  protect, authorize("ADMIN","SUPER_ADMIN","STAFF"), ctrl.markAsPaid);
 router.get("/:id",              protect, branchScope, ctrl.getInvoice);
-router.put("/:id",              protect, authorize("ADMIN","SUPER_ADMIN"), branchScope, ctrl.updateInvoice);
+router.put("/:id",              protect, authorize("ADMIN","SUPER_ADMIN","STAFF"), branchScope, ctrl.updateInvoice);
 router.delete("/:id",           protect, authorize("ADMIN","SUPER_ADMIN"), branchScope, ctrl.cancelInvoice);
 router.post("/:id/send-email",  protect, branchScope, ctrl.sendInvoiceEmailManual);
 

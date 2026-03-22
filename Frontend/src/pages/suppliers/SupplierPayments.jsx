@@ -1,10 +1,10 @@
+import ConfirmModal from "../../components/ui/ConfirmModal";
 import { useState, useEffect, useMemo } from "react";
 import { PageShell, Card } from "../../components/ui/PageShell";
 import Button from "../../components/ui/Button";
-import { IS as ISBase, SS, FieldLabel, FormError, FormDivider } from "../../components/forms/FormStyles";
+import { IS as ISBase, SS, FieldLabel, FormError } from "../../components/forms/FormStyles";
 import { getSuppliers } from "../../services/productService";
 import axiosInstance from "../../services/axiosInstance";
-import ExcelExport from "../../components/ui/ExcelExport";
 
 const P = "#059669", PL = "rgba(5,150,105,.08)", PB = "rgba(5,150,105,.2)";
 const B = "#0284c7", BL = "rgba(2,132,199,.08)", BB = "rgba(2,132,199,.2)";
@@ -24,10 +24,14 @@ const MODE_MAP = {
 
 function PayModeChip({ mode }) {
   const [color, bg, border] = MODE_MAP[mode] || MODE_MAP.OTHER;
-  return <span style={{ padding: "3px 10px", borderRadius: "99px", background: bg, border: `1px solid ${border}`, color, fontSize: "11px", fontFamily: "'DM Mono',monospace", fontWeight: 700 }}>{mode?.replace("_", " ")}</span>;
+  return (
+    <span style={{ padding: "3px 10px", borderRadius: "99px", background: bg, border: `1px solid ${border}`, color, fontSize: "11px", fontFamily: "'DM Mono',monospace", fontWeight: 700 }}>
+      {mode?.replace("_", " ")}
+    </span>
+  );
 }
 
-function SupplierLedger({ supplier, payments, pos }) {
+function SupplierLedger({ supplier, payments, pos, onDeletePayment }) {
   const [open, setOpen] = useState(false);
   const supPayments = payments.filter(p => String(p.supplier?._id || p.supplier) === supplier._id);
   const totalPaid = supPayments.reduce((s, p) => s + (p.amount || 0), 0);
@@ -60,19 +64,22 @@ function SupplierLedger({ supplier, payments, pos }) {
             <div style={{ fontFamily: "'Fraunces',serif", fontSize: "13px", fontWeight: 800, color: netDue > 0 ? RD : P }}>₹{netDue.toLocaleString("en-IN")}</div>
             <div style={{ fontSize: "8.5px", fontFamily: "'DM Mono',monospace", color: netDue > 0 ? RD : P, letterSpacing: ".08em" }}>NET DUE</div>
           </div>
-          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(26,26,46,.3)" strokeWidth="2" width="14" height="14" style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform .2s" }}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(26,26,46,.3)" strokeWidth="2" width="14" height="14" style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
         </div>
       </div>
+
       {open && (
         <div style={{ padding: "14px 18px" }}>
-          {/* Opening balance */}
           {balance > 0 && (
             <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 12px", borderRadius: "9px", background: AML, border: `1px solid ${AMB}`, marginBottom: "10px" }}>
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke={AM} strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke={AM} strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+              </svg>
               <span style={{ fontSize: "12px", color: AM, fontWeight: 600 }}>Opening Balance: <strong>₹{balance.toLocaleString("en-IN")}</strong></span>
             </div>
           )}
-          {/* Payment history */}
           {supPayments.length === 0 ? (
             <div style={{ padding: "20px", textAlign: "center", color: "rgba(26,26,46,.35)", fontSize: "12px" }}>No payments recorded for this supplier</div>
           ) : (
@@ -95,10 +102,7 @@ function SupplierLedger({ supplier, payments, pos }) {
                         : <span style={{ color: "rgba(26,26,46,.25)", fontSize: "11px" }}>—</span>}
                     </td>
                     <td style={{ padding: "10px 14px" }}>
-                      <button onClick={async () => {
-                        if (!window.confirm("Delete this payment?")) return;
-                        try { await axiosInstance.delete(`/supplier-payments/${pay._id}`); window.location.reload(); } catch (e) { alert("Failed."); }
-                      }} style={{ padding: "3px 9px", borderRadius: "7px", border: `1px solid ${RDB}`, background: RDL, color: RD, fontSize: "11px", fontWeight: 600, cursor: "pointer" }}>Del</button>
+                      <button onClick={() => onDeletePayment(pay._id, `Payment #${pay._id?.slice(-6)?.toUpperCase()}`)} style={{ padding: "3px 9px", borderRadius: "7px", border: `1px solid ${RDB}`, background: RDL, color: RD, fontSize: "11px", fontWeight: 600, cursor: "pointer" }}>Del</button>
                     </td>
                   </tr>
                 ))}
@@ -123,6 +127,9 @@ export default function SupplierPayments() {
   const [apiError, setApiError] = useState("");
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
+  const [delModal, setDelModal] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [delError, setDelError] = useState(null);
 
   const loadAll = () => {
     setLoading(true);
@@ -157,8 +164,20 @@ export default function SupplierPayments() {
     } catch (err) { setApiError(err?.response?.data?.message || "Failed."); } finally { setSaving(false); }
   };
 
-  const activeSuppliers = useMemo(() => suppliers.filter(s => s.status === "ACTIVE"), [suppliers]);
+  const handleDeletePayment = (id, name) => { setDelError(null); setDelModal({ id, name }); };
 
+  const confirmDelete = async () => {
+    if (!delModal) return;
+    setDeleting(true); setDelError(null);
+    try {
+      await axiosInstance.delete(`/supplier-payments/${delModal.id}`);
+      setPayments(prev => prev.filter(p => p._id !== delModal.id));
+      setDelModal(null);
+    } catch (e) { setDelError(e?.response?.data?.message || "Failed to delete payment."); }
+    finally { setDeleting(false); }
+  };
+
+  const activeSuppliers = useMemo(() => suppliers.filter(s => s.status === "ACTIVE"), [suppliers]);
   const filteredSuppliers = useMemo(() => {
     const q = search.toLowerCase();
     return activeSuppliers.filter(s => !q || s.supplierName?.toLowerCase().includes(q) || s.companyName?.toLowerCase().includes(q));
@@ -169,6 +188,20 @@ export default function SupplierPayments() {
 
   return (
     <PageShell title="Supplier Payments" subtitle="Track all payment ledgers and outstanding dues">
+      {delModal && (
+        <ConfirmModal
+          title="Delete Payment"
+          message="This payment record will be permanently deleted."
+          itemName={delModal.name}
+          variant="danger"
+          loading={deleting}
+          error={delError}
+          onConfirm={confirmDelete}
+          onCancel={() => { setDelModal(null); setDelError(null); }}
+          confirmLabel="Delete Payment"
+        />
+      )}
+
       {/* Stats */}
       <div style={{ display: "flex", gap: "10px", marginBottom: "20px", flexWrap: "wrap" }}>
         <div style={{ padding: "12px 18px", borderRadius: "12px", background: PL, border: `1.5px solid ${PB}`, display: "flex", gap: "10px", alignItems: "center" }}>
@@ -258,7 +291,9 @@ export default function SupplierPayments() {
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          {filteredSuppliers.map(s => <SupplierLedger key={s._id} supplier={s} payments={payments} pos={pos} />)}
+          {filteredSuppliers.map(s => (
+            <SupplierLedger key={s._id} supplier={s} payments={payments} pos={pos} onDeletePayment={handleDeletePayment} />
+          ))}
         </div>
       )}
     </PageShell>

@@ -1,3 +1,4 @@
+import ConfirmModal from "../../components/ui/ConfirmModal";
 import { useState, useEffect } from "react";
 import { PageShell, Card } from "../../components/ui/PageShell";
 import Button from "../../components/ui/Button";
@@ -150,8 +151,7 @@ export default function AssignShifts(){
   };
 
   const handleDelete=async id=>{
-    if(!window.confirm("Delete this shift?"))return;
-    try{await axiosInstance.delete(`/shifts/${id}`);load();}catch{alert("Failed to delete.");}
+    setDelError(null); setDelModal({id});
   };
 
   const prevWeek=()=>{const d=new Date(weekStart);d.setDate(d.getDate()-7);setWeekStart(d);};

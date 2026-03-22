@@ -33,7 +33,7 @@ function KpiCard({ icon, label, value, trend, trendUp, color = ac, light = acLig
         <div style={{ display: "flex", padding: "8px 0" }}><Spinner size={18} /></div>
       ) : (
         <>
-          <div style={{ fontFamily: "'Figtree',sans-serif", fontSize: "30px", fontWeight: 700, color: "#1a1a2e", letterSpacing: "-.04em", lineHeight: 1 }}>{value ?? "—"}</div>
+          <div style={{ fontFamily: "'Poppins',sans-serif", fontSize: "30px", fontWeight: 700, color: "#1a1a2e", letterSpacing: "-.04em", lineHeight: 1 }}>{value ?? "—"}</div>
           <div style={{ fontFamily: "'DM Mono',monospace", fontSize: "9.5px", color: "rgba(26,26,46,.38)", letterSpacing: ".14em", textTransform: "uppercase", marginTop: "8px" }}>{label}</div>
         </>
       )}
@@ -66,7 +66,7 @@ function SectionBox({ title, icon, children, right }) {
           <div style={{ width: "32px", height: "32px", borderRadius: "9px", background: acLight, border: `1px solid ${acBorder}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke={ac} strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d={icon} /></svg>
           </div>
-          <span style={{ fontFamily: "'Figtree',sans-serif", fontSize: "15px", fontWeight: 800, color: "#1a1a2e" }}>{title}</span>
+          <span style={{ fontFamily: "'Poppins',sans-serif", fontSize: "15px", fontWeight: 800, color: "#1a1a2e" }}>{title}</span>
         </div>
         {right}
       </div>
@@ -135,17 +135,17 @@ export default function CashierDashboard() {
             <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: green, boxShadow: "0 0 8px rgba(5,150,105,.5)", animation: "pulse 2s infinite" }} />
             <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "9.5px", color: ac, letterSpacing: ".2em", textTransform: "uppercase" }}>Customer Portal</span>
           </div>
-          <h1 style={{ fontFamily: "'Figtree',sans-serif", fontSize: "30px", fontWeight: 700, color: "#1a1a2e", letterSpacing: "-.04em", margin: 0, lineHeight: 1.1 }}>
+          <h1 style={{ fontFamily: "'Poppins',sans-serif", fontSize: "30px", fontWeight: 700, color: "#1a1a2e", letterSpacing: "-.04em", margin: 0, lineHeight: 1.1 }}>
             {greeting}, <em style={{ color: ac, fontStyle: "italic" }}>{user?.name?.split(" ")[0]}</em> 👋
           </h1>
           <p style={{ fontSize: "14px", color: "rgba(26,26,46,.45)", marginTop: "7px" }}>Your orders, invoices &amp; account — all in one place.</p>
         </div>
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-          <button onClick={() => navigate("/profile")} style={{ padding: "10px 20px", borderRadius: "12px", border: `1.5px solid ${acBorder}`, cursor: "pointer", background: acLight, color: ac, fontSize: "13px", fontWeight: 700, fontFamily: "'Figtree',sans-serif", display: "flex", alignItems: "center", gap: "7px" }}>
+          <button onClick={() => navigate("/profile")} style={{ padding: "10px 20px", borderRadius: "12px", border: `1.5px solid ${acBorder}`, cursor: "pointer", background: acLight, color: ac, fontSize: "13px", fontWeight: 700, fontFamily: "'Poppins',sans-serif", display: "flex", alignItems: "center", gap: "7px" }}>
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0" /></svg>
             My Profile
           </button>
-          <button onClick={() => navigate("/change-password")} style={{ padding: "10px 20px", borderRadius: "12px", border: "1.5px solid rgba(26,26,46,.14)", cursor: "pointer", background: "#fff", color: "rgba(26,26,46,.65)", fontSize: "13px", fontWeight: 600, fontFamily: "'Figtree',sans-serif" }}>Change Password</button>
+          <button onClick={() => navigate("/change-password")} style={{ padding: "10px 20px", borderRadius: "12px", border: "1.5px solid rgba(26,26,46,.14)", cursor: "pointer", background: "#fff", color: "rgba(26,26,46,.65)", fontSize: "13px", fontWeight: 600, fontFamily: "'Poppins',sans-serif" }}>Change Password</button>
         </div>
       </div>
 
@@ -178,7 +178,7 @@ export default function CashierDashboard() {
               <span style={{ fontSize: "20px", fontWeight: 800, color: "#fff" }}>{user?.name?.charAt(0)?.toUpperCase()}</span>
             </div>
             <div>
-              <div style={{ fontSize: "16px", fontWeight: 800, color: "#1a1a2e", fontFamily: "'Figtree',sans-serif" }}>{user?.name}</div>
+              <div style={{ fontSize: "16px", fontWeight: 800, color: "#1a1a2e", fontFamily: "'Poppins',sans-serif" }}>{user?.name}</div>
               <div style={{ fontSize: "12px", color: "rgba(26,26,46,.5)", marginTop: "2px" }}>{user?.email}</div>
               <span style={{ display: "inline-block", marginTop: "5px", fontSize: "10px", fontFamily: "'DM Mono',monospace", color: ac, background: acLight, border: `1px solid ${acBorder}`, padding: "2px 8px", borderRadius: "99px" }}>Customer</span>
             </div>

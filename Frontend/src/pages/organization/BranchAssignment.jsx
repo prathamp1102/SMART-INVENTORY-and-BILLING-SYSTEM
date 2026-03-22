@@ -58,6 +58,17 @@ function EmptyState({ icon, title, sub }) {
 /* ─── StaffCard ────────────────────────────────────────────────── */
 function StaffCard({ staff, onRemove, onMove, branches, currentBranchId, removing }) {
   const [showMove, setShowMove] = useState(false);
+  const dropRef = useState(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    if (!showMove) return;
+    const handler = (e) => {
+      if (!e.target.closest("[data-move-dropdown]")) setShowMove(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showMove]);
   return (
     <div style={{ display:"flex", alignItems:"center", gap:"12px", padding:"10px 14px", borderRadius:"12px", border:"1px solid rgba(26,26,46,.07)", background:"rgba(26,26,46,.01)", transition:"all .15s" }}
       onMouseEnter={e => e.currentTarget.style.background = PL}
@@ -71,30 +82,36 @@ function StaffCard({ staff, onRemove, onMove, branches, currentBranchId, removin
       <Tag label={staff.role} color={staff.role === "ADMIN" ? B : G} bg={staff.role === "ADMIN" ? BL : GL} border={staff.role === "ADMIN" ? BB : GB} />
 
       <div style={{ display:"flex", gap:"5px", flexShrink:0 }}>
-        {/* Move to another branch */}
-        <div style={{ position:"relative" }}>
-          <button
-            title="Move to branch"
-            onClick={() => setShowMove(v => !v)}
-            style={{ width:28, height:28, borderRadius:"8px", border:`1px solid ${BB}`, background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", color:B }}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="13" height="13"><path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
-          </button>
-          {showMove && (
-            <div style={{ position:"absolute", right:0, top:"34px", zIndex:200, background:"#fff", borderRadius:"12px", border:"1px solid rgba(26,26,46,.1)", boxShadow:"0 8px 32px rgba(26,26,46,.15)", padding:"6px", minWidth:"200px" }}>
-              <div style={{ fontSize:"10px", fontFamily:"'DM Mono',monospace", letterSpacing:".1em", textTransform:"uppercase", color:"rgba(26,26,46,.4)", padding:"4px 8px 6px" }}>Move to branch</div>
-              {branches.filter(b => String(b._id) !== currentBranchId).map(b => (
-                <button key={b._id} onClick={() => { setShowMove(false); onMove(staff._id, b._id); }}
-                  style={{ display:"block", width:"100%", textAlign:"left", padding:"8px 10px", borderRadius:"8px", border:"none", background:"transparent", cursor:"pointer", fontSize:"12px", color:"#1a1a2e", fontWeight:600 }}
-                  onMouseEnter={e => e.currentTarget.style.background = PL}
-                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-                >
-                  {b.branchName} <span style={{ color:"rgba(26,26,46,.4)", fontWeight:400 }}>· {b.city}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Move to another branch — only show if other branches exist */}
+        {branches.length > 0 && (
+          <div style={{ position:"relative" }} data-move-dropdown="true">
+            <button
+              title="Move to branch"
+              onClick={() => setShowMove(v => !v)}
+              style={{ width:28, height:28, borderRadius:"8px", border:`1px solid ${BB}`, background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", color:B }}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="13" height="13"><path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
+            </button>
+            {showMove && (
+              <div style={{ position:"absolute", right:0, top:"34px", zIndex:200, background:"#fff", borderRadius:"12px", border:"1px solid rgba(26,26,46,.1)", boxShadow:"0 8px 32px rgba(26,26,46,.15)", padding:"6px", minWidth:"200px" }}>
+                <div style={{ fontSize:"10px", fontFamily:"'DM Mono',monospace", letterSpacing:".1em", textTransform:"uppercase", color:"rgba(26,26,46,.4)", padding:"4px 8px 6px" }}>Move to branch</div>
+                {branches.filter(b => String(b._id) !== currentBranchId).length === 0 ? (
+                  <div style={{ padding:"10px", fontSize:"12px", color:"rgba(26,26,46,.4)", textAlign:"center" }}>No other branches available</div>
+                ) : (
+                  branches.filter(b => String(b._id) !== currentBranchId).map(b => (
+                    <button key={b._id} onClick={() => { setShowMove(false); onMove(staff._id, b._id); }}
+                      style={{ display:"block", width:"100%", textAlign:"left", padding:"8px 10px", borderRadius:"8px", border:"none", background:"transparent", cursor:"pointer", fontSize:"12px", color:"#1a1a2e", fontWeight:600 }}
+                      onMouseEnter={e => e.currentTarget.style.background = PL}
+                      onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                    >
+                      {b.branchName} <span style={{ color:"rgba(26,26,46,.4)", fontWeight:400 }}>· {b.city}</span>
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+        )}
         {/* Remove from branch */}
         <button
           title="Remove from branch"

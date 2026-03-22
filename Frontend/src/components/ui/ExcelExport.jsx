@@ -65,7 +65,7 @@ export default function ExcelExport({ data = [], columns = [], filename = "expor
         background:isEmpty?"rgba(26,26,46,.04)":btn.light,
         color:isEmpty?"rgba(26,26,46,.3)":btn.color,
         fontSize:"13px", fontWeight:700, cursor:isEmpty||loading?"not-allowed":"pointer",
-        fontFamily:"'Figtree',sans-serif", transition:"all .15s", whiteSpace:"nowrap",
+        fontFamily:"'Poppins',sans-serif", transition:"all .15s", whiteSpace:"nowrap",
         opacity:loading?0.7:1,
       }}
       onMouseEnter={e=>{ if(!isEmpty&&!loading) e.currentTarget.style.background=btn.color+"22"; }}

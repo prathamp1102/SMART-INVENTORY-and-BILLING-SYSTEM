@@ -109,7 +109,7 @@ export default function AttendanceReport() {
       const orgId    = isSuperAdmin && selOrg    !== "all" ? selOrg    : undefined;
       const branchId = isSuperAdmin && selBranch !== "all" ? selBranch : undefined;
       getAllAttendanceApi({ date, organizationId: orgId, branchId }).then(setRecords);
-    } catch (e) { alert(e?.response?.data?.message || "Update failed"); }
+    } catch (e) { console.error("Update failed", e); }
     finally { setSaving(false); }
   };
 

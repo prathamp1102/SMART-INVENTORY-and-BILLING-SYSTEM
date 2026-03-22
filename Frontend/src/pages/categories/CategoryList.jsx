@@ -1,6 +1,161 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCategories, deleteCategory } from "../../services/productService";
+
+/* ─── Delete Confirm Modal ────────────────────────────────────── */
+function DeleteModal({ categoryName, onConfirm, onCancel, deleting, error }) {
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={onCancel}
+        style={{
+          position: "fixed", inset: 0, background: "rgba(10,10,26,.55)",
+          backdropFilter: "blur(4px)", zIndex: 1000,
+          animation: "fadeIn .18s ease",
+        }}
+      />
+      {/* Modal card */}
+      <div style={{
+        position: "fixed", top: "50%", left: "50%",
+        transform: "translate(-50%,-50%)",
+        zIndex: 1001, width: "min(420px, calc(100vw - 32px))",
+        background: "#fff", borderRadius: "22px",
+        boxShadow: "0 24px 80px rgba(10,10,26,.22), 0 4px 24px rgba(220,38,38,.08)",
+        overflow: "hidden",
+        animation: "popIn .22s cubic-bezier(.34,1.4,.64,1)",
+      }}>
+        {/* Red top strip */}
+        <div style={{
+          height: "5px",
+          background: "linear-gradient(90deg,#dc2626,#ef4444,#f87171)",
+        }} />
+
+        <div style={{ padding: "28px 28px 24px" }}>
+          {/* Icon */}
+          <div style={{
+            width: 56, height: 56, borderRadius: "16px",
+            background: "rgba(239,68,68,.1)", border: "1.5px solid rgba(239,68,68,.2)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            marginBottom: "18px",
+          }}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="1.8"
+              strokeLinecap="round" strokeLinejoin="round" width="26" height="26">
+              <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
+              <path d="M10 11v6M14 11v6"/>
+            </svg>
+          </div>
+
+          {/* Title */}
+          <div style={{
+            fontFamily: "'Poppins',sans-serif", fontSize: "18px",
+            fontWeight: 700, color: "#1a1a2e", marginBottom: "8px",
+            letterSpacing: "-.02em",
+          }}>
+            Delete Category
+          </div>
+
+          {/* Body */}
+          <div style={{ fontSize: "13.5px", color: "rgba(26,26,46,.55)", lineHeight: 1.6, marginBottom: "6px" }}>
+            You're about to permanently delete
+          </div>
+          {categoryName && (
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: "7px",
+              padding: "6px 13px", borderRadius: "10px",
+              background: "rgba(239,68,68,.07)", border: "1px solid rgba(239,68,68,.18)",
+              marginBottom: "14px",
+            }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2"
+                strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+                <path d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"/>
+              </svg>
+              <span style={{
+                fontFamily: "'DM Mono',monospace", fontSize: "13px",
+                fontWeight: 700, color: "#dc2626",
+              }}>{categoryName}</span>
+            </div>
+          )}
+          <div style={{ fontSize: "13px", color: "rgba(26,26,46,.42)", lineHeight: 1.55 }}>
+            This action <strong style={{ color: "#dc2626" }}>cannot be undone</strong>. All data associated with this category will be permanently removed.
+          </div>
+
+          {/* Error */}
+          {error && (
+            <div style={{
+              marginTop: "14px", padding: "10px 14px", borderRadius: "10px",
+              background: "rgba(239,68,68,.07)", border: "1px solid rgba(239,68,68,.2)",
+              color: "#dc2626", fontSize: "12.5px", display: "flex", gap: "7px", alignItems: "center",
+            }}>
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+              </svg>
+              {error}
+            </div>
+          )}
+
+          {/* Buttons */}
+          <div style={{ display: "flex", gap: "10px", marginTop: "24px" }}>
+            <button
+              onClick={onCancel}
+              disabled={deleting}
+              style={{
+                flex: 1, padding: "12px", borderRadius: "12px",
+                border: "1.5px solid rgba(26,26,46,.14)", background: "#fff",
+                color: "rgba(26,26,46,.6)", fontSize: "13.5px", fontWeight: 600,
+                cursor: deleting ? "not-allowed" : "pointer",
+                fontFamily: "'Poppins',sans-serif", transition: "all .15s",
+              }}
+              onMouseEnter={e => { if (!deleting) { e.currentTarget.style.background = "rgba(26,26,46,.04)"; e.currentTarget.style.borderColor = "rgba(26,26,46,.22)"; }}}
+              onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.borderColor = "rgba(26,26,46,.14)"; }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={onConfirm}
+              disabled={deleting}
+              style={{
+                flex: 1, padding: "12px", borderRadius: "12px", border: "none",
+                background: deleting ? "rgba(220,38,38,.5)" : "linear-gradient(135deg,#dc2626,#b91c1c)",
+                color: "#fff", fontSize: "13.5px", fontWeight: 700,
+                cursor: deleting ? "not-allowed" : "pointer",
+                fontFamily: "'Poppins',sans-serif",
+                boxShadow: deleting ? "none" : "0 4px 18px rgba(220,38,38,.35)",
+                transition: "all .15s",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "7px",
+              }}
+              onMouseEnter={e => { if (!deleting) e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; }}
+            >
+              {deleting ? (
+                <>
+                  <svg style={{ animation: "spin .7s linear infinite" }} viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="2.5" width="14" height="14">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                  </svg>
+                  Deleting…
+                </>
+              ) : (
+                <>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"
+                    strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+                    <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
+                  </svg>
+                  Delete
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+      <style>{`
+        @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+        @keyframes popIn  { from { opacity:0; transform:translate(-50%,-50%) scale(.92) } to { opacity:1; transform:translate(-50%,-50%) scale(1) } }
+        @keyframes spin   { to { transform:rotate(360deg) } }
+      `}</style>
+    </>
+  );
+}
 import { getOrganizations, getBranches } from "../../services/organizationService";
 import { PageShell } from "../../components/ui/PageShell";
 import BranchScopeBanner from "../../components/ui/BranchScopeBanner";
@@ -61,7 +216,7 @@ function CategoryRow({c,onDelete,showOrgBranch}){
     <td style={{padding:"12px 14px"}}>
       <div style={{display:"flex",gap:"6px"}}>
         <button onClick={()=>navigate(`/categories/edit/${c._id}`)} style={{padding:"5px 12px",borderRadius:"8px",border:"1.5px solid rgba(26,26,46,.14)",background:"#fff",color:"rgba(26,26,46,.7)",fontSize:"12px",fontWeight:600,cursor:"pointer"}} onMouseEnter={e=>{e.currentTarget.style.borderColor=PB;e.currentTarget.style.color=P;}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(26,26,46,.14)";e.currentTarget.style.color="rgba(26,26,46,.7)";}}>Edit</button>
-        <button onClick={()=>onDelete(c._id)} style={{padding:"5px 12px",borderRadius:"8px",border:`1.5px solid ${RDB}`,background:RDL,color:RD,fontSize:"12px",fontWeight:600,cursor:"pointer"}}>Delete</button>
+        <button onClick={()=>onDelete(c._id, c.name)} style={{padding:"5px 12px",borderRadius:"8px",border:`1.5px solid ${RDB}`,background:RDL,color:RD,fontSize:"12px",fontWeight:600,cursor:"pointer"}}>Delete</button>
       </div>
     </td>
   </tr>;
@@ -180,6 +335,9 @@ export default function CategoryList(){
   const [selBranch,setSelBranch]=useState("all");
   const [viewMode,setViewMode]=useState("grouped");
   const [profile,setProfile]=useState(null);
+  const [deleteModal,setDeleteModal]=useState(null); // { id, name }
+  const [deleting,setDeleting]=useState(false);
+  const [deleteError,setDeleteError]=useState(null);
 
   const loadData=()=>{
     setLoading(true);
@@ -212,10 +370,24 @@ export default function CategoryList(){
     });
   },[categories,search,statusFilter,selOrg,selBranch,isSA]);
 
-  const handleDelete=async(id)=>{
-    if(!window.confirm("Delete this category?"))return;
-    try{await deleteCategory(id);setCategories(prev=>prev.filter(c=>c._id!==id));}
-    catch(err){alert(err?.response?.data?.message||"Failed to delete.");}
+  const handleDelete = (id, name) => {
+    setDeleteError(null);
+    setDeleteModal({ id, name });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteModal) return;
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      await deleteCategory(deleteModal.id);
+      setCategories(prev => prev.filter(c => c._id !== deleteModal.id));
+      setDeleteModal(null);
+    } catch (err) {
+      setDeleteError(err?.response?.data?.message || "Failed to delete. Please try again.");
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const totalOrgs=isSA?new Set(categories.map(c=>c.branch?.organization?._id).filter(Boolean)).size:0;
@@ -228,6 +400,15 @@ export default function CategoryList(){
   const branchName=profile?.branch?.branchName;
 
   return <PageShell title="Categories" subtitle={isSA?"All categories across all organizations & branches":"Manage your branch categories"}>
+    {deleteModal && (
+      <DeleteModal
+        categoryName={deleteModal.name}
+        onConfirm={confirmDelete}
+        onCancel={() => { setDeleteModal(null); setDeleteError(null); }}
+        deleting={deleting}
+        error={deleteError}
+      />
+    )}
 
     {/* SA summary pills */}
     {isSA&&<div style={{display:"flex",gap:"10px",marginBottom:"16px",flexWrap:"wrap",alignItems:"center"}}>
@@ -283,7 +464,7 @@ export default function CategoryList(){
       <div style={{marginLeft:"auto",display:"flex",gap:"8px",alignItems:"center"}}>
         <div style={{position:"relative"}}>
           <svg style={{position:"absolute",left:"10px",top:"50%",transform:"translateY(-50%)"}} width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="rgba(26,26,46,.3)" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input placeholder="Search categories…" value={search} onChange={e=>setSearch(e.target.value)} style={{height:"36px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.12)",outline:"none",paddingLeft:"32px",paddingRight:"12px",fontSize:"13px",fontFamily:"'Figtree',sans-serif",color:"#1a1a2e",background:"#fff",width:"210px"}}
+          <input placeholder="Search categories…" value={search} onChange={e=>setSearch(e.target.value)} style={{height:"36px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.12)",outline:"none",paddingLeft:"32px",paddingRight:"12px",fontSize:"13px",fontFamily:"'Poppins',sans-serif",color:"#1a1a2e",background:"#fff",width:"210px"}}
             onFocus={e=>e.target.style.borderColor=PB} onBlur={e=>e.target.style.borderColor="rgba(26,26,46,.12)"}/>
         </div>
         <span style={{fontSize:"12px",color:"rgba(26,26,46,.4)",fontFamily:"'DM Mono',monospace",whiteSpace:"nowrap"}}>{filtered.length} categor{filtered.length!==1?"ies":"y"}</span>
@@ -303,7 +484,7 @@ export default function CategoryList(){
             {key:"branch.state",label:"Branch State"},
           ]}
         />
-        <button onClick={()=>navigate("/categories/add")} style={{display:"flex",alignItems:"center",gap:"7px",padding:"8px 16px",borderRadius:"10px",border:"none",cursor:"pointer",background:`linear-gradient(135deg,${P},#6d28d9)`,color:"#fff",fontSize:"13px",fontWeight:700,fontFamily:"'Figtree',sans-serif",boxShadow:"0 4px 14px rgba(124,58,237,.3)",whiteSpace:"nowrap"}}>
+        <button onClick={()=>navigate("/categories/add")} style={{display:"flex",alignItems:"center",gap:"7px",padding:"8px 16px",borderRadius:"10px",border:"none",cursor:"pointer",background:`linear-gradient(135deg,${P},#6d28d9)`,color:"#fff",fontSize:"13px",fontWeight:700,fontFamily:"'Poppins',sans-serif",boxShadow:"0 4px 14px rgba(124,58,237,.3)",whiteSpace:"nowrap"}}>
           <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
           Add Category
         </button>

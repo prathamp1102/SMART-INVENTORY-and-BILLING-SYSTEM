@@ -34,7 +34,7 @@ function Modal({ title, onClose, children, width = 460 }) {
       onClick={e => e.target === e.currentTarget && onClose()}>
       <div style={{ background: "#fff", borderRadius: 20, width: "100%", maxWidth: width, boxShadow: "0 24px 80px rgba(26,26,46,.22)", animation: "fadeUp .22s ease both", maxHeight: "90vh", overflow: "auto" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 24px", borderBottom: "1px solid rgba(26,26,46,.07)", position: "sticky", top: 0, background: "#fff", zIndex: 1 }}>
-          <span style={{ fontFamily: "'Figtree',sans-serif", fontSize: 15, fontWeight: 800, color: "#1a1a2e" }}>{title}</span>
+          <span style={{ fontFamily: "'Poppins',sans-serif", fontSize: 15, fontWeight: 800, color: "#1a1a2e" }}>{title}</span>
           <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: 8, border: "1px solid rgba(26,26,46,.12)", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(26,26,46,.4)" }}>
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
@@ -45,7 +45,7 @@ function Modal({ title, onClose, children, width = 460 }) {
   );
 }
 
-const iStyle = { width: "100%", padding: "9px 12px", borderRadius: 10, border: "1.5px solid rgba(26,26,46,.12)", fontSize: 13, color: "#1a1a2e", background: "#fafafa", outline: "none", fontFamily: "'Figtree',sans-serif", boxSizing: "border-box", transition: "border-color .15s" };
+const iStyle = { width: "100%", padding: "9px 12px", borderRadius: 10, border: "1.5px solid rgba(26,26,46,.12)", fontSize: 13, color: "#1a1a2e", background: "#fafafa", outline: "none", fontFamily: "'Poppins',sans-serif", boxSizing: "border-box", transition: "border-color .15s" };
 
 function Field({ label, error, children }) {
   return (
@@ -66,7 +66,7 @@ function Input({ error, ...props }) {
 function PrimaryBtn({ onClick, children, loading, color = ac, glow = acGlow }) {
   return (
     <button onClick={onClick} disabled={loading}
-      style={{ padding: "10px 22px", borderRadius: 11, border: "none", cursor: loading ? "not-allowed" : "pointer", background: `linear-gradient(135deg,${color},${color}cc)`, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: "'Figtree',sans-serif", boxShadow: `0 4px 16px ${glow}`, opacity: loading ? 0.7 : 1, display: "flex", alignItems: "center", gap: 7 }}>
+      style={{ padding: "10px 22px", borderRadius: 11, border: "none", cursor: loading ? "not-allowed" : "pointer", background: `linear-gradient(135deg,${color},${color}cc)`, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: "'Poppins',sans-serif", boxShadow: `0 4px 16px ${glow}`, opacity: loading ? 0.7 : 1, display: "flex", alignItems: "center", gap: 7 }}>
       {loading && <Spinner size={13} color="#fff" />}
       {children}
     </button>
@@ -76,7 +76,7 @@ function PrimaryBtn({ onClick, children, loading, color = ac, glow = acGlow }) {
 function GhostBtn({ onClick, children }) {
   return (
     <button onClick={onClick}
-      style={{ padding: "10px 18px", borderRadius: 11, border: `1.5px solid ${acBorder}`, cursor: "pointer", background: acLight, color: ac, fontSize: 13, fontWeight: 700, fontFamily: "'Figtree',sans-serif" }}>
+      style={{ padding: "10px 18px", borderRadius: 11, border: `1.5px solid ${acBorder}`, cursor: "pointer", background: acLight, color: ac, fontSize: 13, fontWeight: 700, fontFamily: "'Poppins',sans-serif" }}>
       {children}
     </button>
   );
@@ -94,7 +94,7 @@ function KpiCard({ icon, label, value, trend, trendUp, color = ac, light = acLig
         </div>
         {trend && <span style={{ fontSize: 11, fontWeight: 700, color: trendUp ? green : red, background: trendUp ? greenLight : "rgba(239,68,68,.1)", padding: "3px 8px", borderRadius: 99, fontFamily: "'DM Mono',monospace" }}>{trendUp ? "↑" : "↓"} {trend}</span>}
       </div>
-      <div style={{ fontFamily: "'Figtree',sans-serif", fontSize: 30, fontWeight: 700, color: "#1a1a2e", lineHeight: 1 }}>{value}</div>
+      <div style={{ fontFamily: "'Poppins',sans-serif", fontSize: 30, fontWeight: 700, color: "#1a1a2e", lineHeight: 1 }}>{value}</div>
       <div style={{ fontFamily: "'DM Mono',monospace", fontSize: "9.5px", color: "rgba(26,26,46,.38)", letterSpacing: ".14em", textTransform: "uppercase", marginTop: 8 }}>{label}</div>
     </div>
   );
@@ -125,7 +125,7 @@ function SectionBox({ title, icon, children, right, color = ac, light = acLight,
           <div style={{ width: 32, height: 32, borderRadius: 9, background: light, border: `1px solid ${border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke={color} strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d={icon} /></svg>
           </div>
-          <span style={{ fontFamily: "'Figtree',sans-serif", fontSize: 15, fontWeight: 800, color: "#1a1a2e" }}>{title}</span>
+          <span style={{ fontFamily: "'Poppins',sans-serif", fontSize: 15, fontWeight: 800, color: "#1a1a2e" }}>{title}</span>
         </div>
         {right}
       </div>
@@ -304,7 +304,7 @@ function StaffSection({ profile, showToast }) {
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke={ac} strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
           </div>
           <div>
-            <span style={{ fontFamily: "'Figtree',sans-serif", fontSize: 15, fontWeight: 800, color: "#1a1a2e" }}>Staff Management</span>
+            <span style={{ fontFamily: "'Poppins',sans-serif", fontSize: 15, fontWeight: 800, color: "#1a1a2e" }}>Staff Management</span>
             {(branchName || orgName) && (
               <div style={{ fontSize: 11, color: "rgba(26,26,46,.4)", marginTop: 2, fontFamily: "'DM Mono',monospace" }}>
                 {[orgName, branchName].filter(Boolean).join(" · ")}
@@ -330,7 +330,7 @@ function StaffSection({ profile, showToast }) {
             <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
           </button>
           <button onClick={openAdd}
-            style={{ display: "flex", alignItems: "center", gap: 7, padding: "8px 16px", borderRadius: 10, border: "none", cursor: "pointer", background: `linear-gradient(135deg,${ac},#0369a1)`, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: "'Figtree',sans-serif", boxShadow: `0 4px 14px ${acGlow}` }}>
+            style={{ display: "flex", alignItems: "center", gap: 7, padding: "8px 16px", borderRadius: 10, border: "none", cursor: "pointer", background: `linear-gradient(135deg,${ac},#0369a1)`, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: "'Poppins',sans-serif", boxShadow: `0 4px 14px ${acGlow}` }}>
             <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             Add Staff
           </button>
@@ -348,7 +348,7 @@ function StaffSection({ profile, showToast }) {
             </div>
             <div style={{ fontSize: 14, fontWeight: 700, color: "#1a1a2e", marginBottom: 6 }}>{search ? "No staff match your search" : "No staff yet"}</div>
             <div style={{ fontSize: 12, color: "rgba(26,26,46,.4)", marginBottom: 16 }}>{search ? "Try a different name or email." : "Add your first staff member to get started."}</div>
-            {!search && <button onClick={openAdd} style={{ padding: "8px 18px", borderRadius: 10, border: "none", cursor: "pointer", background: `linear-gradient(135deg,${ac},#0369a1)`, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: "'Figtree',sans-serif" }}>+ Add First Staff</button>}
+            {!search && <button onClick={openAdd} style={{ padding: "8px 18px", borderRadius: 10, border: "none", cursor: "pointer", background: `linear-gradient(135deg,${ac},#0369a1)`, color: "#fff", fontSize: 12, fontWeight: 700, fontFamily: "'Poppins',sans-serif" }}>+ Add First Staff</button>}
           </div>
         ) : (
           <div style={{ display: "grid", gap: 10 }}>
@@ -561,7 +561,7 @@ export default function AdminDashboard() {
             <div style={{ width: 8, height: 8, borderRadius: "50%", background: green, boxShadow: "0 0 8px rgba(5,150,105,.5)", animation: "pulse 2s infinite" }} />
             <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "9.5px", color: ac, letterSpacing: ".2em", textTransform: "uppercase" }}>Branch Manager Console</span>
           </div>
-          <h1 style={{ fontFamily: "'Figtree',sans-serif", fontSize: 30, fontWeight: 800, color: "#1a1a2e", letterSpacing: "-.02em", margin: 0, lineHeight: 1.1 }}>
+          <h1 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 30, fontWeight: 800, color: "#1a1a2e", letterSpacing: "-.02em", margin: 0, lineHeight: 1.1 }}>
             {greeting}, <em style={{ color: ac, fontStyle: "italic" }}>{user?.name?.split(" ")[0]}</em> 🏢
           </h1>
           <p style={{ fontSize: 13, color: "rgba(26,26,46,.45)", marginTop: 7, display: "flex", alignItems: "center", gap: 6 }}>
@@ -572,11 +572,11 @@ export default function AdminDashboard() {
           </p>
         </div>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <button onClick={() => navigate("/products/add")} style={{ padding: "10px 20px", borderRadius: 12, border: "none", cursor: "pointer", background: `linear-gradient(135deg,${ac},#0369a1)`, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: "'Figtree',sans-serif", boxShadow: `0 4px 18px ${acGlow}`, display: "flex", alignItems: "center", gap: 7 }}>
+          <button onClick={() => navigate("/products/add")} style={{ padding: "10px 20px", borderRadius: 12, border: "none", cursor: "pointer", background: `linear-gradient(135deg,${ac},#0369a1)`, color: "#fff", fontSize: 13, fontWeight: 700, fontFamily: "'Poppins',sans-serif", boxShadow: `0 4px 18px ${acGlow}`, display: "flex", alignItems: "center", gap: 7 }}>
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             Add Product
           </button>
-          <button onClick={() => navigate("/sales/desk")} style={{ padding: "10px 20px", borderRadius: 12, border: `1.5px solid ${acBorder}`, cursor: "pointer", background: acLight, color: ac, fontSize: 13, fontWeight: 700, fontFamily: "'Figtree',sans-serif" }}>New Sale</button>
+          <button onClick={() => navigate("/sales/desk")} style={{ padding: "10px 20px", borderRadius: 12, border: `1.5px solid ${acBorder}`, cursor: "pointer", background: acLight, color: ac, fontSize: 13, fontWeight: 700, fontFamily: "'Poppins',sans-serif" }}>New Sale</button>
         </div>
       </div>
 

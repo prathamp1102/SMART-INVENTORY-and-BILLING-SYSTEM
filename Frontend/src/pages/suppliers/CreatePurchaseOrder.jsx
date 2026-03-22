@@ -145,7 +145,7 @@ export default function CreatePurchaseOrder() {
               </button>
             </div>
           ))}
-          <button onClick={addItem} style={{ alignSelf: "flex-start", display: "flex", alignItems: "center", gap: "6px", padding: "7px 14px", borderRadius: "9px", border: `1.5px dashed ${BB}`, background: BL, color: B, fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "'Figtree',sans-serif" }}>
+          <button onClick={addItem} style={{ alignSelf: "flex-start", display: "flex", alignItems: "center", gap: "6px", padding: "7px 14px", borderRadius: "9px", border: `1.5px dashed ${BB}`, background: BL, color: B, fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "'Poppins',sans-serif" }}>
             <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             Add Item
           </button>
