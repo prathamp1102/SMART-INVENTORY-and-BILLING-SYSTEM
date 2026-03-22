@@ -1,3 +1,4 @@
+import ConfirmModal from "../../components/ui/ConfirmModal";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../services/axiosInstance";
@@ -55,14 +56,14 @@ export default function TrackComplaint() {
   };
 
   const handleCancel = async (id) => {
-    if (!window.confirm("Are you sure you want to cancel this service request?")) return;
+    setCancelError(null); setCancelModal({id}); return;
     setCancelling(true);
     try {
       await axiosInstance.patch(`/service/requests/${id}/cancel`);
       await fetchRequests();
       setSelected(prev => prev?._id === id ? { ...prev, status: "CANCELLED" } : prev);
     } catch (err) {
-      alert(err?.response?.data?.message || "Failed to cancel request.");
+      setCancelError(err?.response?.data?.message || "Failed to cancel request.");
     } finally { setCancelling(false); }
   };
 
@@ -79,7 +80,20 @@ export default function TrackComplaint() {
   const currentStep = selected ? (STATUS_CONFIG[selected.status]?.step || 1) : 0;
   const isCancelled = selected?.status === "CANCELLED";
 
+  const confirmCancel=async()=>{
+    if(!cancelModal)return;
+    setCancelling(true); setCancelError(null);
+    try{
+      await axiosInstance.patch(`/service-requests/${cancelModal.id}/cancel`);
+      setRequests(prev=>prev.map(r=>r._id===cancelModal.id?{...r,status:"CANCELLED"}:r));
+      setCancelModal(null);
+    }catch(err){ setCancelError(err?.response?.data?.message||"Failed to cancel."); }
+    finally{ setCancelling(false); }
+  };
+
   return (
+
+    <>{cancelModal&&<ConfirmModal title="Cancel Service Request" message="Are you sure you want to cancel this service request?" variant="warning" loading={cancelling} error={cancelError} onConfirm={confirmCancel} onCancel={()=>{setCancelModal(null);setCancelError(null);}} confirmLabel="Yes, Cancel"/>}
     <div style={{ animation: "fadeUp .4s ease both" }}>
       <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}`}</style>
 

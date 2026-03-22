@@ -7,6 +7,8 @@ import BranchScopeBanner from "../../components/ui/BranchScopeBanner";
 import useAuth from "../../hooks/useAuth";
 import axiosInstance from "../../services/axiosInstance";
 import ExcelExport from "../../components/ui/ExcelExport";
+import ConfirmModal from "../../components/ui/ConfirmModal";
+
 
 /* ─── palette ─────────────────────────────────────────────────── */
 const P="#0284c7",PL="rgba(2,132,199,.08)",PB="rgba(2,132,199,.2)";
@@ -74,7 +76,7 @@ function ProductRow({p,onDelete,showOrgBranch}){
     <td style={{padding:"12px 14px"}}>
       <div style={{display:"flex",gap:"6px"}}>
         <button onClick={()=>navigate(`/products/edit/${p._id}`)} style={{padding:"5px 12px",borderRadius:"8px",border:"1.5px solid rgba(26,26,46,.14)",background:"#fff",color:"rgba(26,26,46,.7)",fontSize:"12px",fontWeight:600,cursor:"pointer"}} onMouseEnter={e=>{e.currentTarget.style.borderColor=PB;e.currentTarget.style.color=P;}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(26,26,46,.14)";e.currentTarget.style.color="rgba(26,26,46,.7)";}}>Edit</button>
-        <button onClick={()=>onDelete(p._id)} style={{padding:"5px 12px",borderRadius:"8px",border:`1.5px solid ${RDB}`,background:RDL,color:RD,fontSize:"12px",fontWeight:600,cursor:"pointer"}}>Delete</button>
+        <button onClick={()=>onDelete(p._id, p.name)} style={{padding:"5px 12px",borderRadius:"8px",border:`1.5px solid ${RDB}`,background:RDL,color:RD,fontSize:"12px",fontWeight:600,cursor:"pointer"}}>Delete</button>
       </div>
     </td>
   </tr>;
@@ -196,6 +198,9 @@ export default function ProductList(){
   const [selOrg,setSelOrg]=useState("all");
   const [selBranch,setSelBranch]=useState("all");
   const [viewMode,setViewMode]=useState("grouped");
+  const [delModal,setDelModal]=useState(null);
+  const [deleting,setDeleting]=useState(false);
+  const [delError,setDelError]=useState(null);
   const [profile,setProfile]=useState(null);
 
   const loadData=()=>{
@@ -229,10 +234,13 @@ export default function ProductList(){
     });
   },[products,search,statusFilter,selOrg,selBranch,isSA]);
 
-  const handleDelete=async(id)=>{
-    if(!window.confirm("Delete this product?"))return;
-    try{await deleteProduct(id);setProducts(prev=>prev.filter(p=>p._id!==id));}
-    catch(err){alert(err?.response?.data?.message||"Failed to delete.");}
+  const handleDelete=(id,name)=>{ setDelError(null); setDelModal({id,name}); };
+  const confirmDelete=async()=>{
+    if(!delModal)return;
+    setDeleting(true); setDelError(null);
+    try{ await deleteProduct(delModal.id); setProducts(prev=>prev.filter(p=>p._id!==delModal.id)); setDelModal(null); }
+    catch(err){ setDelError(err?.response?.data?.message||"Failed to delete."); }
+    finally{ setDeleting(false); }
   };
 
   const totalOrgs=isSA?new Set(products.map(p=>p.branch?.organization?._id).filter(Boolean)).size:0;
@@ -245,7 +253,9 @@ export default function ProductList(){
   const orgName=profile?.organization?.name||profile?.branch?.organization?.name;
   const branchName=profile?.branch?.branchName;
 
-  return <PageShell title="Products" subtitle={isSA?"All products across all organizations & branches":"Manage your branch product catalogue"}>
+  return <>
+    {delModal&&<ConfirmModal title="Delete Product" message="You're about to permanently delete" itemName={delModal.name} variant="danger" loading={deleting} error={delError} onConfirm={confirmDelete} onCancel={()=>{setDelModal(null);setDelError(null);}} confirmLabel="Delete Product"/>}
+    <PageShell title="Products" subtitle={isSA?"All products across all organizations & branches":"Manage your branch product catalogue"}>
 
     {/* SA summary pills */}
     {isSA&&<div style={{display:"flex",gap:"10px",marginBottom:"16px",flexWrap:"wrap",alignItems:"center"}}>
@@ -303,7 +313,7 @@ export default function ProductList(){
       <div style={{marginLeft:"auto",display:"flex",gap:"8px",alignItems:"center"}}>
         <div style={{position:"relative"}}>
           <svg style={{position:"absolute",left:"10px",top:"50%",transform:"translateY(-50%)"}} width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="rgba(26,26,46,.3)" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input placeholder="Search products…" value={search} onChange={e=>setSearch(e.target.value)} style={{height:"36px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.12)",outline:"none",paddingLeft:"32px",paddingRight:"12px",fontSize:"13px",fontFamily:"'Figtree',sans-serif",color:"#1a1a2e",background:"#fff",width:"220px"}}/>
+          <input placeholder="Search products…" value={search} onChange={e=>setSearch(e.target.value)} style={{height:"36px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.12)",outline:"none",paddingLeft:"32px",paddingRight:"12px",fontSize:"13px",fontFamily:"'Poppins',sans-serif",color:"#1a1a2e",background:"#fff",width:"220px"}}/>
         </div>
         <span style={{fontSize:"12px",color:"rgba(26,26,46,.4)",fontFamily:"'DM Mono',monospace",whiteSpace:"nowrap"}}>{filtered.length} product{filtered.length!==1?"s":""}</span>
         <button onClick={loadData} style={{padding:"7px 11px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.12)",background:"#fff",fontSize:"14px",cursor:"pointer"}}>↻</button>
@@ -327,7 +337,7 @@ export default function ProductList(){
             {key:"description",label:"Description"},
           ]}
         />
-        <button onClick={()=>navigate("/products/add")} style={{display:"flex",alignItems:"center",gap:"7px",padding:"8px 16px",borderRadius:"10px",border:"none",cursor:"pointer",background:`linear-gradient(135deg,${P},#0369a1)`,color:"#fff",fontSize:"13px",fontWeight:700,fontFamily:"'Figtree',sans-serif",boxShadow:`0 4px 14px rgba(2,132,199,.3)`,whiteSpace:"nowrap"}}>
+        <button onClick={()=>navigate("/products/add")} style={{display:"flex",alignItems:"center",gap:"7px",padding:"8px 16px",borderRadius:"10px",border:"none",cursor:"pointer",background:`linear-gradient(135deg,${P},#0369a1)`,color:"#fff",fontSize:"13px",fontWeight:700,fontFamily:"'Poppins',sans-serif",boxShadow:`0 4px 14px rgba(2,132,199,.3)`,whiteSpace:"nowrap"}}>
           <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
           Add Product
         </button>
@@ -341,5 +351,6 @@ export default function ProductList(){
         :<FlatView products={filtered} onDelete={handleDelete} isSA={isSA}/>
     }
     <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`}</style>
-  </PageShell>;
+  </PageShell>
+  </>;
 }

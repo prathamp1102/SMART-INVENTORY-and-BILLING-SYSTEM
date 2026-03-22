@@ -172,7 +172,7 @@ export default function BulkImport({ categories, onSuccess, onCancel }) {
               </div>
             </div>
             <button onClick={downloadTemplate}
-              style={{ display:"flex", alignItems:"center", gap:"8px", padding:"10px 18px", borderRadius:"11px", border:"1.5px solid rgba(2,132,199,.25)", background:"rgba(2,132,199,.06)", color:"#0284c7", cursor:"pointer", fontFamily:"'Figtree',sans-serif", fontSize:"13px", fontWeight:700, whiteSpace:"nowrap", transition:"all .18s" }}
+              style={{ display:"flex", alignItems:"center", gap:"8px", padding:"10px 18px", borderRadius:"11px", border:"1.5px solid rgba(2,132,199,.25)", background:"rgba(2,132,199,.06)", color:"#0284c7", cursor:"pointer", fontFamily:"'Poppins',sans-serif", fontSize:"13px", fontWeight:700, whiteSpace:"nowrap", transition:"all .18s" }}
               onMouseEnter={e => { e.currentTarget.style.background = "rgba(2,132,199,.12)"; }}
               onMouseLeave={e => { e.currentTarget.style.background = "rgba(2,132,199,.06)"; }}
             >

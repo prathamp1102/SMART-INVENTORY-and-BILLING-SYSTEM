@@ -319,8 +319,8 @@ export default function AdminServiceManagement() {
   const cell = { padding:"13px 16px", fontSize:13, color:C.ink, borderBottom:"1px solid rgba(15,18,42,.05)", verticalAlign:"middle" };
 
   return (
-    <div style={{ fontFamily:"'Figtree',sans-serif", animation:"fadeUp .35s ease both" }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}`}</style>
+    <div style={{ fontFamily:"'Poppins',sans-serif", animation:"fadeUp .35s ease both" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}`}</style>
 
       {/* Header */}
       <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:22, flexWrap:"wrap", gap:12 }}>

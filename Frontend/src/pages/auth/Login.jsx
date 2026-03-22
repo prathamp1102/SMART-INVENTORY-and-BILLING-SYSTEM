@@ -41,11 +41,11 @@ function FloatingInput({ id, type, label, value, onChange, error, autoComplete, 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "50px", flexShrink: 0, color: focused ? accent : "rgba(26,26,46,.28)", transition: "color .22s" }}>{icon}</div>
         <input id={id} type={type} value={value} onChange={onChange} autoComplete={autoComplete} placeholder=" "
           onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-          style={{ flex: 1, height: "100%", background: "transparent", border: "none", outline: "none", color: "#1a1a2e", fontSize: "14px", fontFamily: "'Figtree',sans-serif", fontWeight: 400, paddingTop: lifted ? "15px" : "0", transition: "padding-top .16s" }}
+          style={{ flex: 1, height: "100%", background: "transparent", border: "none", outline: "none", color: "#1a1a2e", fontSize: "14px", fontFamily: "'Poppins',sans-serif", fontWeight: 400, paddingTop: lifted ? "15px" : "0", transition: "padding-top .16s" }}
         />
         <label htmlFor={id} style={{
           position: "absolute", left: "50px", pointerEvents: "none",
-          fontFamily: lifted ? "'DM Mono',monospace" : "'Figtree',sans-serif",
+          fontFamily: lifted ? "'DM Mono',monospace" : "'Poppins',sans-serif",
           fontWeight: lifted ? 400 : 500, fontSize: lifted ? "9.5px" : "14px",
           color: lifted ? (error ? "rgba(220,38,38,.7)" : accent) : "rgba(26,26,46,.38)",
           top: lifted ? "10px" : "50%", transform: lifted ? "none" : "translateY(-50%)",
@@ -325,7 +325,7 @@ export default function Login() {
       </div>
       <div style={{ marginTop: "32px", display: "flex", alignItems: "center", gap: "20px", animation: "fadeUp .6s ease .42s both" }}>
         <button disabled={!selectedRole} onClick={goToForm}
-          style={{ height: "52px", padding: "0 36px", borderRadius: "14px", border: "none", cursor: selectedRole ? "pointer" : "not-allowed", fontFamily: "'Figtree',sans-serif", fontSize: "14px", fontWeight: 700, background: selectedRole ? `linear-gradient(135deg,${role.btnFrom},${role.btnTo})` : "rgba(26,26,46,.08)", color: selectedRole ? "#fff" : "rgba(26,26,46,.28)", display: "flex", alignItems: "center", gap: "10px", boxShadow: selectedRole ? `0 6px 28px ${role.glow}` : "none", transition: "all .3s cubic-bezier(.34,1.4,.64,1)" }}>
+          style={{ height: "52px", padding: "0 36px", borderRadius: "14px", border: "none", cursor: selectedRole ? "pointer" : "not-allowed", fontFamily: "'Poppins',sans-serif", fontSize: "14px", fontWeight: 700, background: selectedRole ? `linear-gradient(135deg,${role.btnFrom},${role.btnTo})` : "rgba(26,26,46,.08)", color: selectedRole ? "#fff" : "rgba(26,26,46,.28)", display: "flex", alignItems: "center", gap: "10px", boxShadow: selectedRole ? `0 6px 28px ${role.glow}` : "none", transition: "all .3s cubic-bezier(.34,1.4,.64,1)" }}>
           <span>{selectedRole ? `Continue as ${role.name}` : "Select a role first"}</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="16" height="16"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
         </button>
@@ -394,14 +394,14 @@ export default function Login() {
               </div>
               <span style={{ fontSize: "13px", color: "rgba(26,26,46,.48)" }}>Remember me</span>
             </div>
-            <button type="button" onClick={() => navigate("/forgot-password")} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'Figtree',sans-serif", fontSize: "13px", color: "rgba(26,26,46,.38)", fontWeight: 600, padding: 0 }}
+            <button type="button" onClick={() => navigate("/forgot-password")} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'Poppins',sans-serif", fontSize: "13px", color: "rgba(26,26,46,.38)", fontWeight: 600, padding: 0 }}
               onMouseEnter={e => e.currentTarget.style.color = role.accent}
               onMouseLeave={e => e.currentTarget.style.color = "rgba(26,26,46,.38)"}
             >Forgot password?</button>
           </div>
 
           <button type="submit" disabled={locked || loading}
-            style={{ width: "100%", height: "52px", borderRadius: "14px", border: "none", cursor: locked || loading ? "not-allowed" : "pointer", fontFamily: "'Figtree',sans-serif", fontSize: "14.5px", fontWeight: 700, background: `linear-gradient(135deg,${role.btnFrom},${role.btnTo})`, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", gap: "9px", boxShadow: `0 6px 24px ${role.glow}`, opacity: locked ? 0.35 : 1, transition: "all .22s", animation: "fadeUp .48s ease .42s both" }}>
+            style={{ width: "100%", height: "52px", borderRadius: "14px", border: "none", cursor: locked || loading ? "not-allowed" : "pointer", fontFamily: "'Poppins',sans-serif", fontSize: "14.5px", fontWeight: 700, background: `linear-gradient(135deg,${role.btnFrom},${role.btnTo})`, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", gap: "9px", boxShadow: `0 6px 24px ${role.glow}`, opacity: locked ? 0.35 : 1, transition: "all .22s", animation: "fadeUp .48s ease .42s both" }}>
             {loading
               ? <><div style={{ width: "16px", height: "16px", borderRadius: "50%", border: "2px solid rgba(255,255,255,.3)", borderTopColor: "#fff", animation: "spin .7s linear infinite" }} /><span>Sending OTP…</span></>
               : locked ? <span>Locked — {lockLeft}s</span>
@@ -468,7 +468,7 @@ export default function Login() {
 
         {/* Verify button */}
         <button onClick={handleVerifyOtp} disabled={otpLoading || otp.length !== 6}
-          style={{ width: "100%", height: "52px", borderRadius: "14px", border: "none", cursor: (otpLoading || otp.length !== 6) ? "not-allowed" : "pointer", fontFamily: "'Figtree',sans-serif", fontSize: "14.5px", fontWeight: 700, background: otp.length === 6 ? `linear-gradient(135deg,${role.btnFrom},${role.btnTo})` : "rgba(26,26,46,.07)", color: otp.length === 6 ? "#fff" : "rgba(26,26,46,.28)", display: "flex", alignItems: "center", justifyContent: "center", gap: "9px", boxShadow: otp.length === 6 ? `0 6px 24px ${role.glow}` : "none", transition: "all .3s cubic-bezier(.34,1.4,.64,1)", marginBottom: "16px" }}>
+          style={{ width: "100%", height: "52px", borderRadius: "14px", border: "none", cursor: (otpLoading || otp.length !== 6) ? "not-allowed" : "pointer", fontFamily: "'Poppins',sans-serif", fontSize: "14.5px", fontWeight: 700, background: otp.length === 6 ? `linear-gradient(135deg,${role.btnFrom},${role.btnTo})` : "rgba(26,26,46,.07)", color: otp.length === 6 ? "#fff" : "rgba(26,26,46,.28)", display: "flex", alignItems: "center", justifyContent: "center", gap: "9px", boxShadow: otp.length === 6 ? `0 6px 24px ${role.glow}` : "none", transition: "all .3s cubic-bezier(.34,1.4,.64,1)", marginBottom: "16px" }}>
           {otpLoading
             ? <><div style={{ width: "16px", height: "16px", borderRadius: "50%", border: "2px solid rgba(255,255,255,.3)", borderTopColor: "#fff", animation: "spin .7s linear infinite" }} /><span>Verifying…</span></>
             : <><span>Verify & Sign In</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="15" height="15"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></>
@@ -479,7 +479,7 @@ export default function Login() {
         <div style={{ textAlign: "center" }}>
           <span style={{ fontSize: "13px", color: "rgba(26,26,46,.4)" }}>Didn't receive it? </span>
           <button onClick={handleResend} disabled={resendCool > 0 || resending}
-            style={{ background: "none", border: "none", cursor: resendCool > 0 ? "default" : "pointer", fontFamily: "'Figtree',sans-serif", fontSize: "13px", fontWeight: 700, color: resendCool > 0 ? "rgba(26,26,46,.25)" : role.accent, padding: 0, transition: "color .2s" }}>
+            style={{ background: "none", border: "none", cursor: resendCool > 0 ? "default" : "pointer", fontFamily: "'Poppins',sans-serif", fontSize: "13px", fontWeight: 700, color: resendCool > 0 ? "rgba(26,26,46,.25)" : role.accent, padding: 0, transition: "color .2s" }}>
             {resending ? "Sending…" : resendCool > 0 ? `Resend in ${resendCool}s` : "Resend code"}
           </button>
         </div>

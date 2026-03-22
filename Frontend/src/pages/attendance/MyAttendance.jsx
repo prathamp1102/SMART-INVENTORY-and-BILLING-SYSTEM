@@ -56,7 +56,7 @@ export default function MyAttendance() {
       setToday(result.attendance);
       load();
     } catch (e) {
-      alert(e?.response?.data?.message || "Checkout failed");
+      console.error("Checkout failed", e);
     } finally {
       setCheckingOut(false);
     }

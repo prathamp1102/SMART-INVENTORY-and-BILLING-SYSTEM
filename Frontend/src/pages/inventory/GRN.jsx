@@ -93,7 +93,7 @@ export default function GRN() {
       <div style={{ display: "flex", gap: "4px", padding: "4px", background: "rgba(26,26,46,.06)", borderRadius: "12px", width: "fit-content", marginBottom: "22px" }}>
         {[["create", "📥 Record GRN"], ["history", "📋 GRN History"]].map(([key, label]) => (
           <button key={key} onClick={() => setTab(key)} type="button"
-            style={{ padding: "8px 20px", borderRadius: "9px", border: "none", cursor: "pointer", fontSize: "13px", fontWeight: 600, fontFamily: "'Figtree',sans-serif", transition: "all .18s", background: tab === key ? "#fff" : "transparent", color: tab === key ? "#1a1a2e" : "rgba(26,26,46,.45)", boxShadow: tab === key ? "0 1px 6px rgba(26,26,46,.1)" : "none" }}>
+            style={{ padding: "8px 20px", borderRadius: "9px", border: "none", cursor: "pointer", fontSize: "13px", fontWeight: 600, fontFamily: "'Poppins',sans-serif", transition: "all .18s", background: tab === key ? "#fff" : "transparent", color: tab === key ? "#1a1a2e" : "rgba(26,26,46,.45)", boxShadow: tab === key ? "0 1px 6px rgba(26,26,46,.1)" : "none" }}>
             {label}
           </button>
         ))}
@@ -142,7 +142,7 @@ export default function GRN() {
           <Card style={{ marginBottom: "16px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
               <div style={{ fontFamily: "'Fraunces',serif", fontSize: "15px", fontWeight: 800, color: "#1a1a2e" }}>Products Received</div>
-              <button type="button" onClick={addItem} style={{ padding: "7px 16px", borderRadius: "9px", border: "1.5px solid rgba(5,150,105,.25)", background: "rgba(5,150,105,.08)", color: "#059669", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "'Figtree',sans-serif", display: "flex", alignItems: "center", gap: "6px" }}>
+              <button type="button" onClick={addItem} style={{ padding: "7px 16px", borderRadius: "9px", border: "1.5px solid rgba(5,150,105,.25)", background: "rgba(5,150,105,.08)", color: "#059669", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "'Poppins',sans-serif", display: "flex", alignItems: "center", gap: "6px" }}>
                 <span style={{ fontSize: "16px", lineHeight: 1 }}>+</span> Add Product
               </button>
             </div>

@@ -218,12 +218,12 @@ function DeleteModal({user,onConfirm,onClose,deleting}){
         You're about to permanently delete <strong style={{color:"#1a1a2e"}}>{user.name}</strong>. This action cannot be undone.
       </div>
       <div style={{display:"flex",gap:"10px"}}>
-        <button onClick={onClose} style={{flex:1,padding:"11px",borderRadius:"11px",border:"1.5px solid rgba(26,26,46,.12)",background:"transparent",color:"rgba(26,26,46,.6)",fontSize:"13px",fontWeight:600,cursor:"pointer",fontFamily:"'Figtree',sans-serif"}}
+        <button onClick={onClose} style={{flex:1,padding:"11px",borderRadius:"11px",border:"1.5px solid rgba(26,26,46,.12)",background:"transparent",color:"rgba(26,26,46,.6)",fontSize:"13px",fontWeight:600,cursor:"pointer",fontFamily:"'Poppins',sans-serif"}}
           onMouseEnter={e=>e.currentTarget.style.background="rgba(26,26,46,.04)"}
           onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
           Cancel
         </button>
-        <button onClick={onConfirm} disabled={deleting} style={{flex:1,padding:"11px",borderRadius:"11px",border:"none",background:deleting?"rgba(239,68,68,.5)":`linear-gradient(135deg,${RD},#b91c1c)`,color:"#fff",fontSize:"13px",fontWeight:700,cursor:deleting?"not-allowed":"pointer",fontFamily:"'Figtree',sans-serif",boxShadow:`0 4px 14px rgba(220,38,38,.3)`}}>
+        <button onClick={onConfirm} disabled={deleting} style={{flex:1,padding:"11px",borderRadius:"11px",border:"none",background:deleting?"rgba(239,68,68,.5)":`linear-gradient(135deg,${RD},#b91c1c)`,color:"#fff",fontSize:"13px",fontWeight:700,cursor:deleting?"not-allowed":"pointer",fontFamily:"'Poppins',sans-serif",boxShadow:`0 4px 14px rgba(220,38,38,.3)`}}>
           {deleting?"Deleting…":"Yes, Delete"}
         </button>
       </div>
@@ -388,7 +388,7 @@ export default function UserList(){
       <div style={{marginLeft:"auto",display:"flex",gap:"8px",alignItems:"center"}}>
         <div style={{position:"relative"}}>
           <svg style={{position:"absolute",left:"10px",top:"50%",transform:"translateY(-50%)"}} width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="rgba(26,26,46,.3)" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input placeholder="Search name, email, org…" value={search} onChange={e=>setSearch(e.target.value)} style={{height:"36px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.12)",outline:"none",paddingLeft:"32px",paddingRight:"12px",fontSize:"13px",fontFamily:"'Figtree',sans-serif",color:"#1a1a2e",background:"#fff",width:"220px"}}
+          <input placeholder="Search name, email, org…" value={search} onChange={e=>setSearch(e.target.value)} style={{height:"36px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.12)",outline:"none",paddingLeft:"32px",paddingRight:"12px",fontSize:"13px",fontFamily:"'Poppins',sans-serif",color:"#1a1a2e",background:"#fff",width:"220px"}}
             onFocus={e=>e.target.style.borderColor=VB} onBlur={e=>e.target.style.borderColor="rgba(26,26,46,.12)"}/>
         </div>
         <span style={{fontSize:"12px",color:"rgba(26,26,46,.4)",fontFamily:"'DM Mono',monospace",whiteSpace:"nowrap"}}>{filtered.length} user{filtered.length!==1?"s":""}</span>
@@ -408,7 +408,7 @@ export default function UserList(){
             {key:"branch.organization.name",label:"Organization"},
           ]}
         />
-        <button onClick={()=>navigate("/users/add")} style={{display:"flex",alignItems:"center",gap:"7px",padding:"8px 16px",borderRadius:"10px",border:"none",cursor:"pointer",background:`linear-gradient(135deg,${V},#6d28d9)`,color:"#fff",fontSize:"13px",fontWeight:700,fontFamily:"'Figtree',sans-serif",boxShadow:"0 4px 14px rgba(124,58,237,.3)",whiteSpace:"nowrap"}}>
+        <button onClick={()=>navigate("/users/add")} style={{display:"flex",alignItems:"center",gap:"7px",padding:"8px 16px",borderRadius:"10px",border:"none",cursor:"pointer",background:`linear-gradient(135deg,${V},#6d28d9)`,color:"#fff",fontSize:"13px",fontWeight:700,fontFamily:"'Poppins',sans-serif",boxShadow:"0 4px 14px rgba(124,58,237,.3)",whiteSpace:"nowrap"}}>
           <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
           Add User
         </button>

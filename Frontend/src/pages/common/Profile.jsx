@@ -256,7 +256,7 @@ export default function Profile() {
             </div>
 
             <button onClick={() => { logout(); navigate("/login", { replace: true }); }}
-              style={{ padding: "11px", borderRadius: "12px", border: "1.5px solid rgba(239,68,68,.2)", background: "rgba(239,68,68,.05)", color: "#dc2626", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'Figtree',sans-serif", width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "7px" }}>
+              style={{ padding: "11px", borderRadius: "12px", border: "1.5px solid rgba(239,68,68,.2)", background: "rgba(239,68,68,.05)", color: "#dc2626", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'Poppins',sans-serif", width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "7px" }}>
               <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" /></svg>
               Sign Out
             </button>
@@ -340,7 +340,7 @@ export default function Profile() {
               </>)}
 
               <button onClick={handleSave} disabled={saving || profileLoading}
-                style={{ padding: "11px 28px", borderRadius: "12px", border: "none", cursor: (saving || profileLoading) ? "not-allowed" : "pointer", background: `linear-gradient(135deg,${ac},${role.btnTo || ac})`, color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Figtree',sans-serif", boxShadow: `0 4px 16px ${role.glow || "rgba(0,0,0,.15)"}`, opacity: (saving || profileLoading) ? 0.6 : 1, display: "flex", alignItems: "center", gap: "7px" }}>
+                style={{ padding: "11px 28px", borderRadius: "12px", border: "none", cursor: (saving || profileLoading) ? "not-allowed" : "pointer", background: `linear-gradient(135deg,${ac},${role.btnTo || ac})`, color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Poppins',sans-serif", boxShadow: `0 4px 16px ${role.glow || "rgba(0,0,0,.15)"}`, opacity: (saving || profileLoading) ? 0.6 : 1, display: "flex", alignItems: "center", gap: "7px" }}>
                 {saving ? (
                   <><span style={{ width: "13px", height: "13px", border: "2px solid rgba(255,255,255,.4)", borderTop: "2px solid #fff", borderRadius: "50%", display: "inline-block", animation: "spin .7s linear infinite" }} /> Saving…</>
                 ) : "Save Changes"}
@@ -394,7 +394,7 @@ export default function Profile() {
                 )}
                 <div style={{ marginTop: "8px" }}>
                   <button onClick={handleSendOtp} disabled={pwLoading}
-                    style={{ padding: "11px 24px", borderRadius: "12px", border: "none", cursor: pwLoading ? "not-allowed" : "pointer", background: "linear-gradient(135deg,#4f46e5,#7c3aed)", color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Figtree',sans-serif", boxShadow: "0 4px 16px rgba(79,70,229,.25)", opacity: pwLoading ? 0.7 : 1 }}>
+                    style={{ padding: "11px 24px", borderRadius: "12px", border: "none", cursor: pwLoading ? "not-allowed" : "pointer", background: "linear-gradient(135deg,#4f46e5,#7c3aed)", color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Poppins',sans-serif", boxShadow: "0 4px 16px rgba(79,70,229,.25)", opacity: pwLoading ? 0.7 : 1 }}>
                     {pwLoading ? "Sending OTP…" : "Send OTP to Email →"}
                   </button>
                 </div>
@@ -416,15 +416,15 @@ export default function Profile() {
                 />
                 <div style={{ display: "flex", gap: "10px", marginTop: "8px", flexWrap: "wrap" }}>
                   <button onClick={handleVerifyOtp} disabled={pwLoading}
-                    style={{ padding: "11px 24px", borderRadius: "12px", border: "none", cursor: pwLoading ? "not-allowed" : "pointer", background: "linear-gradient(135deg,#dc2626,#b91c1c)", color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Figtree',sans-serif", boxShadow: "0 4px 16px rgba(239,68,68,.25)", opacity: pwLoading ? 0.7 : 1 }}>
+                    style={{ padding: "11px 24px", borderRadius: "12px", border: "none", cursor: pwLoading ? "not-allowed" : "pointer", background: "linear-gradient(135deg,#dc2626,#b91c1c)", color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Poppins',sans-serif", boxShadow: "0 4px 16px rgba(239,68,68,.25)", opacity: pwLoading ? 0.7 : 1 }}>
                     {pwLoading ? "Verifying…" : "Confirm & Update Password"}
                   </button>
                   <button onClick={handleResendOtp} disabled={pwLoading}
-                    style={{ padding: "11px 18px", borderRadius: "12px", border: "1.5px solid rgba(79,70,229,.25)", background: "transparent", color: "#4f46e5", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "'Figtree',sans-serif" }}>
+                    style={{ padding: "11px 18px", borderRadius: "12px", border: "1.5px solid rgba(79,70,229,.25)", background: "transparent", color: "#4f46e5", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "'Poppins',sans-serif" }}>
                     Resend OTP
                   </button>
                   <button onClick={resetPwFlow}
-                    style={{ padding: "11px 14px", borderRadius: "12px", border: "1.5px solid rgba(26,26,46,.1)", background: "transparent", color: "rgba(26,26,46,.45)", fontSize: "13px", fontWeight: 500, cursor: "pointer", fontFamily: "'Figtree',sans-serif" }}>
+                    style={{ padding: "11px 14px", borderRadius: "12px", border: "1.5px solid rgba(26,26,46,.1)", background: "transparent", color: "rgba(26,26,46,.45)", fontSize: "13px", fontWeight: 500, cursor: "pointer", fontFamily: "'Poppins',sans-serif" }}>
                     ← Back
                   </button>
                 </div>
@@ -437,7 +437,7 @@ export default function Profile() {
                   <div style={{ fontFamily: "'Fraunces',serif", fontSize: "18px", fontWeight: 800, color: "#1a1a2e", marginBottom: "8px" }}>Password Updated!</div>
                   <p style={{ fontSize: "13px", color: "rgba(26,26,46,.45)", marginBottom: "24px" }}>Your password has been changed successfully.</p>
                   <button onClick={resetPwFlow}
-                    style={{ padding: "10px 22px", borderRadius: "12px", border: "1.5px solid rgba(79,70,229,.25)", background: "transparent", color: "#4f46e5", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "'Figtree',sans-serif" }}>
+                    style={{ padding: "10px 22px", borderRadius: "12px", border: "1.5px solid rgba(79,70,229,.25)", background: "transparent", color: "#4f46e5", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "'Poppins',sans-serif" }}>
                     Change Again
                   </button>
                 </div>

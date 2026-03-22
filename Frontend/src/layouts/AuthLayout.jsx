@@ -7,7 +7,7 @@ import { ROLE_CONFIG } from "../utils/constants";
 // ── Inject fonts & keyframes once ────────────────────────────
 const fontLink = document.createElement("link");
 fontLink.rel = "stylesheet";
-fontLink.href = "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,700&family=Figtree:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap";
+fontLink.href = "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,700&family=Poppins:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap";
 document.head.appendChild(fontLink);
 
 const styleTag = document.createElement("style");
@@ -19,7 +19,7 @@ styleTag.textContent = `
   @keyframes spin      { to{transform:rotate(360deg)} }
   @keyframes checkPop  { 0%{transform:scale(0)} 70%{transform:scale(1.18)} 100%{transform:scale(1)} }
   * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:'Figtree',sans-serif; background:#f5f3ee; -webkit-font-smoothing:antialiased; }
+  body { font-family:'Poppins',sans-serif; background:#f5f3ee; -webkit-font-smoothing:antialiased; }
   input::placeholder { color:transparent; }
 `;
 document.head.appendChild(styleTag);

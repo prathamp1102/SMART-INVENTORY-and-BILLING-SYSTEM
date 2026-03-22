@@ -222,6 +222,7 @@ exports.updateInvoice = async (req, res) => {
       invoice.status              = "PAID";
     }
     if (req.body.status) invoice.status = req.body.status;
+    if (req.body.amountPaid !== undefined) invoice.amountPaid = req.body.amountPaid;
     if (req.body.notes !== undefined) invoice.notes = req.body.notes;
 
     await invoice.save();
@@ -229,6 +230,27 @@ exports.updateInvoice = async (req, res) => {
     res.json(invoice);
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+};
+
+// PATCH /api/invoices/:id/mark-paid — confirm COD payment (no branch scope restriction)
+exports.markAsPaid = async (req, res) => {
+  try {
+    const invoice = await Invoice.findById(req.params.id);
+    if (!invoice) return res.status(404).json({ message: "Invoice not found" });
+    if (invoice.status === "PAID") return res.status(400).json({ message: "Invoice is already marked as paid" });
+    if (invoice.status === "CANCELLED") return res.status(400).json({ message: "Cannot mark a cancelled invoice as paid" });
+
+    invoice.status     = "PAID";
+    invoice.amountPaid = invoice.grandTotal;
+    invoice.paidBy     = req.user._id || req.user.id;
+    invoice.paidAt     = new Date();
+
+    await invoice.save();
+    await invoice.populate([POP_CASHIER, POP_BRANCH]);
+    res.json({ message: "Payment confirmed successfully", invoice });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 

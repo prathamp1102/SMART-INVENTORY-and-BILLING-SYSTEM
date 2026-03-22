@@ -34,7 +34,7 @@ export default function Button({
         display: "inline-flex", alignItems: "center", justifyContent: "center",
         gap: 7, padding: sizes[size], borderRadius: radii[size],
         cursor: isDisabled ? "not-allowed" : "pointer",
-        fontFamily: "'Figtree', sans-serif", fontSize: fontSizes[size],
+        fontFamily: "'Poppins', sans-serif", fontSize: fontSizes[size],
         fontWeight: 700, letterSpacing: ".01em",
         opacity: isDisabled ? 0.48 : 1,
         width: fullWidth ? "100%" : "auto",

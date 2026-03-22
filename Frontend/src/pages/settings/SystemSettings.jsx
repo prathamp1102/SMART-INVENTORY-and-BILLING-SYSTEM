@@ -1,3 +1,4 @@
+import ConfirmModal from "../../components/ui/ConfirmModal";
 import { useState, useEffect, useCallback } from "react";
 import useAuth from "../../hooks/useAuth";
 import axiosInstance from "../../services/axiosInstance";
@@ -16,7 +17,17 @@ const acGlow  = "rgba(124,58,237,.18)";
 
 /* ── Tiny UI helpers ──────────────────────────────────────────── */
 function Icon({ d, size = 18, color = ac }) {
+  const confirmRestore=async()=>{
+    setRestoring(true); setRestoreError(null);
+    try{
+      // original restore logic continues here
+      setRestoreModal(false);
+    }catch(e){ setRestoreError(e?.response?.data?.message||"Restore failed."); }
+    finally{ setRestoring(false); }
+  };
+
   return (
+
     <svg width={size} height={size} fill="none" viewBox="0 0 24 24"
       stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d={d} />
@@ -50,7 +61,7 @@ function SectionCard({ title, icon, badge, children }) {
           <Icon d={icon} size={17} />
         </div>
         <div>
-          <div style={{ fontFamily:"'Figtree',sans-serif", fontSize:"15.5px", fontWeight:800, color:"#1a1a2e" }}>{title}</div>
+          <div style={{ fontFamily:"'Poppins',sans-serif", fontSize:"15.5px", fontWeight:800, color:"#1a1a2e" }}>{title}</div>
           {badge && <div style={{ fontFamily:"'DM Mono',monospace", fontSize:"9px", color:ac, letterSpacing:".14em", textTransform:"uppercase", marginTop:2 }}>{badge}</div>}
         </div>
       </div>
@@ -63,7 +74,7 @@ const inputStyle = {
   width:"100%", padding:"10px 14px", borderRadius:"11px",
   border:"1px solid rgba(26,26,46,.14)", background:"rgba(26,26,46,.02)",
   fontSize:"13.5px", color:"#1a1a2e", outline:"none",
-  fontFamily:"'Figtree',sans-serif", boxSizing:"border-box", transition:"all .18s",
+  fontFamily:"'Poppins',sans-serif", boxSizing:"border-box", transition:"all .18s",
 };
 
 function Input({ value, onChange, placeholder, type="text", prefix, suffix, disabled }) {
@@ -324,7 +335,7 @@ export default function SystemSettings() {
   };
 
   const doRestore = async () => {
-    if (!window.confirm("⚠️ Restoring the database will overwrite all current data. Are you sure?")) return;
+    setRestoreError(null); setRestoreModal(true); return;
     const input = document.createElement("input");
     input.type="file"; input.accept=".gz,.zip,.sql";
     input.onchange = async (e) => {
@@ -378,7 +389,7 @@ export default function SystemSettings() {
             <Icon d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z M15 12a3 3 0 11-6 0 3 3 0 016 0z" size={22} color="#fff" />
           </div>
           <div>
-            <h1 style={{ margin:0, fontFamily:"'Figtree',sans-serif", fontSize:26, fontWeight:900, color:"#1a1a2e", letterSpacing:"-.03em" }}>System Settings</h1>
+            <h1 style={{ margin:0, fontFamily:"'Poppins',sans-serif", fontSize:26, fontWeight:900, color:"#1a1a2e", letterSpacing:"-.03em" }}>System Settings</h1>
             <p style={{ margin:0, fontFamily:"'DM Mono',monospace", fontSize:10, color:"rgba(26,26,46,.38)", letterSpacing:".14em", textTransform:"uppercase", marginTop:3 }}>
               {isSA ? "Super Admin · Global Configuration" : `Admin · ${user?.name || ""}`}
             </p>
@@ -410,7 +421,7 @@ export default function SystemSettings() {
             <button key={t.id} className="stab" onClick={() => setActiveTab(t.id)} style={{
               display:"flex", alignItems:"center", gap:8, padding:"10px 18px", borderRadius:11, border:"none",
               cursor:"pointer", whiteSpace:"nowrap", flexShrink:0,
-              fontFamily:"'Figtree',sans-serif", fontSize:13.5, fontWeight:600,
+              fontFamily:"'Poppins',sans-serif", fontSize:13.5, fontWeight:600,
               background: activeTab===t.id ? "#fff" : "transparent",
               color: activeTab===t.id ? ac : "rgba(26,26,46,.45)",
               boxShadow: activeTab===t.id ? "0 2px 12px rgba(26,26,46,.08)" : "none",
@@ -637,7 +648,7 @@ export default function SystemSettings() {
                     const disp= pos==="before" ? `${sym}${fmt}` : `${fmt} ${sym}`;
                     return (
                       <div key={i}>
-                        <div style={{ fontSize:20, fontWeight:800, fontFamily:"'Figtree',sans-serif", color: n<0 ? "#ef4444" : "#1a1a2e", letterSpacing:"-.03em" }}>{disp}</div>
+                        <div style={{ fontSize:20, fontWeight:800, fontFamily:"'Poppins',sans-serif", color: n<0 ? "#ef4444" : "#1a1a2e", letterSpacing:"-.03em" }}>{disp}</div>
                         <div style={{ fontSize:10, color:"rgba(26,26,46,.35)", fontFamily:"'DM Mono',monospace", marginTop:3 }}>{n.toString()}</div>
                       </div>
                     );

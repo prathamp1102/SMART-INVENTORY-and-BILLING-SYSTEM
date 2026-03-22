@@ -12,7 +12,7 @@ export const IS = {
   outline: "none",
   padding: "0 14px",
   fontSize: "14px",
-  fontFamily: "'Figtree', sans-serif",
+  fontFamily: "'Poppins', sans-serif",
   color: "#1a1a2e",
   background: "#fff",
   marginBottom: "12px",

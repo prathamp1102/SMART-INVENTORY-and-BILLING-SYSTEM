@@ -65,7 +65,7 @@ export default function AddProduct() {
       <div style={{ display:"flex", gap:"4px", padding:"4px", background:"rgba(26,26,46,.06)", borderRadius:"12px", width:"fit-content", marginBottom:"24px" }}>
         {[["manual","✏️ Manual Entry"],["bulk","📊 Bulk Import (Excel/CSV)"]].map(([key, label]) => (
           <button key={key} onClick={() => setTab(key)} type="button"
-            style={{ padding:"8px 20px", borderRadius:"9px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:600, fontFamily:"'Figtree',sans-serif", transition:"all .18s",
+            style={{ padding:"8px 20px", borderRadius:"9px", border:"none", cursor:"pointer", fontSize:"13px", fontWeight:600, fontFamily:"'Poppins',sans-serif", transition:"all .18s",
               background: tab === key ? "#fff" : "transparent",
               color: tab === key ? "#1a1a2e" : "rgba(26,26,46,.45)",
               boxShadow: tab === key ? "0 1px 6px rgba(26,26,46,.1)" : "none",

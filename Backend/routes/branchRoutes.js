@@ -15,19 +15,22 @@ const {
 } = require("../controllers/branchcontroller");
 const { protect, authorize } = require("../middlewares/rolemiddleware");
 
-// ⚠️ Static routes MUST come before /:id to avoid "admins" being treated as an id
-router.get("/admins", protect, authorize("SUPER_ADMIN"), getAdminUsers);
-router.post("/assign-admin", protect, authorize("SUPER_ADMIN"), assignAdmin);
+// ⚠️ ALL static routes MUST come before /:id to avoid being matched as an id param
 
-router.post("/", protect, authorize("SUPER_ADMIN"), createBranch);
-router.get("/", protect, authorize("SUPER_ADMIN", "ADMIN"), getBranches);
-router.get("/:id", protect, authorize("SUPER_ADMIN", "ADMIN"), getBranchById);
-router.put("/:id", protect, authorize("SUPER_ADMIN"), updateBranch);
-router.delete("/:id", protect, authorize("SUPER_ADMIN"), deleteBranch);
+router.get("/admins",              protect, authorize("SUPER_ADMIN"),           getAdminUsers);
+router.get("/staff/unassigned",    protect, authorize("SUPER_ADMIN"),           getUnassignedStaff);
 
-router.get("/staff/unassigned",    protect, authorize("SUPER_ADMIN"), getUnassignedStaff);
-router.post("/assign-staff",        protect, authorize("SUPER_ADMIN"), assignStaff);
-router.post("/assign-staff/bulk",   protect, authorize("SUPER_ADMIN"), bulkAssignStaff);
-router.get("/:id/staff",            protect, authorize("SUPER_ADMIN", "ADMIN"), getBranchStaff);
+router.post("/assign-admin",       protect, authorize("SUPER_ADMIN"),           assignAdmin);
+router.post("/assign-staff",       protect, authorize("SUPER_ADMIN"),           assignStaff);
+router.post("/assign-staff/bulk",  protect, authorize("SUPER_ADMIN"),           bulkAssignStaff);
+
+router.post("/",                   protect, authorize("SUPER_ADMIN"),           createBranch);
+router.get("/",                    protect, authorize("SUPER_ADMIN", "ADMIN"),  getBranches);
+
+// Dynamic :id routes come last
+router.get("/:id/staff",           protect, authorize("SUPER_ADMIN", "ADMIN"), getBranchStaff);
+router.get("/:id",                 protect, authorize("SUPER_ADMIN", "ADMIN"), getBranchById);
+router.put("/:id",                 protect, authorize("SUPER_ADMIN"),           updateBranch);
+router.delete("/:id",              protect, authorize("SUPER_ADMIN"),           deleteBranch);
 
 module.exports = router;

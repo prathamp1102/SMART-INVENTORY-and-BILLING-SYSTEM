@@ -33,7 +33,7 @@ const C = {
 };
 
 const ff = {
-  body:  "'Figtree','Inter',sans-serif",
+  body:  "'Poppins','Inter',sans-serif",
   serif: "'Fraunces',serif",
   mono:  "'DM Mono','Fira Mono',monospace",
 };

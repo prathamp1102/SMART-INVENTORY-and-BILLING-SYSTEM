@@ -28,7 +28,7 @@ const inkA = a => `rgba(26,26,46,${a})`;
 
 const MONO  = "'DM Mono','Fira Mono',monospace";
 const SERIF = "'Fraunces',serif";
-const BODY  = "'Figtree','Inter',sans-serif";
+const BODY  = "'Poppins','Inter',sans-serif";
 
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 

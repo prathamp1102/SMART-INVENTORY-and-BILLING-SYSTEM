@@ -15,6 +15,11 @@ export const getInvoiceById = async (id) => {
   return data;
 };
 
+export const markInvoicePaid = async (id) => {
+  const { data } = await axiosInstance.patch(`/invoices/${id}/mark-paid`);
+  return data;
+};
+
 export const processReturn = async (payload) => {
   const { data } = await axiosInstance.post("/returns", payload);
   return data;

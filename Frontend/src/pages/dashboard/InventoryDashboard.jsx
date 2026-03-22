@@ -30,7 +30,7 @@ function KpiCard({ icon, label, value, trend, trendUp, color = ac, light = acLig
         </div>
         {trend && <span style={{ fontSize: "11px", fontWeight: 700, color: trendUp ? green : red, background: trendUp ? "rgba(5,150,105,.1)" : "rgba(239,68,68,.1)", padding: "3px 8px", borderRadius: "99px", fontFamily: "'DM Mono',monospace" }}>{trendUp ? "↑" : "↓"} {trend}</span>}
       </div>
-      <div style={{ fontFamily: "'Figtree',sans-serif", fontSize: "30px", fontWeight: 700, color: "#1a1a2e", letterSpacing: "-.04em", lineHeight: 1 }}>{value}</div>
+      <div style={{ fontFamily: "'Poppins',sans-serif", fontSize: "30px", fontWeight: 700, color: "#1a1a2e", letterSpacing: "-.04em", lineHeight: 1 }}>{value}</div>
       <div style={{ fontFamily: "'DM Mono',monospace", fontSize: "9.5px", color: "rgba(26,26,46,.38)", letterSpacing: ".14em", textTransform: "uppercase", marginTop: "8px" }}>{label}</div>
     </div>
   );
@@ -64,7 +64,7 @@ function SectionBox({ title, icon, children, right }) {
           <div style={{ width: "32px", height: "32px", borderRadius: "9px", background: acLight, border: `1px solid ${acBorder}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke={ac} strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d={icon} /></svg>
           </div>
-          <span style={{ fontFamily: "'Figtree',sans-serif", fontSize: "15px", fontWeight: 800, color: "#1a1a2e" }}>{title}</span>
+          <span style={{ fontFamily: "'Poppins',sans-serif", fontSize: "15px", fontWeight: 800, color: "#1a1a2e" }}>{title}</span>
         </div>
         {right}
       </div>
@@ -228,7 +228,7 @@ export default function InventoryDashboard() {
             <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: ac, boxShadow: `0 0 8px ${acGlow}`, animation: "pulse 2s infinite" }} />
             <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "9.5px", color: ac, letterSpacing: ".2em", textTransform: "uppercase" }}>Staff Panel · Active Shift</span>
           </div>
-          <h1 style={{ fontFamily: "'Figtree',sans-serif", fontSize: "30px", fontWeight: 700, color: "#1a1a2e", letterSpacing: "-.04em", margin: 0, lineHeight: 1.1 }}>
+          <h1 style={{ fontFamily: "'Poppins',sans-serif", fontSize: "30px", fontWeight: 700, color: "#1a1a2e", letterSpacing: "-.04em", margin: 0, lineHeight: 1.1 }}>
             {greeting}, <em style={{ color: ac, fontStyle: "italic" }}>{user?.name?.split(" ")[0]}</em> 👨‍💻
           </h1>
           <p style={{ fontSize: "14px", color: "rgba(26,26,46,.45)", marginTop: "7px" }}>
@@ -242,11 +242,11 @@ export default function InventoryDashboard() {
           )}
         </div>
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-          <button onClick={() => navigate("/sales/desk")} style={{ padding: "10px 22px", borderRadius: "12px", border: "none", cursor: "pointer", background: `linear-gradient(135deg,${ac},#047857)`, color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Figtree',sans-serif", boxShadow: `0 4px 18px ${acGlow}`, display: "flex", alignItems: "center", gap: "7px" }}>
+          <button onClick={() => navigate("/sales/desk")} style={{ padding: "10px 22px", borderRadius: "12px", border: "none", cursor: "pointer", background: `linear-gradient(135deg,${ac},#047857)`, color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Poppins',sans-serif", boxShadow: `0 4px 18px ${acGlow}`, display: "flex", alignItems: "center", gap: "7px" }}>
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             New Invoice
           </button>
-          <button onClick={() => navigate("/billing/returns")} style={{ padding: "10px 18px", borderRadius: "12px", border: `1.5px solid ${acBorder}`, cursor: "pointer", background: acLight, color: ac, fontSize: "13px", fontWeight: 700, fontFamily: "'Figtree',sans-serif" }}>
+          <button onClick={() => navigate("/billing/returns")} style={{ padding: "10px 18px", borderRadius: "12px", border: `1.5px solid ${acBorder}`, cursor: "pointer", background: acLight, color: ac, fontSize: "13px", fontWeight: 700, fontFamily: "'Poppins',sans-serif" }}>
             Process Return
           </button>
         </div>

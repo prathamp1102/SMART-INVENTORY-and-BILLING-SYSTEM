@@ -1,3 +1,4 @@
+import ConfirmModal from "../../components/ui/ConfirmModal";
 import { useState, useEffect, useMemo } from "react";
 import { PageShell, Card } from "../../components/ui/PageShell";
 import Button from "../../components/ui/Button";
@@ -37,7 +38,17 @@ function SupplierLedger({ supplier, payments, pos }) {
   const balance = supplier.openingBalance || 0;
   const netDue = totalDue + balance;
 
+  const confirmDelete=async()=>{
+    if(!delModal)return;
+    setDeleting(true); setDelError(null);
+    try{ await axiosInstance.delete(`/supplier-payments/${delModal.id}`); setPayments(prev=>prev.filter(p=>p._id!==delModal.id)); setDelModal(null); }
+    catch(e){ setDelError(e?.response?.data?.message||"Failed to delete payment."); }
+    finally{ setDeleting(false); }
+  };
+
   return (
+
+    <>{delModal&&<ConfirmModal title="Delete Payment" message="This payment record will be permanently deleted." itemName={delModal.name} variant="danger" loading={deleting} error={delError} onConfirm={confirmDelete} onCancel={()=>{setDelModal(null);setDelError(null);}} confirmLabel="Delete Payment"/>}
     <div style={{ border: `1px solid ${BB}`, borderRadius: "13px", overflow: "hidden" }}>
       <div onClick={() => setOpen(v => !v)} style={{ padding: "14px 18px", background: `linear-gradient(135deg,${BL},rgba(2,132,199,.02))`, display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", userSelect: "none" }}>
         <div style={{ width: 34, height: 34, borderRadius: "50%", background: `linear-gradient(135deg,${P},#047857)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -96,8 +107,7 @@ function SupplierLedger({ supplier, payments, pos }) {
                     </td>
                     <td style={{ padding: "10px 14px" }}>
                       <button onClick={async () => {
-                        if (!window.confirm("Delete this payment?")) return;
-                        try { await axiosInstance.delete(`/supplier-payments/${pay._id}`); window.location.reload(); } catch (e) { alert("Failed."); }
+                        setDelError(null); setDelModal({id:pay._id, name:`Payment #${pay._id?.slice(-6)?.toUpperCase()}`});
                       }} style={{ padding: "3px 9px", borderRadius: "7px", border: `1px solid ${RDB}`, background: RDL, color: RD, fontSize: "11px", fontWeight: 600, cursor: "pointer" }}>Del</button>
                     </td>
                   </tr>
@@ -114,6 +124,9 @@ function SupplierLedger({ supplier, payments, pos }) {
 export default function SupplierPayments() {
   const [suppliers, setSuppliers] = useState([]);
   const [payments, setPayments] = useState([]);
+  const [delModal,setDelModal]=useState(null);
+  const [deleting,setDeleting]=useState(false);
+  const [delError,setDelError]=useState(null);
   const [pos, setPOs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -262,5 +275,7 @@ export default function SupplierPayments() {
         </div>
       )}
     </PageShell>
+  );
+    </>
   );
 }

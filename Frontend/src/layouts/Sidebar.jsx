@@ -1,4 +1,5 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../components/ui/Logo";
 import useAuth from "../hooks/useAuth";
 import { ROLE_CONFIG, ROLE_NAV } from "../utils/constants";
@@ -12,9 +13,26 @@ function NavIcon({ path, size = 16 }) {
   );
 }
 
+function ChevronIcon({ open }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" width={13} height={13}
+      style={{ flexShrink: 0, transition: "transform .22s ease", transform: open ? "rotate(180deg)" : "rotate(0deg)" }}>
+      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+    </svg>
+  );
+}
+
 export default function Sidebar({ open, onClose }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Track which groups are expanded (by parent path)
+  const [expanded, setExpanded] = useState(() => {
+    // Auto-expand parent if current route is a child
+    const initial = {};
+    return initial;
+  });
 
   if (!user) return null;
 
@@ -28,6 +46,19 @@ export default function Sidebar({ open, onClose }) {
 
   const handleNavClick = () => {
     if (onClose) onClose();
+  };
+
+  const isChildActive = (children) =>
+    children?.some((c) => location.pathname.startsWith(c.path));
+
+  const toggleGroup = (path) => {
+    setExpanded((prev) => ({ ...prev, [path]: !prev[path] }));
+  };
+
+  // Auto-expand if a child is currently active
+  const isOpen = (item) => {
+    if (expanded[item.path] !== undefined) return expanded[item.path];
+    return isChildActive(item.children);
   };
 
   return (
@@ -93,26 +124,112 @@ export default function Sidebar({ open, onClose }) {
 
         {/* Nav */}
         <nav style={{ flex: 1, padding: "4px 10px", overflowY: "auto" }}>
-          {navItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={handleNavClick}
-              style={({ isActive }) => ({
-                display: "flex", alignItems: "center", gap: "11px",
-                padding: "9px 12px", borderRadius: "11px", marginBottom: "2px",
-                fontSize: "13.5px", fontWeight: isActive ? 600 : 400,
-                color: isActive ? role.accent : "rgba(26,26,46,.52)",
-                background: isActive ? role.light : "transparent",
-                border: `1px solid ${isActive ? role.border : "transparent"}`,
-                textDecoration: "none", transition: "all .18s",
-                boxShadow: isActive ? `0 2px 8px ${role.glow}` : "none",
-              })}
-            >
-              {item.icon && <NavIcon path={item.icon} />}
-              {item.label}
-            </NavLink>
-          ))}
+          {navItems.map((item) => {
+            const hasChildren = item.children && item.children.length > 0;
+
+            if (hasChildren) {
+              const groupOpen = isOpen(item);
+              const childActive = isChildActive(item.children);
+              const parentActive = location.pathname === item.path;
+              const highlighted = childActive || parentActive;
+
+              return (
+                <div key={item.path}>
+                  {/* Parent row — clickable to toggle + navigate */}
+                  <div
+                    onClick={() => toggleGroup(item.path)}
+                    style={{
+                      display: "flex", alignItems: "center", gap: "11px",
+                      padding: "9px 12px", borderRadius: "11px", marginBottom: "2px",
+                      fontSize: "13.5px", fontWeight: highlighted ? 600 : 400,
+                      color: highlighted ? role.accent : "rgba(26,26,46,.52)",
+                      background: highlighted ? role.light : "transparent",
+                      border: `1px solid ${highlighted ? role.border : "transparent"}`,
+                      cursor: "pointer", transition: "all .18s",
+                      boxShadow: highlighted ? `0 2px 8px ${role.glow}` : "none",
+                      userSelect: "none",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!highlighted) {
+                        e.currentTarget.style.background = "rgba(26,26,46,.04)";
+                        e.currentTarget.style.color = "rgba(26,26,46,.7)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!highlighted) {
+                        e.currentTarget.style.background = "transparent";
+                        e.currentTarget.style.color = "rgba(26,26,46,.52)";
+                      }
+                    }}
+                  >
+                    {item.icon && <NavIcon path={item.icon} />}
+                    <span style={{ flex: 1 }}>{item.label}</span>
+                    <ChevronIcon open={groupOpen} />
+                  </div>
+
+                  {/* Children — animated slide */}
+                  <div style={{
+                    overflow: "hidden",
+                    maxHeight: groupOpen ? `${item.children.length * 48}px` : "0px",
+                    transition: "max-height .25s ease",
+                  }}>
+                    {/* Left accent line */}
+                    <div style={{ position: "relative", marginLeft: "10px" }}>
+                      <div style={{
+                        position: "absolute", left: "11px", top: "4px",
+                        bottom: "4px", width: "2px",
+                        background: `linear-gradient(180deg, ${role.border}, transparent)`,
+                        borderRadius: "99px",
+                      }} />
+                      {item.children.map((child) => (
+                        <NavLink
+                          key={child.path}
+                          to={child.path}
+                          onClick={handleNavClick}
+                          style={({ isActive }) => ({
+                            display: "flex", alignItems: "center", gap: "10px",
+                            padding: "8px 12px 8px 30px",
+                            borderRadius: "10px", marginBottom: "2px",
+                            fontSize: "13px", fontWeight: isActive ? 600 : 400,
+                            color: isActive ? role.accent : "rgba(26,26,46,.48)",
+                            background: isActive ? role.light : "transparent",
+                            border: `1px solid ${isActive ? role.border : "transparent"}`,
+                            textDecoration: "none", transition: "all .15s",
+                            boxShadow: isActive ? `0 1px 6px ${role.glow}` : "none",
+                          })}
+                        >
+                          {child.icon && <NavIcon path={child.icon} size={14} />}
+                          {child.label}
+                        </NavLink>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+
+            // Regular flat nav item
+            return (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                onClick={handleNavClick}
+                style={({ isActive }) => ({
+                  display: "flex", alignItems: "center", gap: "11px",
+                  padding: "9px 12px", borderRadius: "11px", marginBottom: "2px",
+                  fontSize: "13.5px", fontWeight: isActive ? 600 : 400,
+                  color: isActive ? role.accent : "rgba(26,26,46,.52)",
+                  background: isActive ? role.light : "transparent",
+                  border: `1px solid ${isActive ? role.border : "transparent"}`,
+                  textDecoration: "none", transition: "all .18s",
+                  boxShadow: isActive ? `0 2px 8px ${role.glow}` : "none",
+                })}
+              >
+                {item.icon && <NavIcon path={item.icon} />}
+                {item.label}
+              </NavLink>
+            );
+          })}
         </nav>
 
         {/* Footer */}

@@ -62,7 +62,7 @@ function Field({ label, children }) {
     </div>
   );
 }
-const inputStyle = { width:"100%", padding:"9px 12px", borderRadius:"10px", border:"1.5px solid rgba(26,26,46,.12)", fontSize:"13px", color:"#1a1a2e", background:"#fafafa", outline:"none", fontFamily:"'Figtree',sans-serif", boxSizing:"border-box", transition:"border-color .15s" };
+const inputStyle = { width:"100%", padding:"9px 12px", borderRadius:"10px", border:"1.5px solid rgba(26,26,46,.12)", fontSize:"13px", color:"#1a1a2e", background:"#fafafa", outline:"none", fontFamily:"'Poppins',sans-serif", boxSizing:"border-box", transition:"border-color .15s" };
 function Input(props) {
   return <input {...props} style={inputStyle} onFocus={e=>e.target.style.borderColor=ac} onBlur={e=>e.target.style.borderColor="rgba(26,26,46,.12)"}/>;
 }
@@ -81,7 +81,7 @@ function Spinner({ size=20, color=ac }) {
 function SaveBtn({ onClick, label="Save", loading }) {
   return (
     <button onClick={onClick} disabled={loading}
-      style={{ padding:"10px 24px", borderRadius:"11px", border:"none", cursor:loading?"not-allowed":"pointer", background:`linear-gradient(135deg,${ac},#6d28d9)`, color:"#fff", fontSize:"13px", fontWeight:700, fontFamily:"'Figtree',sans-serif", boxShadow:`0 4px 16px ${acGlow}`, opacity:loading?0.7:1, display:"flex", alignItems:"center", gap:"7px" }}>
+      style={{ padding:"10px 24px", borderRadius:"11px", border:"none", cursor:loading?"not-allowed":"pointer", background:`linear-gradient(135deg,${ac},#6d28d9)`, color:"#fff", fontSize:"13px", fontWeight:700, fontFamily:"'Poppins',sans-serif", boxShadow:`0 4px 16px ${acGlow}`, opacity:loading?0.7:1, display:"flex", alignItems:"center", gap:"7px" }}>
       {loading&&<Spinner size={14} color="#fff"/>}
       {label}
     </button>
@@ -90,7 +90,7 @@ function SaveBtn({ onClick, label="Save", loading }) {
 function CancelBtn({ onClick }) {
   return (
     <button onClick={onClick}
-      style={{ padding:"10px 20px", borderRadius:"11px", border:`1.5px solid ${acBorder}`, cursor:"pointer", background:acLight, color:ac, fontSize:"13px", fontWeight:700, fontFamily:"'Figtree',sans-serif" }}>
+      style={{ padding:"10px 20px", borderRadius:"11px", border:`1.5px solid ${acBorder}`, cursor:"pointer", background:acLight, color:ac, fontSize:"13px", fontWeight:700, fontFamily:"'Poppins',sans-serif" }}>
       Cancel
     </button>
   );
@@ -106,7 +106,7 @@ function Toast({ message, type="success" }) {
 function Tab({ active, label, icon, count, onClick }) {
   return (
     <button onClick={onClick}
-      style={{ display:"flex", alignItems:"center", gap:"8px", padding:"9px 18px", borderRadius:"11px", border:`1px solid ${active?acBorder:"transparent"}`, background:active?acLight:"transparent", color:active?ac:"rgba(26,26,46,.5)", fontSize:"13px", fontWeight:active?700:500, cursor:"pointer", fontFamily:"'Figtree',sans-serif", transition:"all .15s", whiteSpace:"nowrap" }}>
+      style={{ display:"flex", alignItems:"center", gap:"8px", padding:"9px 18px", borderRadius:"11px", border:`1px solid ${active?acBorder:"transparent"}`, background:active?acLight:"transparent", color:active?ac:"rgba(26,26,46,.5)", fontSize:"13px", fontWeight:active?700:500, cursor:"pointer", fontFamily:"'Poppins',sans-serif", transition:"all .15s", whiteSpace:"nowrap" }}>
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d={icon}/></svg>
       {label}
       {count!=null&&<span style={{ fontSize:"10px", fontWeight:800, background:active?ac:"rgba(26,26,46,.12)", color:active?"#fff":"rgba(26,26,46,.45)", borderRadius:"99px", padding:"1px 7px", fontFamily:"'DM Mono',monospace" }}>{count}</span>}
@@ -163,7 +163,7 @@ function CompaniesTab({ companies, loading, onRefresh, showToast }) {
             {key:"status",label:"Status"},
           ]}
         />
-        <button onClick={openAdd} style={{ display:"flex", alignItems:"center", gap:"7px", padding:"9px 18px", borderRadius:"11px", border:"none", cursor:"pointer", background:`linear-gradient(135deg,${ac},#6d28d9)`, color:"#fff", fontSize:"13px", fontWeight:700, fontFamily:"'Figtree',sans-serif", boxShadow:`0 4px 16px ${acGlow}` }}>
+        <button onClick={openAdd} style={{ display:"flex", alignItems:"center", gap:"7px", padding:"9px 18px", borderRadius:"11px", border:"none", cursor:"pointer", background:`linear-gradient(135deg,${ac},#6d28d9)`, color:"#fff", fontSize:"13px", fontWeight:700, fontFamily:"'Poppins',sans-serif", boxShadow:`0 4px 16px ${acGlow}` }}>
           <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
           Add Organization
         </button>
@@ -227,7 +227,7 @@ function CompaniesTab({ companies, loading, onRefresh, showToast }) {
           <div style={{ display:"flex", justifyContent:"flex-end", gap:"10px" }}>
             <CancelBtn onClick={()=>setDeleteConfirm(null)}/>
             <button onClick={handleDelete} disabled={deleting}
-              style={{ padding:"10px 20px", borderRadius:"11px", border:"none", cursor:"pointer", background:red, color:"#fff", fontSize:"13px", fontWeight:700, fontFamily:"'Figtree',sans-serif", display:"flex", alignItems:"center", gap:"7px", opacity:deleting?0.7:1 }}>
+              style={{ padding:"10px 20px", borderRadius:"11px", border:"none", cursor:"pointer", background:red, color:"#fff", fontSize:"13px", fontWeight:700, fontFamily:"'Poppins',sans-serif", display:"flex", alignItems:"center", gap:"7px", opacity:deleting?0.7:1 }}>
               {deleting&&<Spinner size={14} color="#fff"/>}Delete
             </button>
           </div>
@@ -300,7 +300,7 @@ function BranchesTab({ branches, organizations, admins, loading, onRefresh, show
               {key:"admin.email",label:"Admin Email"},
             ]}
           />
-          <button onClick={openAdd} style={{ display:"flex", alignItems:"center", gap:"7px", padding:"9px 18px", borderRadius:"11px", border:"none", cursor:"pointer", background:`linear-gradient(135deg,${green},#047857)`, color:"#fff", fontSize:"13px", fontWeight:700, fontFamily:"'Figtree',sans-serif", boxShadow:`0 4px 16px ${greenBorder}` }}>
+          <button onClick={openAdd} style={{ display:"flex", alignItems:"center", gap:"7px", padding:"9px 18px", borderRadius:"11px", border:"none", cursor:"pointer", background:`linear-gradient(135deg,${green},#047857)`, color:"#fff", fontSize:"13px", fontWeight:700, fontFamily:"'Poppins',sans-serif", boxShadow:`0 4px 16px ${greenBorder}` }}>
             <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
             Add Branch
           </button>
@@ -362,7 +362,20 @@ function BranchesTab({ branches, organizations, admins, loading, onRefresh, show
           <Field label="Assign Admin (Optional)">
             <FSelect value={form.admin||""} onChange={e=>setForm(f=>({...f,admin:e.target.value||""}))}>
               <option value="">— No Admin —</option>
-              {admins.map(a=><option key={a._id} value={a._id}>{a.name} ({a.email})</option>)}
+              {admins
+                .filter(a => {
+                  // Always show the admin currently assigned to THIS branch (so they can keep it)
+                  const currentBranchAdminId = modal?.edit?.admin?._id || modal?.edit?.admin || "";
+                  if (String(a._id) === String(currentBranchAdminId)) return true;
+                  // Hide admins already assigned to any other branch
+                  const assignedToOtherBranch = branches.some(b => {
+                    const bAdminId = b.admin?._id || b.admin;
+                    return String(bAdminId) === String(a._id);
+                  });
+                  return !assignedToOtherBranch;
+                })
+                .map(a => <option key={a._id} value={a._id}>{a.name} ({a.email})</option>)
+              }
             </FSelect>
           </Field>
           <div style={{ display:"flex", justifyContent:"flex-end", gap:"10px", marginTop:"8px" }}>
@@ -377,7 +390,7 @@ function BranchesTab({ branches, organizations, admins, loading, onRefresh, show
           <div style={{ display:"flex", justifyContent:"flex-end", gap:"10px" }}>
             <CancelBtn onClick={()=>setDeleteConfirm(null)}/>
             <button onClick={handleDelete} disabled={deleting}
-              style={{ padding:"10px 20px", borderRadius:"11px", border:"none", cursor:"pointer", background:red, color:"#fff", fontSize:"13px", fontWeight:700, fontFamily:"'Figtree',sans-serif", display:"flex", alignItems:"center", gap:"7px", opacity:deleting?0.7:1 }}>
+              style={{ padding:"10px 20px", borderRadius:"11px", border:"none", cursor:"pointer", background:red, color:"#fff", fontSize:"13px", fontWeight:700, fontFamily:"'Poppins',sans-serif", display:"flex", alignItems:"center", gap:"7px", opacity:deleting?0.7:1 }}>
               {deleting&&<Spinner size={14} color="#fff"/>}Delete
             </button>
           </div>
