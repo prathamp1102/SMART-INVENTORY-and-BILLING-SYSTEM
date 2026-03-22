@@ -44,24 +44,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100%;
-  overflow-x: hidden;
+  overflow-x: clip; /* clip prevents layout shift but allows child scroll */
 }
 
 a { text-decoration: none; color: inherit; }
 button { font-family: inherit; }
 input, select, textarea { font-family: inherit; }
 
-/* Placeholder — hide by default for floating label effect */
+/* Placeholder */
 input::placeholder { color: transparent; }
 textarea::placeholder { color: rgba(26,26,46,.35); }
 
 /* ── Scrollbar ─────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background: rgba(26,26,46,.12);
-  border-radius: 99px;
-}
+::-webkit-scrollbar-thumb { background: rgba(26,26,46,.12); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(26,26,46,.22); }
 
 /* ── Layout Shell ──────────────────────────────────────────── */
@@ -70,6 +67,7 @@ textarea::placeholder { color: rgba(26,26,46,.35); }
   width: 100vw;
   min-height: 100vh;
   background: var(--bg);
+  overflow-x: clip;
 }
 
 .main-content {
@@ -85,7 +83,8 @@ textarea::placeholder { color: rgba(26,26,46,.35); }
 .page-main {
   flex: 1;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto; /* allow tables to scroll horizontally */
+  -webkit-overflow-scrolling: touch;
   padding: 28px 32px;
 }
 
@@ -221,9 +220,9 @@ textarea::placeholder { color: rgba(26,26,46,.35); }
 }
 
 /* ── Responsive grid helpers ───────────────────────────────── */
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.grid-2   { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3   { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.grid-4   { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .grid-3-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; }
 .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
 
@@ -252,12 +251,7 @@ textarea::placeholder { color: rgba(26,26,46,.35); }
 }
 
 /* ── Utility classes ───────────────────────────────────────── */
-.sr-only {
-  position: absolute; width: 1px; height: 1px;
-  padding: 0; margin: -1px; overflow: hidden;
-  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-}
-
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .text-mono { font-family: 'DM Mono', monospace; }
 .text-serif { font-family: 'Fraunces', serif; }
@@ -292,7 +286,7 @@ textarea::placeholder { color: rgba(26,26,46,.35); }
 
   /* Layout */
   .main-content { margin-left: 0 !important; }
-  .page-main { padding: 16px; }
+  .page-main { padding: 14px 14px 24px; }
 
   /* Sidebar — slide in from left */
   .sidebar { transform: translateX(-100%); }
@@ -302,45 +296,69 @@ textarea::placeholder { color: rgba(26,26,46,.35); }
 
   /* Header */
   .hamburger-btn { display: flex !important; }
-  .app-header { padding: 0 16px; }
+  .app-header { padding: 0 14px; }
   .header-workspace { display: none; }
 
   /* Grids */
-  .grid-2   { grid-template-columns: 1fr; }
-  .grid-3   { grid-template-columns: 1fr; }
-  .grid-4   { grid-template-columns: 1fr 1fr; }
+  .grid-2    { grid-template-columns: 1fr; }
+  .grid-3    { grid-template-columns: 1fr; }
+  .grid-4    { grid-template-columns: 1fr 1fr; }
   .grid-auto { grid-template-columns: 1fr; }
-  .grid-3-2 { grid-template-columns: 1fr; }
+  .grid-3-2  { grid-template-columns: 1fr; }
 
   /* Cards */
-  .card { padding: 16px; border-radius: 14px; }
+  .card { padding: 14px; border-radius: 14px; }
+
+  /* Tables — horizontal scroll on mobile */
+  .table-wrap { border-radius: 12px; }
 
   /* Hide/show helpers */
-  .hide-mobile { display: none !important; }
-  .show-mobile { display: flex !important; }
+  .hide-mobile  { display: none !important; }
+  .show-mobile  { display: flex !important; }
 
-  /* Inputs */
-  input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
+  /* Inputs — prevent iOS zoom on focus */
+  input, select, textarea { font-size: 16px !important; }
+
+  /* Inline style overrides for pages that set fixed widths */
+  [style*="width: 220px"], [style*="width:220px"] { width: 100% !important; }
+  [style*="width: 210px"], [style*="width:210px"] { width: 100% !important; }
+  [style*="width: 200px"], [style*="width:200px"] { width: 100% !important; }
+  [style*="width: 190px"], [style*="width:190px"] { width: 100% !important; }
+  [style*="min-width: 500px"] { min-width: 480px; }
 }
 
 /* ════════════════════════════════
    BREAKPOINT: Small mobile (≤ 480px)
 ════════════════════════════════ */
 @media (max-width: 480px) {
-  .grid-4 { grid-template-columns: 1fr; }
+  .grid-4    { grid-template-columns: 1fr 1fr; }
   .stat-pill { padding: 7px 12px; }
   .app-header { height: 56px; }
+  .page-main { padding: 12px 12px 20px; }
 
-  /* Notification dropdown full width on tiny screens */
+  /* Notification dropdown — slide up from bottom on tiny screens */
   .notif-dropdown {
     position: fixed !important;
-    top: 56px !important;
+    bottom: 0 !important;
+    top: auto !important;
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
-    border-radius: 0 0 18px 18px !important;
-    max-height: 70vh !important;
+    max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 80vh !important;
+    box-shadow: 0 -8px 32px rgba(26,26,46,.18) !important;
   }
+}
+
+/* ════════════════════════════════
+   BREAKPOINT: Extra small (≤ 380px)
+════════════════════════════════ */
+@media (max-width: 380px) {
+  .page-main  { padding: 10px 10px 20px; }
+  .app-header { padding: 0 10px; height: 52px; }
+  .grid-4     { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .card       { padding: 12px; }
 }
 
 /* ── Sidebar overlay ───────────────────────────────────────── */
@@ -361,29 +379,27 @@ textarea::placeholder { color: rgba(26,26,46,.35); }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   EVARA — Additional Component-Level Responsive Styles
+   EVARA — Component-Level Responsive Styles
 ═══════════════════════════════════════════════════════════ */
 
 /* ── Auth page ─────────────────────────────────────────────── */
 .auth-role-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
   width: 100%;
 }
 
-/* ── Dashboard stat grids ──────────────────────────────────── */
-.stat-grid-4 {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+@media (max-width: 400px) {
+  .auth-role-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
 }
 
-.stat-grid-3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
+/* ── Dashboard stat grids ──────────────────────────────────── */
+.stat-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.stat-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 
 @media (max-width: 1100px) {
   .stat-grid-4 { grid-template-columns: repeat(2, 1fr); }
@@ -399,7 +415,7 @@ textarea::placeholder { color: rgba(26,26,46,.35); }
   .stat-grid-4 { grid-template-columns: 1fr 1fr; gap: 8px; }
 }
 
-/* ── Toolbar flex wrapping ──────────────────────────────────── */
+/* ── Toolbar ───────────────────────────────────────────────── */
 .toolbar {
   background: #fff;
   border-radius: 14px;
@@ -413,7 +429,7 @@ textarea::placeholder { color: rgba(26,26,46,.35); }
 }
 
 @media (max-width: 600px) {
-  .toolbar { padding: 10px 14px; gap: 8px; }
+  .toolbar { padding: 10px 12px; gap: 8px; }
   .toolbar-search { width: 100% !important; }
 }
 
@@ -426,6 +442,10 @@ textarea::placeholder { color: rgba(26,26,46,.35); }
   align-items: center;
 }
 
+@media (max-width: 480px) {
+  .pill-strip { gap: 8px; }
+}
+
 /* ── Form cards ────────────────────────────────────────────── */
 .form-card {
   background: #fff;
@@ -435,28 +455,15 @@ textarea::placeholder { color: rgba(26,26,46,.35); }
   padding: 26px;
 }
 
-@media (max-width: 600px) {
-  .form-card { padding: 18px; border-radius: 14px; }
-}
+@media (max-width: 600px) { .form-card { padding: 16px; border-radius: 14px; } }
+@media (max-width: 380px) { .form-card { padding: 14px; border-radius: 12px; } }
 
 /* ── Responsive form grid ──────────────────────────────────── */
-.form-grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-@media (max-width: 560px) {
-  .form-grid-2 { grid-template-columns: 1fr; }
-}
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 560px) { .form-grid-2 { grid-template-columns: 1fr; } }
 
 /* ── Action buttons row ────────────────────────────────────── */
-.action-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
+.action-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
 
 /* ── Page title bar ────────────────────────────────────────── */
 .page-title-bar {
@@ -468,77 +475,40 @@ textarea::placeholder { color: rgba(26,26,46,.35); }
   flex-wrap: wrap;
 }
 
-/* ── Notification dropdown responsive ──────────────────────── */
 @media (max-width: 480px) {
-  .notif-dropdown {
-    position: fixed !important;
-    top: auto !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    border-radius: 20px 20px 0 0 !important;
-    max-height: 80vh !important;
-    box-shadow: 0 -8px 32px rgba(26,26,46,.18) !important;
-  }
+  .page-title-bar { margin-bottom: 16px; gap: 10px; }
 }
 
-/* ── Table — no horizontal scroll on mobile fallback ───────── */
+/* ── Table responsive helpers ──────────────────────────────── */
 @media (max-width: 500px) {
-  .table-mobile-stack td,
-  .table-mobile-stack th {
-    display: block;
-    width: 100%;
-  }
+  .table-mobile-stack td, .table-mobile-stack th { display: block; width: 100%; }
 }
 
-/* ── Modal ─────────────────────────────────────────────────── */
+/* ── Modal — sheet style on mobile ────────────────────────── */
 @media (max-width: 520px) {
   .modal-sheet {
     position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    top: auto !important;
+    bottom: 0 !important; left: 0 !important; right: 0 !important; top: auto !important;
     max-width: 100% !important;
     border-radius: 20px 20px 0 0 !important;
     max-height: 90vh !important;
   }
 }
 
-/* ── Page padding override on very small screens ────────────── */
-@media (max-width: 380px) {
-  .page-main { padding: 12px; }
-  .app-header { padding: 0 12px; height: 52px; }
-}
-
-/* ── Touch-friendly button sizes ────────────────────────────── */
+/* ── Touch-friendly targets ────────────────────────────────── */
 @media (hover: none) and (pointer: coarse) {
   button { min-height: 40px; }
-  a { min-height: 40px; display: inline-flex; align-items: center; }
+  a      { min-height: 40px; display: inline-flex; align-items: center; }
 }
 
-/* ── Focus visible styles ───────────────────────────────────── */
-:focus-visible {
-  outline: 2px solid rgba(124,58,237,.5);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
+/* ── Focus visible ──────────────────────────────────────────── */
+:focus-visible { outline: 2px solid rgba(124,58,237,.5); outline-offset: 2px; border-radius: 4px; }
+button:focus-visible, a:focus-visible { outline: 2px solid rgba(124,58,237,.5); outline-offset: 3px; }
 
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid rgba(124,58,237,.5);
-  outline-offset: 3px;
-}
-
-/* ── Custom scrollbar (light theme) ────────────────────────── */
+/* ── Scrollbar (light theme) ────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: rgba(26,26,46,.03); }
-::-webkit-scrollbar-thumb {
-  background: rgba(26,26,46,.14);
-  border-radius: 99px;
-}
+::-webkit-scrollbar-thumb { background: rgba(26,26,46,.14); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(26,26,46,.25); }
 
 /* ── Selection colour ───────────────────────────────────────── */
@@ -546,11 +516,104 @@ a:focus-visible {
 
 /* ── Safe-area insets for iOS notch ────────────────────────── */
 @supports (padding: max(0px)) {
-  .app-header { padding-left: max(32px, env(safe-area-inset-left)); padding-right: max(32px, env(safe-area-inset-right)); }
+  .app-header {
+    padding-left:  max(32px, env(safe-area-inset-left));
+    padding-right: max(32px, env(safe-area-inset-right));
+  }
   .page-main  { padding-bottom: max(28px, env(safe-area-inset-bottom)); }
   .sidebar    { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+
   @media (max-width: 767px) {
-    .app-header { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
-    .page-main  { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+    .app-header {
+      padding-left:  max(14px, env(safe-area-inset-left));
+      padding-right: max(14px, env(safe-area-inset-right));
+    }
+    .page-main { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EVARA — Inline Style Mobile Overrides
+   Fixes pages that use inline styles for widths/grids
+═══════════════════════════════════════════════════════════ */
+
+/* ── Inventory stock table on mobile ───────────────────────── */
+@media (max-width: 767px) {
+
+  /* Force all wide inline tables to scroll */
+  div[style*="overflow-x: auto"] table,
+  div[style*="overflowX:\"auto\""] table {
+    min-width: 520px;
+  }
+
+  /* Toolbar inline search inputs — full width */
+  div[style*="width: 240px"],
+  div[style*="width:240px"],
+  input[style*="width: 240px"],
+  input[style*="width:240px"] {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Stat pill strips that use fixed gaps — let them wrap */
+  div[style*="display: flex"][style*="gap:"],
+  div[style*="display:flex"][style*="gap:"] {
+    flex-wrap: wrap;
+  }
+
+  /* Report/dashboard big number cards — 2 col on mobile */
+  div[style*="grid-template-columns: repeat(auto-fit"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Login role cards — always 2x2 grid */
+  div[style*="repeat(auto-fit,minmax(min(140px"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    padding: 0 4px !important;
+  }
+
+  /* Auth card padding reduction */
+  div[style*="padding: 38px 36px"] {
+    padding: 24px 18px 22px !important;
+  }
+
+  /* Page shell padding */
+  div[style*="padding: 28px 32px"] {
+    padding: 14px !important;
+  }
+
+  /* Invoice/billing table action buttons — stack */
+  td div[style*="display:\"flex\""][style*="gap:\"6px\""] {
+    flex-wrap: wrap;
+    gap: 4px !important;
+  }
+}
+
+@media (max-width: 480px) {
+
+  /* Role card text scaling */
+  div[style*="repeat(auto-fit,minmax(min(140px"] div[style*="font-size: 17px"],
+  div[style*="repeat(auto-fit,minmax(min(140px"] div[style*="fontSize: \"17px\""] {
+    font-size: 14px !important;
+  }
+
+  /* Role card padding */
+  div[style*="padding: 28px 24px"] {
+    padding: 16px 14px 14px !important;
+  }
+
+  /* Login form card */
+  div[style*="padding: 38px 36px 34px"] {
+    padding: 22px 16px 20px !important;
+    border-radius: 18px !important;
+  }
+
+  /* OTP boxes — compact */
+  input[style*="width: 44px"],
+  input[style*="width:44px"] {
+    width: 38px !important;
+    height: 48px !important;
+    font-size: 18px !important;
   }
 }

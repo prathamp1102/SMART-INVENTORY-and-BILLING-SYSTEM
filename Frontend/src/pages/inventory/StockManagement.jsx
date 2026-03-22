@@ -12,6 +12,9 @@ const G="#059669",GL="rgba(5,150,105,.08)";
 const AM="#b45309",AML="rgba(180,83,9,.08)",AMB="rgba(180,83,9,.2)";
 const RD="#dc2626",RDL="rgba(239,68,68,.08)",RDB="rgba(239,68,68,.2)";
 
+/* mobile scroll hint shown only on small screens via CSS */
+const MOBILE_HINT_STYLE = `@media(max-width:767px){.mobile-scroll-hint{display:block!important}}`;
+
 const thS={padding:"11px 13px",textAlign:"left",fontFamily:"'DM Mono',monospace",fontSize:"9.5px",color:"rgba(26,26,46,.35)",letterSpacing:".14em",textTransform:"uppercase",fontWeight:500,whiteSpace:"nowrap"};
 
 function Chip({label,color,bg,border,small}){
@@ -46,7 +49,7 @@ function ProductRow({p,onAdjust,showOrgBranch}){
       {p.description&&<div style={{fontSize:"11px",color:"rgba(26,26,46,.38)",marginTop:"2px",maxWidth: "min(170px, 100%)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{p.description}</div>}
     </td>
     <td style={{padding:"12px 13px"}}>
-      {p.category?.name?<span style={{padding:"2px 9px",borderRadius:"99px",background:GL,border:"1px solid rgba(5,150,105,.18)",color:G,fontSize:"11px",fontFamily:"'DM Mono',monospace"}}>{p.category.name}</span>:<span style={{color:"rgba(26,26,46,.25)"}}>—</span>}
+      {p.category?.name?<span style={{padding:"2px 9px",borderRadius:"99px",background:GL,border:"1px solid rgba(5,150,105,.18)",color:G,fontSize:"11px",fontFamily:"'DM Mono',monospace",whiteSpace:"nowrap"}}>{p.category.name}</span>:<span style={{color:"rgba(26,26,46,.25)"}}>—</span>}
     </td>
     {showOrgBranch&&<>
       <td style={{padding:"12px 13px"}}>
@@ -70,12 +73,15 @@ function ProductRow({p,onAdjust,showOrgBranch}){
 }
 
 function BranchBlock({brName,brCity,products,onAdjust}){
+  return <><style>{MOBILE_HINT_STYLE}</style>{_BranchBlock({brName,brCity,products,onAdjust})}</>;
+}
+function _BranchBlock({brName,brCity,products,onAdjust}){
   const [open,setOpen]=useState(true);
   const totalStock=products.reduce((s,p)=>s+p.stock,0);
   const lowCount=products.filter(p=>p.stock>0&&p.stock<10).length;
   const outCount=products.filter(p=>p.stock===0).length;
   const COLS=["Product","Category","Barcode","Cost ₹","Price ₹","Stock","Status"];
-  return <div style={{border:`1px solid ${BB}`,borderRadius:"13px",overflow:"hidden"}}>
+  return <div style={{border:`1px solid ${BB}`,borderRadius:"13px",overflow:"visible"}}>
     <div onClick={()=>setOpen(v=>!v)} style={{padding:"10px 15px",background:`linear-gradient(135deg,${BL},rgba(2,132,199,.02))`,borderBottom:open?`1px solid ${BB}`:"none",display:"flex",alignItems:"center",gap:"10px",cursor:"pointer",userSelect:"none"}}>
       <svg viewBox="0 0 24 24" fill="none" stroke={B} strokeWidth="2" width="14" height="14"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.75M3.75 21V10.5a9 9 0 0118 0V21"/></svg>
       <span style={{fontWeight:700,fontSize:"13px",color:B}}>{brName==="No Branch"?"No Specific Branch":brName}</span>
@@ -88,12 +94,16 @@ function BranchBlock({brName,brCity,products,onAdjust}){
         <svg viewBox="0 0 24 24" fill="none" stroke="rgba(26,26,46,.3)" strokeWidth="2" width="14" height="14" style={{transform:open?"rotate(180deg)":"none",transition:"transform .2s"}}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
       </div>
     </div>
-    {open&&<div style={{overflowX:"auto"}}>
-      <table style={{width:"100%",borderCollapse:"collapse"}}>
+    {open&&<>
+      <div style={{fontSize:"10px",color:"rgba(26,26,46,.3)",fontFamily:"'DM Mono',monospace",padding:"6px 14px 2px",letterSpacing:".06em",display:"none"}} className="mobile-scroll-hint">← scroll to see all columns →</div>
+      <div style={{overflowX:"auto",WebkitOverflowScrolling:"touch",borderRadius:"0 0 13px 13px"}}>
+      <table style={{width:"100%",borderCollapse:"collapse",minWidth:"560px"}}>
         <thead><tr style={{background:"rgba(26,26,46,.025)",borderBottom:"1px solid rgba(26,26,46,.06)"}}>{COLS.map(h=><th key={h} style={thS}>{h}</th>)}</tr></thead>
         <tbody>{products.map(p=><ProductRow key={p._id} p={p} onAdjust={onAdjust} showOrgBranch={false}/>)}</tbody>
       </table>
-    </div>}
+    </div>
+    </>
+  }
   </div>;
 }
 
@@ -103,7 +113,7 @@ function OrgBlock({orgId,orgName,branches,onAdjust}){
   const totalStock=allProducts.reduce((s,p)=>s+p.stock,0);
   const lowCount=allProducts.filter(p=>p.stock>0&&p.stock<10).length;
   const outCount=allProducts.filter(p=>p.stock===0).length;
-  return <div style={{background:"#fff",borderRadius:"18px",border:`1px solid ${PB}`,overflow:"hidden",boxShadow:"0 2px 14px rgba(124,58,237,.07)"}}>
+  return <div style={{background:"#fff",borderRadius:"18px",border:`1px solid ${PB}`,overflow:"visible",boxShadow:"0 2px 14px rgba(124,58,237,.07)"}}>
     <div onClick={()=>setOpen(v=>!v)} style={{padding:"14px 20px",background:`linear-gradient(135deg,${PL},rgba(124,58,237,.03))`,borderBottom:open?`1px solid ${PB}`:"none",display:"flex",alignItems:"center",gap:"14px",cursor:"pointer",userSelect:"none"}}>
       <div style={{width:38,height:38,borderRadius:"11px",background:`linear-gradient(135deg,${P},#6d28d9)`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,boxShadow:"0 4px 12px rgba(124,58,237,.3)"}}>
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" width="17" height="17"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
@@ -159,9 +169,9 @@ function FlatView({products,onAdjust,isSA}){
   const COLS=isSA
     ?["Product","Category","Organization","Branch","Barcode","Cost ₹","Price ₹","Stock","Status"]
     :["Product","Category","Barcode","Cost ₹","Price ₹","Stock","Status"];
-  return <div style={{background:"#fff",borderRadius:"18px",border:"1px solid rgba(26,26,46,.08)",overflow:"hidden",boxShadow:"0 2px 16px rgba(26,26,46,.05)"}}>
-    <div style={{overflowX:"auto"}}>
-      <table style={{width:"100%",borderCollapse:"collapse"}}>
+  return <div style={{background:"#fff",borderRadius:"18px",border:"1px solid rgba(26,26,46,.08)",boxShadow:"0 2px 16px rgba(26,26,46,.05)"}}>
+    <div style={{overflowX:"auto",WebkitOverflowScrolling:"touch",borderRadius:"18px"}}>
+      <table style={{width:"100%",borderCollapse:"collapse",minWidth:"600px"}}>
         <thead><tr style={{background:"rgba(26,26,46,.03)",borderBottom:"1px solid rgba(26,26,46,.07)"}}>{COLS.map(h=><th key={h} style={thS}>{h}</th>)}</tr></thead>
         <tbody>
           {products.length===0?<tr><td colSpan={COLS.length} style={{padding:"60px",textAlign:"center"}}>
@@ -235,7 +245,7 @@ export default function StockManagement(){
       <div style={{marginLeft:"auto",display:"flex",gap:"8px",alignItems:"center"}}>
         <div style={{position:"relative"}}>
           <svg style={{position:"absolute",left:"10px",top:"50%",transform:"translateY(-50%)"}} width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="rgba(26,26,46,.3)" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input placeholder="Search products, org, branch…" value={search} onChange={e=>setSearch(e.target.value)} style={{height:"36px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.12)",outline:"none",paddingLeft:"32px",paddingRight:"12px",fontSize:"13px",fontFamily:"'Poppins',sans-serif",color:"#1a1a2e",background:"#fff",width:"240px"}}/>
+          <input placeholder="Search products, org, branch…" value={search} onChange={e=>setSearch(e.target.value)} style={{height:"36px",borderRadius:"10px",border:"1.5px solid rgba(26,26,46,.12)",outline:"none",paddingLeft:"32px",paddingRight:"12px",fontSize:"13px",fontFamily:"'Poppins',sans-serif",color:"#1a1a2e",background:"#fff",width:"clamp(160px,30vw,240px)"}}/>
         </div>
         <Button variant="secondary" size="sm" onClick={load}>↻</Button>
         <ExcelExport

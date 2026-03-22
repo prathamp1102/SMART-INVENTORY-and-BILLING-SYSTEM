@@ -413,7 +413,7 @@ export default function Header({ onMenuClick }) {
           </button>
 
           <div>
-            <div style={{ fontFamily: "'Fraunces', serif", fontSize: "18px", fontWeight: 800, color: "#1a1a2e", letterSpacing: "-.02em" }}>
+            <div style={{ fontFamily: "'Fraunces', serif", fontSize: "clamp(15px,3vw,18px)", fontWeight: 800, color: "#1a1a2e", letterSpacing: "-.02em" }}>
               {current?.label ?? "Dashboard"}
             </div>
             <div className="header-workspace">{role.workspace}</div>

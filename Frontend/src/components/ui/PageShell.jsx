@@ -5,19 +5,20 @@ export function PageShell({ title, subtitle, actions, children }) {
       {/* Page header */}
       <div style={{
         display: "flex", alignItems: "flex-start", justifyContent: "space-between",
-        gap: 16, marginBottom: 24, flexWrap: "wrap",
+        gap: "clamp(10px,2vw,16px)", marginBottom: "clamp(14px,3vw,24px)", flexWrap: "wrap",
       }}>
-        <div>
+        <div style={{ minWidth: 0, flex: 1 }}>
           <h1 style={{
             fontFamily: "'Fraunces', serif",
-            fontSize: "clamp(20px, 3vw, 26px)",
+            fontSize: "clamp(18px, 3vw, 26px)",
             fontWeight: 800, color: "#1a1a2e",
             letterSpacing: "-.025em", lineHeight: 1.15, marginBottom: 4,
+            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
           }}>
             {title}
           </h1>
           {subtitle && (
-            <p style={{ fontSize: 13, color: "rgba(26,26,46,.42)", lineHeight: 1.5 }}>
+            <p style={{ fontSize: "clamp(11px,2vw,13px)", color: "rgba(26,26,46,.42)", lineHeight: 1.5 }}>
               {subtitle}
             </p>
           )}
