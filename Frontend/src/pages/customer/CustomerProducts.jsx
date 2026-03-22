@@ -46,7 +46,7 @@ function ProductCard({ product, onAddToCart, currency }) {
           <div style={{ fontSize: "11px", color: "rgba(26,26,46,.4)", marginBottom: "8px" }}>SKU: {product.barcode}</div>
         )}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "12px" }}>
-          <div style={{ fontSize: "20px", fontWeight: 800, color: ac, fontFamily: "'Figtree',sans-serif" }}>
+          <div style={{ fontSize: "20px", fontWeight: 800, color: ac, fontFamily: "'Poppins',sans-serif" }}>
             {currency}{Number(product.price || product.sellingPrice || 0).toLocaleString()}
           </div>
           <button

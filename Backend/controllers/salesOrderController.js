@@ -155,6 +155,15 @@ exports.importSalesOrders = async (req, res) => {
             total:       item.total,
           }));
 
+          // Cash on Delivery = payment not yet received, mark as PENDING
+          const isCOD = !order.paymentMode || order.paymentMode === "CASH";
+
+          // Map SalesOrder paymentMode → Invoice paymentMode enum
+          const invoicePaymentMode = {
+            CASH: "CASH", CARD: "CARD", UPI: "UPI",
+            BANK_TRANSFER: "BANK", CREDIT: "OTHER", OTHER: "OTHER",
+          }[order.paymentMode] || "CASH";
+
           await Invoice.create({
             branch:          branchId,
             cashier:         uploadedBy,
@@ -167,11 +176,11 @@ exports.importSalesOrders = async (req, res) => {
             discountPercent: 0,
             taxAmount:       0,
             grandTotal,
-            paymentMode:     order.paymentMode,
-            amountPaid:      grandTotal,
+            paymentMode:     invoicePaymentMode,
+            amountPaid:      isCOD ? 0 : grandTotal,
             change:          0,
             notes:           order.notes,
-            status:          "PAID",
+            status:          isCOD ? "PENDING" : "PAID",
             discountApproved: true,
           });
         }

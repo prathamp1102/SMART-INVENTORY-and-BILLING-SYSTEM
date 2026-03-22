@@ -1,3 +1,4 @@
+import ConfirmModal from "../../components/ui/ConfirmModal";
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { PageShell } from "../../components/ui/PageShell";
@@ -75,7 +76,7 @@ function RecordPurchaseForm({ suppliers, onSuccess }) {
   const fStyle = {
     width: "100%", height: "46px", borderRadius: "12px",
     border: "1.5px solid rgba(26,26,46,.11)", outline: "none",
-    padding: "0 14px", fontSize: "14px", fontFamily: "'Figtree',sans-serif",
+    padding: "0 14px", fontSize: "14px", fontFamily: "'Poppins',sans-serif",
     color: "#1a1a2e", background: "#fafaf9", boxSizing: "border-box",
     transition: "border-color .18s, box-shadow .18s",
   };
@@ -85,7 +86,16 @@ function RecordPurchaseForm({ suppliers, onSuccess }) {
     letterSpacing: ".12em", textTransform: "uppercase", marginBottom: "6px",
   };
 
+  const confirmDelete=async()=>{
+    if(!delModal)return;
+    setDeleting(true); setDelError(null);
+    try{ await axiosInstance.delete(`/supplier-payments/${delModal.id}`); loadPayments(); setDelModal(null); }
+    catch(e){ setDelError(e?.response?.data?.message||"Failed to delete."); }
+    finally{ setDeleting(false); }
+  };
+
   return (
+
     <div style={{ display: "grid", gridTemplateColumns: showPanel ? "1fr 1fr" : "1fr", gap: "20px", alignItems: "start", maxWidth: showPanel ? "960px" : "560px" }}>
 
       {/* ── LEFT: Form ──────────────────────────────── */}
@@ -147,7 +157,7 @@ function RecordPurchaseForm({ suppliers, onSuccess }) {
                 <div style={{ fontWeight: 700, fontSize: "13px", color: RD }}>₹{(selectedPO.dueAmount || 0).toLocaleString("en-IN")}</div>
               </div>
               <button onClick={() => setForm(p => ({ ...p, amount: selectedPO.dueAmount || "" }))}
-                style={{ marginLeft: "auto", padding: "6px 13px", borderRadius: "9px", border: `1.5px solid ${BB}`, background: "#fff", color: B, fontSize: "11.5px", fontWeight: 700, cursor: "pointer", fontFamily: "'Figtree',sans-serif" }}>
+                style={{ marginLeft: "auto", padding: "6px 13px", borderRadius: "9px", border: `1.5px solid ${BB}`, background: "#fff", color: B, fontSize: "11.5px", fontWeight: 700, cursor: "pointer", fontFamily: "'Poppins',sans-serif" }}>
                 Auto-fill Due
               </button>
             </div>
@@ -200,7 +210,7 @@ function RecordPurchaseForm({ suppliers, onSuccess }) {
             cursor: loading ? "wait" : "pointer",
             background: loading ? "rgba(26,26,46,.08)" : `linear-gradient(135deg,${P},#047857)`,
             color: loading ? "rgba(26,26,46,.3)" : "#fff",
-            fontSize: "14px", fontWeight: 800, fontFamily: "'Figtree',sans-serif",
+            fontSize: "14px", fontWeight: 800, fontFamily: "'Poppins',sans-serif",
             boxShadow: loading ? "none" : "0 4px 20px rgba(5,150,105,.28)",
             transition: "all .2s", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
           }}>
@@ -255,6 +265,7 @@ export default function RecordPurchases() {
   const COLS = ["Date", "Supplier", "Linked PO", "Amount", "Mode", "Reference", "Actions"];
 
   return (
+    <>{delModal&&<ConfirmModal title="Delete Payment Record" message="This payment entry will be permanently removed." itemName={delModal.name} variant="danger" loading={deleting} error={delError} onConfirm={confirmDelete} onCancel={()=>{setDelModal(null);setDelError(null);}} confirmLabel="Delete Record"/>}
     <PageShell title="Record Purchases" subtitle="Record payments made to suppliers">
       {/* Tabs */}
       <div style={{ display: "flex", gap: "0", marginBottom: "20px", background: "#fff", borderRadius: "12px", border: "1px solid rgba(26,26,46,.08)", padding: "4px", width: "fit-content" }}>
@@ -342,8 +353,7 @@ export default function RecordPurchases() {
                       <td style={{ padding: "12px 14px", fontFamily: "'DM Mono',monospace", fontSize: "11px", color: "rgba(26,26,46,.5)" }}>{pay.referenceNo || "—"}</td>
                       <td style={{ padding: "12px 14px" }}>
                         <button onClick={async () => {
-                          if (!window.confirm("Delete this payment record?")) return;
-                          try { await axiosInstance.delete(`/supplier-payments/${pay._id}`); loadPayments(); } catch (e) { alert(e?.response?.data?.message || "Failed."); }
+                          setDelError(null); setDelModal({id:pay._id, name:`Payment #${pay._id?.slice(-6)?.toUpperCase()}`});
                         }} style={{ padding: "5px 10px", borderRadius: "8px", border: `1.5px solid ${RDB}`, background: RDL, color: RD, fontSize: "11px", fontWeight: 600, cursor: "pointer" }}>
                           Delete
                         </button>
@@ -357,5 +367,6 @@ export default function RecordPurchases() {
         </>
       )}
     </PageShell>
+    </>
   );
 }

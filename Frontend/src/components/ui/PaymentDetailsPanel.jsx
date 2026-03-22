@@ -9,7 +9,7 @@ import axiosInstance from "../../services/axiosInstance";
  *   amount     — number
  */
 
-const ff = { mono: "'DM Mono','Fira Mono',monospace", body: "'Figtree','Inter',sans-serif", serif: "'Fraunces',serif" };
+const ff = { mono: "'DM Mono','Fira Mono',monospace", body: "'Poppins','Inter',sans-serif", serif: "'Fraunces',serif" };
 
 function detectBrand(num) {
   const n = num.replace(/\s/g, "");

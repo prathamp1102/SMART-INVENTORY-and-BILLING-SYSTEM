@@ -33,7 +33,7 @@ const C = {
 };
 
 const ff = {
-  body:  "'Figtree','Inter',sans-serif",
+  body:  "'Poppins','Inter',sans-serif",
   serif: "'Fraunces',serif",
   mono:  "'DM Mono','Fira Mono',monospace",
 };
@@ -153,10 +153,10 @@ function InvoicePrint({ inv, onClose, orgName }) {
     w.document.write(`
       <!DOCTYPE html><html><head>
         <title>Invoice #${inv.invoiceNumber}</title>
-        <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;800;900&family=DM+Mono:wght@400;500&family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;800;900&family=DM+Mono:wght@400;500&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
         <style>
           *{margin:0;padding:0;box-sizing:border-box}
-          body{font-family:'Figtree',sans-serif;background:#fff;color:#1a1a2e;padding:40px;max-width:700px;margin:auto}
+          body{font-family:'Poppins',sans-serif;background:#fff;color:#1a1a2e;padding:40px;max-width:700px;margin:auto}
           @media print{body{padding:20px}button{display:none!important}}
         </style>
       </head><body>${content}</body></html>

@@ -265,7 +265,7 @@ export default function ExcelImport({ entity, onImport, buttonLabel, accent }) {
       {/* Trigger button */}
       <button
         onClick={() => { reset(); setShowPanel(true); }}
-        style={{ display: "flex", alignItems: "center", gap: "7px", padding: "9px 18px", borderRadius: "11px", border: `1.5px solid ${btn.border}`, background: btn.light, color: btn.color, fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'Figtree',sans-serif", transition: "all .15s" }}
+        style={{ display: "flex", alignItems: "center", gap: "7px", padding: "9px 18px", borderRadius: "11px", border: `1.5px solid ${btn.border}`, background: btn.light, color: btn.color, fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'Poppins',sans-serif", transition: "all .15s" }}
         onMouseEnter={e => e.currentTarget.style.background = btn.color + "22"}
         onMouseLeave={e => e.currentTarget.style.background = btn.light}
       >
@@ -313,7 +313,7 @@ export default function ExcelImport({ entity, onImport, buttonLabel, accent }) {
                   </div>
                   <button
                     onClick={() => downloadTemplate(schema)}
-                    style={{ display: "flex", alignItems: "center", gap: "7px", padding: "8px 16px", borderRadius: "10px", border: `1.5px solid ${greenBorder}`, background: greenLight, color: green, fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "'Figtree',sans-serif", whiteSpace: "nowrap" }}
+                    style={{ display: "flex", alignItems: "center", gap: "7px", padding: "8px 16px", borderRadius: "10px", border: `1.5px solid ${greenBorder}`, background: greenLight, color: green, fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "'Poppins',sans-serif", whiteSpace: "nowrap" }}
                   >
                     <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M12 3v13.5m0 0l-4.5-4.5M12 16.5l4.5-4.5" /></svg>
                     Download CSV Template
@@ -407,11 +407,11 @@ export default function ExcelImport({ entity, onImport, buttonLabel, accent }) {
                   </div>
 
                   <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-                    <button onClick={reset} style={{ padding: "10px 20px", borderRadius: "11px", border: "1.5px solid rgba(26,26,46,.14)", background: "transparent", color: "rgba(26,26,46,.6)", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'Figtree',sans-serif" }}>Cancel</button>
+                    <button onClick={reset} style={{ padding: "10px 20px", borderRadius: "11px", border: "1.5px solid rgba(26,26,46,.14)", background: "transparent", color: "rgba(26,26,46,.6)", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'Poppins',sans-serif" }}>Cancel</button>
                     <button
                       onClick={handleImport}
                       disabled={errors.length > 0}
-                      style={{ padding: "10px 24px", borderRadius: "11px", border: "none", cursor: errors.length > 0 ? "not-allowed" : "pointer", background: errors.length > 0 ? "rgba(26,26,46,.15)" : `linear-gradient(135deg,${btn.color},#6d28d9)`, color: errors.length > 0 ? "rgba(26,26,46,.35)" : "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Figtree',sans-serif", boxShadow: errors.length > 0 ? "none" : `0 4px 16px rgba(124,58,237,.25)` }}
+                      style={{ padding: "10px 24px", borderRadius: "11px", border: "none", cursor: errors.length > 0 ? "not-allowed" : "pointer", background: errors.length > 0 ? "rgba(26,26,46,.15)" : `linear-gradient(135deg,${btn.color},#6d28d9)`, color: errors.length > 0 ? "rgba(26,26,46,.35)" : "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Poppins',sans-serif", boxShadow: errors.length > 0 ? "none" : `0 4px 16px rgba(124,58,237,.25)` }}
                     >
                       Import {rows.length} {schema.label}
                     </button>
@@ -435,7 +435,7 @@ export default function ExcelImport({ entity, onImport, buttonLabel, accent }) {
                   </div>
                   <div style={{ fontFamily: "'Fraunces',serif", fontSize: "20px", fontWeight: 800, color: "#1a1a2e", marginBottom: "6px" }}>Import Complete!</div>
                   <div style={{ fontSize: "13px", color: "rgba(26,26,46,.5)", marginBottom: "20px" }}>{result?.success} {schema.label.toLowerCase()} imported successfully.</div>
-                  <button onClick={() => setShowPanel(false)} style={{ padding: "10px 28px", borderRadius: "11px", border: "none", cursor: "pointer", background: `linear-gradient(135deg,${green},#047857)`, color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Figtree',sans-serif" }}>Close</button>
+                  <button onClick={() => setShowPanel(false)} style={{ padding: "10px 28px", borderRadius: "11px", border: "none", cursor: "pointer", background: `linear-gradient(135deg,${green},#047857)`, color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Poppins',sans-serif" }}>Close</button>
                 </div>
               )}
 
@@ -446,7 +446,7 @@ export default function ExcelImport({ entity, onImport, buttonLabel, accent }) {
                     <div style={{ fontSize: "13px", fontWeight: 700, color: red, marginBottom: "8px" }}>✗ Error</div>
                     {errors.map((e, i) => <div key={i} style={{ fontSize: "12px", color: red, marginTop: "3px" }}>• {e}</div>)}
                   </div>
-                  <button onClick={reset} style={{ padding: "9px 20px", borderRadius: "10px", border: `1.5px solid ${btn.border}`, background: btn.light, color: btn.color, fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'Figtree',sans-serif" }}>Try Again</button>
+                  <button onClick={reset} style={{ padding: "9px 20px", borderRadius: "10px", border: `1.5px solid ${btn.border}`, background: btn.light, color: btn.color, fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'Poppins',sans-serif" }}>Try Again</button>
                 </div>
               )}
             </div>

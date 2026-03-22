@@ -28,7 +28,7 @@ function KpiCard({ label, value, sub, color = blue, bg = blueL, border = blueB, 
         <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "9px", color: "rgba(26,26,46,.38)", letterSpacing: ".14em", textTransform: "uppercase" }}>{label}</span>
         {badge && <span style={{ fontSize: "10.5px", fontWeight: 700, color: badgeUp !== false ? green : red, background: badgeUp !== false ? "rgba(5,150,105,.1)" : "rgba(239,68,68,.1)", padding: "2px 7px", borderRadius: "99px", fontFamily: "'DM Mono',monospace" }}>{badgeUp !== false ? "↑" : "↓"} {badge}</span>}
       </div>
-      <div style={{ fontFamily: "'Figtree',sans-serif", fontSize: "28px", fontWeight: 800, color: "#1a1a2e", letterSpacing: "-.04em" }}>{value}</div>
+      <div style={{ fontFamily: "'Poppins',sans-serif", fontSize: "28px", fontWeight: 800, color: "#1a1a2e", letterSpacing: "-.04em" }}>{value}</div>
       {sub && <div style={{ fontSize: "11px", color: "rgba(26,26,46,.4)", marginTop: "5px", fontFamily: "'DM Mono',monospace" }}>{sub}</div>}
     </div>
   );
@@ -37,7 +37,7 @@ function KpiCard({ label, value, sub, color = blue, bg = blueL, border = blueB, 
 function SectionHeader({ title, sub }) {
   return (
     <div style={{ marginBottom: "16px" }}>
-      <h2 style={{ fontFamily: "'Figtree',sans-serif", fontSize: "18px", fontWeight: 800, color: "#1a1a2e", margin: 0 }}>{title}</h2>
+      <h2 style={{ fontFamily: "'Poppins',sans-serif", fontSize: "18px", fontWeight: 800, color: "#1a1a2e", margin: 0 }}>{title}</h2>
       {sub && <p style={{ fontSize: "13px", color: "rgba(26,26,46,.45)", margin: "4px 0 0" }}>{sub}</p>}
     </div>
   );
@@ -50,7 +50,7 @@ function Card({ children, style = {} }) {
 function CardHead({ title, right }) {
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 22px", borderBottom: "1px solid rgba(26,26,46,.06)" }}>
-      <span style={{ fontFamily: "'Figtree',sans-serif", fontSize: "15px", fontWeight: 800, color: "#1a1a2e" }}>{title}</span>
+      <span style={{ fontFamily: "'Poppins',sans-serif", fontSize: "15px", fontWeight: 800, color: "#1a1a2e" }}>{title}</span>
       {right}
     </div>
   );
@@ -154,7 +154,7 @@ function SalesTab() {
       {/* Period Selector */}
       <div style={{ display: "flex", gap: "4px", padding: "4px", background: "rgba(26,26,46,.06)", borderRadius: "12px", alignSelf: "flex-start" }}>
         {[["today","Today"],["week","This Week"],["month","This Month"],["quarter","Quarter"],["year","This Year"]].map(([k,l]) => (
-          <button key={k} onClick={() => setPeriod(k)} style={{ padding: "7px 16px", borderRadius: "9px", border: "none", cursor: "pointer", fontSize: "12.5px", fontWeight: 600, fontFamily: "'Figtree',sans-serif", transition: "all .15s", background: period === k ? "#fff" : "transparent", color: period === k ? "#1a1a2e" : "rgba(26,26,46,.45)", boxShadow: period === k ? "0 1px 6px rgba(26,26,46,.1)" : "none" }}>{l}</button>
+          <button key={k} onClick={() => setPeriod(k)} style={{ padding: "7px 16px", borderRadius: "9px", border: "none", cursor: "pointer", fontSize: "12.5px", fontWeight: 600, fontFamily: "'Poppins',sans-serif", transition: "all .15s", background: period === k ? "#fff" : "transparent", color: period === k ? "#1a1a2e" : "rgba(26,26,46,.45)", boxShadow: period === k ? "0 1px 6px rgba(26,26,46,.1)" : "none" }}>{l}</button>
         ))}
       </div>
 
@@ -269,7 +269,7 @@ function InventoryTab() {
       {/* Sub-view selector */}
       <div style={{ display: "flex", gap: "4px", padding: "4px", background: "rgba(26,26,46,.06)", borderRadius: "12px", alignSelf: "flex-start" }}>
         {[["overview","Overview"],["low","Low Stock"],["out","Out of Stock"]].map(([k,l]) => (
-          <button key={k} onClick={() => setView(k)} style={{ padding: "7px 16px", borderRadius: "9px", border: "none", cursor: "pointer", fontSize: "12.5px", fontWeight: 600, fontFamily: "'Figtree',sans-serif", transition: "all .15s", background: view === k ? "#fff" : "transparent", color: view === k ? "#1a1a2e" : "rgba(26,26,46,.45)", boxShadow: view === k ? "0 1px 6px rgba(26,26,46,.1)" : "none" }}>{l}</button>
+          <button key={k} onClick={() => setView(k)} style={{ padding: "7px 16px", borderRadius: "9px", border: "none", cursor: "pointer", fontSize: "12.5px", fontWeight: 600, fontFamily: "'Poppins',sans-serif", transition: "all .15s", background: view === k ? "#fff" : "transparent", color: view === k ? "#1a1a2e" : "rgba(26,26,46,.45)", boxShadow: view === k ? "0 1px 6px rgba(26,26,46,.1)" : "none" }}>{l}</button>
         ))}
       </div>
 
@@ -496,7 +496,7 @@ function ProfitLossTab() {
       {/* Period */}
       <div style={{ display: "flex", gap: "4px", padding: "4px", background: "rgba(26,26,46,.06)", borderRadius: "12px", alignSelf: "flex-start" }}>
         {[["month","This Month"],["quarter","Quarter"],["year","This Year"]].map(([k,l]) => (
-          <button key={k} onClick={() => setPeriod(k)} style={{ padding: "7px 16px", borderRadius: "9px", border: "none", cursor: "pointer", fontSize: "12.5px", fontWeight: 600, fontFamily: "'Figtree',sans-serif", transition: "all .15s", background: period === k ? "#fff" : "transparent", color: period === k ? "#1a1a2e" : "rgba(26,26,46,.45)", boxShadow: period === k ? "0 1px 6px rgba(26,26,46,.1)" : "none" }}>{l}</button>
+          <button key={k} onClick={() => setPeriod(k)} style={{ padding: "7px 16px", borderRadius: "9px", border: "none", cursor: "pointer", fontSize: "12.5px", fontWeight: 600, fontFamily: "'Poppins',sans-serif", transition: "all .15s", background: period === k ? "#fff" : "transparent", color: period === k ? "#1a1a2e" : "rgba(26,26,46,.45)", boxShadow: period === k ? "0 1px 6px rgba(26,26,46,.1)" : "none" }}>{l}</button>
         ))}
       </div>
 
@@ -721,11 +721,56 @@ function SystemLogsTab() {
    MAIN PAGE
 ═══════════════════════════════════════════════════════════════ */
 const TABS = [
-  { key: "sales",     label: "📊 Sales Report",      Comp: SalesTab },
-  { key: "inventory", label: "📦 Inventory Report",   Comp: InventoryTab },
-  { key: "branches",  label: "🏢 Branch-wise Report", Comp: BranchTab },
-  { key: "pl",        label: "💹 Profit & Loss",      Comp: ProfitLossTab },
-  { key: "logs",      label: "🔍 System Logs",        Comp: SystemLogsTab },
+  {
+    key: "sales",
+    label: "Sales Report",
+    Comp: SalesTab,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+        <path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+      </svg>
+    ),
+  },
+  {
+    key: "inventory",
+    label: "Inventory Report",
+    Comp: InventoryTab,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+        <path d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+      </svg>
+    ),
+  },
+  {
+    key: "branches",
+    label: "Branch-wise Report",
+    Comp: BranchTab,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+        <path d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+      </svg>
+    ),
+  },
+  {
+    key: "pl",
+    label: "Profit & Loss",
+    Comp: ProfitLossTab,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+        <path d="M9 14.25l6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185zM9.75 9h.008v.008H9.75V9zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 4.5h.008v.008h-.008V13.5zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+      </svg>
+    ),
+  },
+  {
+    key: "logs",
+    label: "System Logs",
+    Comp: SystemLogsTab,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+        <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803 7.5 7.5 0 0015.803 15.803z" />
+      </svg>
+    ),
+  },
 ];
 
 export default function SystemMonitoring() {
@@ -751,13 +796,17 @@ export default function SystemMonitoring() {
               onClick={() => setTab(t.key)}
               style={{
                 padding: "9px 18px", borderRadius: "11px", border: "none", cursor: "pointer",
-                fontSize: "13px", fontWeight: 700, fontFamily: "'Figtree',sans-serif",
+                fontSize: "13px", fontWeight: 700, fontFamily: "'Poppins',sans-serif",
                 transition: "all .18s", whiteSpace: "nowrap",
                 background: tab === t.key ? "#fff" : "transparent",
                 color:      tab === t.key ? "#1a1a2e" : "rgba(26,26,46,.45)",
                 boxShadow:  tab === t.key ? "0 2px 10px rgba(26,26,46,.1)" : "none",
+                display: "inline-flex", alignItems: "center", gap: "7px",
               }}
-            >{t.label}</button>
+            >
+              {t.icon}
+              {t.label}
+            </button>
           ))}
         </div>
 

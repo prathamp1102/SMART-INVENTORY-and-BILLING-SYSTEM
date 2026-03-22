@@ -99,7 +99,7 @@ function MetricCard({ icon, label, value, sub, badge, badgeUp, color, bg, border
         <><Sk h={26} w="55%" /><div style={{ marginTop: 6 }}><Sk h={10} w="75%" /></div></>
       ) : (
         <>
-          <div style={{ fontFamily: "'Figtree',sans-serif", fontSize: 28, fontWeight: 900, color: C.ink, letterSpacing: "-.05em", lineHeight: 1, marginBottom: 5 }}>{value}</div>
+          <div style={{ fontFamily: "'Poppins',sans-serif", fontSize: 28, fontWeight: 900, color: C.ink, letterSpacing: "-.05em", lineHeight: 1, marginBottom: 5 }}>{value}</div>
           <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 9, color: C.inkSoft, letterSpacing: ".16em", textTransform: "uppercase" }}>{label}</div>
           {sub && <div style={{ fontSize: 11, color: C.inkSoft, marginTop: 3 }}>{sub}</div>}
           {trend && (
@@ -126,7 +126,7 @@ function Card({ title, icon, iconColor = C.purple, right, children, style = {}, 
           <div style={{ width: 30, height: 30, borderRadius: 9, background: C.purpleL, border: `1px solid ${C.purpleB}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Icon d={icon} color={iconColor} size={14} />
           </div>
-          <span style={{ fontFamily: "'Figtree',sans-serif", fontSize: 14.5, fontWeight: 800, color: C.ink }}>{title}</span>
+          <span style={{ fontFamily: "'Poppins',sans-serif", fontSize: 14.5, fontWeight: 800, color: C.ink }}>{title}</span>
         </div>
         {right}
       </div>
@@ -229,7 +229,7 @@ function TopBtn({ label, icon, onClick, primary }) {
         cursor: "pointer",
         background: primary ? (hov ? "#5b21b6" : C.purple) : (hov ? C.purpleL : "transparent"),
         color: primary ? "#fff" : C.purple,
-        fontSize: 12.5, fontWeight: 700, fontFamily: "'Figtree',sans-serif",
+        fontSize: 12.5, fontWeight: 700, fontFamily: "'Poppins',sans-serif",
         display: "flex", alignItems: "center", gap: 6,
         transition: "all .16s",
       }}
@@ -294,14 +294,14 @@ export default function SuperAdminDashboard() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800;900&family=DM+Mono:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=DM+Mono:wght@400;500;700&display=swap');
         @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
         @keyframes pulse  { 0%,100% { opacity:1; } 50% { opacity:.42; } }
         @keyframes blink  { 0%,100% { opacity:1; } 50% { opacity:.3; } }
         * { box-sizing: border-box; }
       `}</style>
 
-      <div style={{ animation: "fadeUp .35s ease both", fontFamily: "'Figtree',sans-serif" }}>
+      <div style={{ animation: "fadeUp .35s ease both", fontFamily: "'Poppins',sans-serif" }}>
 
         {/* ════════════════════════════════════ HEADER */}
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
@@ -311,7 +311,7 @@ export default function SuperAdminDashboard() {
               <div style={{ width: 7, height: 7, borderRadius: "50%", background: C.green, animation: "blink 2.5s infinite" }} />
               <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 9, color: C.purple, letterSpacing: ".22em", textTransform: "uppercase" }}>Super Admin Console · Live</span>
             </div>
-            <h1 style={{ fontFamily: "'Figtree',sans-serif", fontSize: 28, fontWeight: 900, color: C.ink, letterSpacing: "-.05em", margin: 0, lineHeight: 1.1 }}>
+            <h1 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 28, fontWeight: 900, color: C.ink, letterSpacing: "-.05em", margin: 0, lineHeight: 1.1 }}>
               {greeting}, <em style={{ color: C.purple, fontStyle: "italic" }}>{user?.name?.split(" ")[0] || "Admin"}</em>
             </h1>
             <p style={{ fontSize: 13, color: C.inkSoft, margin: "5px 0 0" }}>

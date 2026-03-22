@@ -15,7 +15,7 @@ const GR = "rgba(26,26,46,.08)", GRB = "rgba(26,26,46,.16)";
 
 const IS = {
   height: "38px", borderRadius: "9px", border: "1.5px solid rgba(26,26,46,.14)",
-  outline: "none", padding: "0 12px", fontSize: "13px", fontFamily: "'Figtree',sans-serif",
+  outline: "none", padding: "0 12px", fontSize: "13px", fontFamily: "'Poppins',sans-serif",
   color: "#1a1a2e", background: "#fff", width: "100%",
 };
 const thS = {
@@ -136,7 +136,7 @@ export default function PurchaseOrders() {
               { key: "dueAmount", label: "Due" },
               { key: "status", label: "Status" },
             ]} />
-          <button onClick={() => navigate("/suppliers/purchase-orders/create")} style={{ display: "flex", alignItems: "center", gap: "7px", padding: "8px 16px", borderRadius: "10px", border: "none", cursor: "pointer", background: `linear-gradient(135deg,${B},#0369a1)`, color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Figtree',sans-serif", boxShadow: "0 4px 14px rgba(2,132,199,.3)", whiteSpace: "nowrap" }}>
+          <button onClick={() => navigate("/suppliers/purchase-orders/create")} style={{ display: "flex", alignItems: "center", gap: "7px", padding: "8px 16px", borderRadius: "10px", border: "none", cursor: "pointer", background: `linear-gradient(135deg,${B},#0369a1)`, color: "#fff", fontSize: "13px", fontWeight: 700, fontFamily: "'Poppins',sans-serif", boxShadow: "0 4px 14px rgba(2,132,199,.3)", whiteSpace: "nowrap" }}>
             <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             Create PO
           </button>

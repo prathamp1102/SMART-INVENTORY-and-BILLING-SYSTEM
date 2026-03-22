@@ -28,7 +28,7 @@ export default function InvoiceDetails() {
           <div style={{ fontSize:"48px", marginBottom:"16px" }}>🧾</div>
           <div style={{ fontFamily:"'Fraunces',serif", fontSize:"18px", fontWeight:800, color:"#1a1a2e", marginBottom:"8px" }}>Invoice Not Found</div>
           <div style={{ fontSize:"13px", color:"rgba(26,26,46,.45)", marginBottom:"20px" }}>The invoice you're looking for doesn't exist or has been deleted.</div>
-          <button onClick={() => navigate(-1)} style={{ padding:"10px 22px", borderRadius:"12px", border:"none", background:"#1a1a2e", color:"#fff", fontSize:"13px", fontWeight:700, cursor:"pointer", fontFamily:"'Figtree',sans-serif" }}>← Go Back</button>
+          <button onClick={() => navigate(-1)} style={{ padding:"10px 22px", borderRadius:"12px", border:"none", background:"#1a1a2e", color:"#fff", fontSize:"13px", fontWeight:700, cursor:"pointer", fontFamily:"'Poppins',sans-serif" }}>← Go Back</button>
         </div>
       </PageShell>
     );
