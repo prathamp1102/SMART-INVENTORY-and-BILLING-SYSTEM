@@ -246,8 +246,9 @@ export default function SupplierList(){
   const orgName=profile?.organization?.name||profile?.branch?.organization?.name;
   const branchName=profile?.branch?.branchName;
 
-  {delModal&&<ConfirmModal title="Delete Supplier" message="You're about to permanently delete" itemName={delModal.name} variant="danger" loading={deleting} error={delError} onConfirm={confirmDelete} onCancel={()=>{setDelModal(null);setDelError(null);}} confirmLabel="Delete Supplier"/>}
-  return <PageShell title="Suppliers" subtitle={isSA?"All suppliers across all organizations & branches":"Manage your branch supplier network"}>
+  return <>
+    {delModal&&<ConfirmModal title="Delete Supplier" message="You're about to permanently delete" itemName={delModal.name} variant="danger" loading={deleting} error={delError} onConfirm={confirmDelete} onCancel={()=>{setDelModal(null);setDelError(null);}} confirmLabel="Delete Supplier"/>}
+    <PageShell title="Suppliers" subtitle={isSA?"All suppliers across all organizations & branches":"Manage your branch supplier network"}>
 
     {/* SA summary pills */}
     {isSA&&<div style={{display:"flex",gap:"10px",marginBottom:"16px",flexWrap:"wrap",alignItems:"center"}}>
@@ -342,5 +343,6 @@ export default function SupplierList(){
         :<FlatView suppliers={filtered} onDelete={handleDelete} isSA={isSA}/>
     }
     <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`}</style>
-  </PageShell>;
+  </PageShell>
+  </>;
 }
