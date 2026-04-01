@@ -27,7 +27,7 @@ const EyeIcon = ({ open }) => (
 /* ── Floating Label Input ─────────────────────────────────────── */
 function FloatingInput({ id, type, label, value, onChange, error, autoComplete, icon, rightSlot, accent, glow, animDelay = "0s" }) {
   const [focused, setFocused] = useState(false);
-  const lifted = focused || (value != null && value.length > 0);
+  const lifted = focused || value?.length > 0;
   return (
     <div style={{ position: "relative", marginBottom: "13px", animation: `fadeUp .48s ease ${animDelay} both` }}>
       <div style={{
@@ -41,11 +41,11 @@ function FloatingInput({ id, type, label, value, onChange, error, autoComplete, 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "50px", flexShrink: 0, color: focused ? accent : "rgba(26,26,46,.28)", transition: "color .22s" }}>{icon}</div>
         <input id={id} type={type} value={value} onChange={onChange} autoComplete={autoComplete} placeholder=" "
           onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-          style={{ flex: 1, height: "100%", background: "transparent", border: "none", outline: "none", color: "#1a1a2e", fontSize: "14px", fontFamily: "'Poppins',sans-serif", fontWeight: 400, paddingTop: lifted ? "15px" : "0", transition: "padding-top .16s" }}
+          style={{ flex: 1, height: "100%", background: "transparent", border: "none", outline: "none", color: "#1a1a2e", fontSize: "14px", fontFamily: "'Figtree',sans-serif", fontWeight: 400, paddingTop: lifted ? "15px" : "0", transition: "padding-top .16s" }}
         />
         <label htmlFor={id} style={{
           position: "absolute", left: "50px", pointerEvents: "none",
-          fontFamily: lifted ? "'DM Mono',monospace" : "'Poppins',sans-serif",
+          fontFamily: lifted ? "'DM Mono',monospace" : "'Figtree',sans-serif",
           fontWeight: lifted ? 400 : 500, fontSize: lifted ? "9.5px" : "14px",
           color: lifted ? (error ? "rgba(220,38,38,.7)" : accent) : "rgba(26,26,46,.38)",
           top: lifted ? "10px" : "50%", transform: lifted ? "none" : "translateY(-50%)",
@@ -98,10 +98,10 @@ function OtpInput({ value, onChange, accent, glow }) {
   };
 
   return (
-    <div style={{ display: "flex", gap: "8px", justifyContent: "center", margin: "8px 0 20px", flexWrap: "nowrap" }}>
+    <div style={{ display: "flex", gap: "10px", justifyContent: "center", margin: "8px 0 20px" }}>
       {digits.map((d, i) => (
         <div key={i} style={{
-          width: "clamp(36px,12vw,52px)", height: "clamp(44px,14vw,60px)", borderRadius: "12px",
+          width: "52px", height: "60px", borderRadius: "14px",
           border: `2px solid ${d ? accent : "rgba(26,26,46,.12)"}`,
           background: d ? `${glow}` : "#fff",
           boxShadow: d ? `0 0 0 3px ${glow}` : "none",
@@ -141,25 +141,25 @@ function RoleCard({ role, isSelected, onSelect }) {
       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onSelect(role.key)}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       style={{
-        position: "relative", cursor: "pointer", background: "#fff", borderRadius: "clamp(14px,3vw,22px)",
-        padding: "clamp(14px,3vw,28px) clamp(12px,2.5vw,24px) clamp(12px,2.5vw,26px)",
+        position: "relative", cursor: "pointer", background: "#fff", borderRadius: "22px",
+        padding: "28px 24px 26px",
         border: `2px solid ${isSelected ? role.accent : active ? "rgba(26,26,46,.15)" : "rgba(26,26,46,.07)"}`,
         boxShadow: isSelected ? `0 20px 56px rgba(0,0,0,.14), 0 0 0 3px ${role.accent}55, 0 0 32px ${role.glow}` : active ? "0 16px 48px rgba(0,0,0,.1)" : "0 2px 12px rgba(0,0,0,.05)",
-        transform: active ? "translateY(-4px) scale(1.015)" : "none",
+        transform: active ? "translateY(-5px) scale(1.015)" : "none",
         transition: "transform .32s cubic-bezier(.34,1.48,.64,1),box-shadow .3s,border-color .3s",
         overflow: "hidden", outline: "none",
       }}
     >
       <div style={{ position: "absolute", top: "-30px", right: "-20px", width: "120px", height: "120px", borderRadius: "50%", background: role.halo, filter: "blur(28px)", pointerEvents: "none", opacity: active ? 1 : 0.7, transition: "opacity .3s" }} />
       <div style={{ position: "absolute", inset: 0, borderRadius: "22px", background: "linear-gradient(135deg,rgba(255,255,255,.9) 0%,rgba(255,255,255,0) 100%)", pointerEvents: "none" }} />
-      <div style={{ width: "clamp(38px,6vw,52px)", height: "clamp(38px,6vw,52px)", borderRadius: "clamp(10px,2vw,15px)", display: "flex", alignItems: "center", justifyContent: "center", background: active ? role.light : "rgba(26,26,46,.04)", border: `1px solid ${active ? role.border : "rgba(26,26,46,.08)"}`, boxShadow: active ? `0 4px 16px ${role.glow}` : "none", marginBottom: "clamp(10px,2vw,18px)", transition: "all .3s", position: "relative", zIndex: 1 }}>
-        <svg viewBox="0 0 24 24" fill="none" stroke={role.accent} strokeWidth="1.8" width="clamp(18px,3vw,24px)" height="clamp(18px,3vw,24px)">
+      <div style={{ width: "52px", height: "52px", borderRadius: "15px", display: "flex", alignItems: "center", justifyContent: "center", background: active ? role.light : "rgba(26,26,46,.04)", border: `1px solid ${active ? role.border : "rgba(26,26,46,.08)"}`, boxShadow: active ? `0 4px 16px ${role.glow}` : "none", marginBottom: "18px", transition: "all .3s", position: "relative", zIndex: 1 }}>
+        <svg viewBox="0 0 24 24" fill="none" stroke={role.accent} strokeWidth="1.8" width="24" height="24">
           <path strokeLinecap="round" strokeLinejoin="round" d={role.iconPath} />
         </svg>
       </div>
-      <div style={{ fontFamily: "'DM Mono',monospace", fontSize: "clamp(7px,1.5vw,9px)", color: "rgba(26,26,46,.3)", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: "4px", position: "relative", zIndex: 1 }}>{role.level}</div>
-      <div style={{ fontFamily: "'Fraunces',serif", fontSize: "clamp(13px,2.5vw,17px)", fontWeight: 700, color: "#1a1a2e", marginBottom: "4px", lineHeight: 1.2, position: "relative", zIndex: 1 }}>{role.name}</div>
-      <div style={{ fontSize: "clamp(10px,1.8vw,12px)", color: "rgba(26,26,46,.42)", lineHeight: 1.5, position: "relative", zIndex: 1 }}>{role.desc}</div>
+      <div style={{ fontFamily: "'DM Mono',monospace", fontSize: "9px", color: "rgba(26,26,46,.3)", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: "6px", position: "relative", zIndex: 1 }}>{role.level}</div>
+      <div style={{ fontFamily: "'Fraunces',serif", fontSize: "17px", fontWeight: 700, color: "#1a1a2e", marginBottom: "6px", lineHeight: 1.2, position: "relative", zIndex: 1 }}>{role.name}</div>
+      <div style={{ fontSize: "12px", color: "rgba(26,26,46,.42)", lineHeight: 1.6, position: "relative", zIndex: 1 }}>{role.desc}</div>
       <div style={{ position: "absolute", top: "16px", right: "16px", width: "24px", height: "24px", borderRadius: "50%", background: isSelected ? role.accent : "#fff", border: `1.5px solid ${isSelected ? role.accent : "rgba(26,26,46,.12)"}`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: isSelected ? `0 4px 12px ${role.glow}` : "none", transition: "all .25s", color: "#fff", zIndex: 2, animation: isSelected ? "checkPop .25s cubic-bezier(.34,1.6,.64,1) both" : "none" }}>
         {isSelected && <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3" width="11" height="11"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
       </div>
@@ -233,7 +233,7 @@ export default function Login() {
 
   const goToForm = () => {
     if (!selectedRole) return;
-    setEmail("");
+    setEmail(ROLE_CONFIG[selectedRole].email);
     setPassword(""); setAlertErr(""); setEmailErr(""); setPassErr("");
     transition("form");
   };
@@ -307,27 +307,27 @@ export default function Login() {
 
   /* ── SCREEN: Role Select ─────────────────────────────────── */
   if (screen === "role") return (
-    <div style={{ opacity: transitioning ? 0 : 1, transform: transitioning ? "scale(.97)" : "scale(1)", transition: "all .28s", display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: "min(640px, 100%)", padding: "0 16px" }}>
+    <div style={{ opacity: transitioning ? 0 : 1, transform: transitioning ? "scale(.97)" : "scale(1)", transition: "all .28s", display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: "1020px", padding: "0 24px" }}>
       <StepDots step={0} accent="#4f46e5" />
-      <div style={{ textAlign: "center", marginBottom: "28px", animation: "fadeUp .6s ease .15s both" }}>
-        <h1 style={{ fontFamily: "'Fraunces',serif", fontSize: "clamp(24px,5vw,40px)", fontWeight: 800, color: "#1a1a2e", letterSpacing: "-.03em", lineHeight: 1.1, marginBottom: "8px" }}>
+      <div style={{ textAlign: "center", marginBottom: "44px", animation: "fadeUp .6s ease .15s both" }}>
+        <h1 style={{ fontFamily: "'Fraunces',serif", fontSize: "clamp(28px,4vw,46px)", fontWeight: 800, color: "#1a1a2e", letterSpacing: "-.03em", lineHeight: 1.08, marginBottom: "10px" }}>
           Sign in as<br />
           <em style={{ fontStyle: "italic", color: role ? role.accent : "#4f46e5", transition: "color .5s" }}>
             {role ? role.name : "your role"}
           </em>
         </h1>
-        <p style={{ fontSize: "clamp(13px,3vw,15px)", color: "rgba(26,26,46,.45)" }}>Choose your role to access your personalised workspace</p>
+        <p style={{ fontSize: "15px", color: "rgba(26,26,46,.45)" }}>Choose your role to access your personalised workspace</p>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "clamp(8px,2vw,16px)", width: "100%", animation: "fadeUp .6s ease .28s both" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(120px,1fr))", gap: "16px", width: "100%", animation: "fadeUp .6s ease .28s both" }}>
         {Object.values(ROLE_CONFIG).map((r) => (
           <RoleCard key={r.key} role={r} isSelected={selectedRole === r.key} onSelect={setSelectedRole} />
         ))}
       </div>
-      <div style={{ marginTop: "24px", display: "flex", alignItems: "center", gap: "12px", animation: "fadeUp .6s ease .42s both", width: "100%" }}>
+      <div style={{ marginTop: "32px", display: "flex", alignItems: "center", gap: "20px", animation: "fadeUp .6s ease .42s both" }}>
         <button disabled={!selectedRole} onClick={goToForm}
-          style={{ flex: 1, height: "50px", padding: "0 24px", borderRadius: "14px", border: "none", cursor: selectedRole ? "pointer" : "not-allowed", fontFamily: "'Poppins',sans-serif", fontSize: "clamp(13px,3vw,14px)", fontWeight: 700, background: selectedRole ? `linear-gradient(135deg,${role.btnFrom},${role.btnTo})` : "rgba(26,26,46,.08)", color: selectedRole ? "#fff" : "rgba(26,26,46,.28)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: selectedRole ? `0 6px 28px ${role.glow}` : "none", transition: "all .3s cubic-bezier(.34,1.4,.64,1)" }}>
-          <span>{selectedRole ? `Continue as ${role.name}` : "Select a role"}</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="15" height="15"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+          style={{ height: "52px", padding: "0 36px", borderRadius: "14px", border: "none", cursor: selectedRole ? "pointer" : "not-allowed", fontFamily: "'Figtree',sans-serif", fontSize: "14px", fontWeight: 700, background: selectedRole ? `linear-gradient(135deg,${role.btnFrom},${role.btnTo})` : "rgba(26,26,46,.08)", color: selectedRole ? "#fff" : "rgba(26,26,46,.28)", display: "flex", alignItems: "center", gap: "10px", boxShadow: selectedRole ? `0 6px 28px ${role.glow}` : "none", transition: "all .3s cubic-bezier(.34,1.4,.64,1)" }}>
+          <span>{selectedRole ? `Continue as ${role.name}` : "Select a role first"}</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="16" height="16"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
         </button>
         <span style={{ fontFamily: "'DM Mono',monospace", fontSize: "10px", color: "rgba(26,26,46,.28)", letterSpacing: ".12em", textTransform: "uppercase" }}>4 roles · secure access</span>
       </div>
@@ -353,11 +353,11 @@ export default function Login() {
 
   /* ── SCREEN: Login Form ──────────────────────────────────── */
   if (screen === "form") return (
-    <div style={{ opacity: transitioning ? 0 : 1, transition: "opacity .28s", display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: "min(420px, 100%)" , padding: "0 20px" }}>
+    <div style={{ opacity: transitioning ? 0 : 1, transition: "opacity .28s", display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: "420px", padding: "0 20px" }}>
       <StepDots step={1} accent={role.accent} />
       <RoleChip />
 
-      <div style={{ width: "100%", background: "#fff", borderRadius: "24px", border: "1.5px solid rgba(26,26,46,.07)", boxShadow: "0 8px 48px rgba(0,0,0,.08)", padding: "clamp(20px,5vw,38px) clamp(16px,4vw,36px) clamp(18px,4vw,34px)", position: "relative", overflow: "hidden", animation: "popIn .55s cubic-bezier(.34,1.24,.64,1) .08s both" }}>
+      <div style={{ width: "100%", background: "#fff", borderRadius: "24px", border: "1.5px solid rgba(26,26,46,.07)", boxShadow: "0 8px 48px rgba(0,0,0,.08)", padding: "38px 36px 34px", position: "relative", overflow: "hidden", animation: "popIn .55s cubic-bezier(.34,1.24,.64,1) .08s both" }}>
         {/* Left side edge color bar */}
         <div style={{ position: "absolute", top: 0, left: 0, width: "4px", height: "100%", background: `linear-gradient(180deg,${role.btnFrom},${role.btnTo})`, borderRadius: "24px 0 0 24px" }} />
         {/* Right side edge color bar */}
@@ -394,14 +394,14 @@ export default function Login() {
               </div>
               <span style={{ fontSize: "13px", color: "rgba(26,26,46,.48)" }}>Remember me</span>
             </div>
-            <button type="button" onClick={() => navigate("/forgot-password")} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'Poppins',sans-serif", fontSize: "13px", color: "rgba(26,26,46,.38)", fontWeight: 600, padding: 0 }}
+            <button type="button" onClick={() => navigate("/forgot-password")} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'Figtree',sans-serif", fontSize: "13px", color: "rgba(26,26,46,.38)", fontWeight: 600, padding: 0 }}
               onMouseEnter={e => e.currentTarget.style.color = role.accent}
               onMouseLeave={e => e.currentTarget.style.color = "rgba(26,26,46,.38)"}
             >Forgot password?</button>
           </div>
 
           <button type="submit" disabled={locked || loading}
-            style={{ width: "100%", height: "52px", borderRadius: "14px", border: "none", cursor: locked || loading ? "not-allowed" : "pointer", fontFamily: "'Poppins',sans-serif", fontSize: "14.5px", fontWeight: 700, background: `linear-gradient(135deg,${role.btnFrom},${role.btnTo})`, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", gap: "9px", boxShadow: `0 6px 24px ${role.glow}`, opacity: locked ? 0.35 : 1, transition: "all .22s", animation: "fadeUp .48s ease .42s both" }}>
+            style={{ width: "100%", height: "52px", borderRadius: "14px", border: "none", cursor: locked || loading ? "not-allowed" : "pointer", fontFamily: "'Figtree',sans-serif", fontSize: "14.5px", fontWeight: 700, background: `linear-gradient(135deg,${role.btnFrom},${role.btnTo})`, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", gap: "9px", boxShadow: `0 6px 24px ${role.glow}`, opacity: locked ? 0.35 : 1, transition: "all .22s", animation: "fadeUp .48s ease .42s both" }}>
             {loading
               ? <><div style={{ width: "16px", height: "16px", borderRadius: "50%", border: "2px solid rgba(255,255,255,.3)", borderTopColor: "#fff", animation: "spin .7s linear infinite" }} /><span>Sending OTP…</span></>
               : locked ? <span>Locked — {lockLeft}s</span>
@@ -420,22 +420,20 @@ export default function Login() {
         )}
       </div>
 
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 20, animation: "fadeUp .5s ease .52s both" }}>
-        <div style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(22,163,74,.55)", boxShadow: "0 0 6px rgba(22,163,74,.35)" }} />
-        <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 9, color: "rgba(26,26,46,.25)", letterSpacing: ".1em", textTransform: "uppercase" }}>
-          TLS 1.3 · EVARA Smart Inventory
-        </span>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "20px", fontFamily: "'DM Mono',monospace", fontSize: "9.5px", color: "rgba(26,26,46,.25)", letterSpacing: ".1em", textTransform: "uppercase", animation: "fadeUp .5s ease .52s both" }}>
+        <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "rgba(22,163,74,.55)", boxShadow: "0 0 6px rgba(22,163,74,.35)" }} />
+        TLS 1.3 encrypted · Smart Inventory
       </div>
     </div>
   );
 
   /* ── SCREEN: OTP Verify ──────────────────────────────────── */
   return (
-    <div style={{ opacity: transitioning ? 0 : 1, transition: "opacity .28s", display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: "min(420px, 100%)" , padding: "0 20px" }}>
+    <div style={{ opacity: transitioning ? 0 : 1, transition: "opacity .28s", display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: "420px", padding: "0 20px" }}>
       <StepDots step={2} accent={role.accent} />
       <RoleChip />
 
-      <div style={{ width: "100%", background: "#fff", borderRadius: "24px", border: "1.5px solid rgba(26,26,46,.07)", boxShadow: "0 8px 48px rgba(0,0,0,.08)", padding: "clamp(20px,5vw,38px) clamp(16px,4vw,36px) clamp(18px,4vw,34px)", position: "relative", overflow: "hidden", animation: "popIn .55s cubic-bezier(.34,1.24,.64,1) both" }}>
+      <div style={{ width: "100%", background: "#fff", borderRadius: "24px", border: "1.5px solid rgba(26,26,46,.07)", boxShadow: "0 8px 48px rgba(0,0,0,.08)", padding: "38px 36px 34px", position: "relative", overflow: "hidden", animation: "popIn .55s cubic-bezier(.34,1.24,.64,1) both" }}>
         {/* Left side edge color bar */}
         <div style={{ position: "absolute", top: 0, left: 0, width: "4px", height: "100%", background: `linear-gradient(180deg,${role.btnFrom},${role.btnTo})`, borderRadius: "24px 0 0 24px" }} />
         {/* Right side edge color bar */}
@@ -468,7 +466,7 @@ export default function Login() {
 
         {/* Verify button */}
         <button onClick={handleVerifyOtp} disabled={otpLoading || otp.length !== 6}
-          style={{ width: "100%", height: "52px", borderRadius: "14px", border: "none", cursor: (otpLoading || otp.length !== 6) ? "not-allowed" : "pointer", fontFamily: "'Poppins',sans-serif", fontSize: "14.5px", fontWeight: 700, background: otp.length === 6 ? `linear-gradient(135deg,${role.btnFrom},${role.btnTo})` : "rgba(26,26,46,.07)", color: otp.length === 6 ? "#fff" : "rgba(26,26,46,.28)", display: "flex", alignItems: "center", justifyContent: "center", gap: "9px", boxShadow: otp.length === 6 ? `0 6px 24px ${role.glow}` : "none", transition: "all .3s cubic-bezier(.34,1.4,.64,1)", marginBottom: "16px" }}>
+          style={{ width: "100%", height: "52px", borderRadius: "14px", border: "none", cursor: (otpLoading || otp.length !== 6) ? "not-allowed" : "pointer", fontFamily: "'Figtree',sans-serif", fontSize: "14.5px", fontWeight: 700, background: otp.length === 6 ? `linear-gradient(135deg,${role.btnFrom},${role.btnTo})` : "rgba(26,26,46,.07)", color: otp.length === 6 ? "#fff" : "rgba(26,26,46,.28)", display: "flex", alignItems: "center", justifyContent: "center", gap: "9px", boxShadow: otp.length === 6 ? `0 6px 24px ${role.glow}` : "none", transition: "all .3s cubic-bezier(.34,1.4,.64,1)", marginBottom: "16px" }}>
           {otpLoading
             ? <><div style={{ width: "16px", height: "16px", borderRadius: "50%", border: "2px solid rgba(255,255,255,.3)", borderTopColor: "#fff", animation: "spin .7s linear infinite" }} /><span>Verifying…</span></>
             : <><span>Verify & Sign In</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="15" height="15"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></>
@@ -479,7 +477,7 @@ export default function Login() {
         <div style={{ textAlign: "center" }}>
           <span style={{ fontSize: "13px", color: "rgba(26,26,46,.4)" }}>Didn't receive it? </span>
           <button onClick={handleResend} disabled={resendCool > 0 || resending}
-            style={{ background: "none", border: "none", cursor: resendCool > 0 ? "default" : "pointer", fontFamily: "'Poppins',sans-serif", fontSize: "13px", fontWeight: 700, color: resendCool > 0 ? "rgba(26,26,46,.25)" : role.accent, padding: 0, transition: "color .2s" }}>
+            style={{ background: "none", border: "none", cursor: resendCool > 0 ? "default" : "pointer", fontFamily: "'Figtree',sans-serif", fontSize: "13px", fontWeight: 700, color: resendCool > 0 ? "rgba(26,26,46,.25)" : role.accent, padding: 0, transition: "color .2s" }}>
             {resending ? "Sending…" : resendCool > 0 ? `Resend in ${resendCool}s` : "Resend code"}
           </button>
         </div>
@@ -490,11 +488,9 @@ export default function Login() {
         </div>
       </div>
 
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 20, animation: "fadeUp .5s ease .3s both" }}>
-        <div style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(22,163,74,.55)", boxShadow: "0 0 6px rgba(22,163,74,.35)" }} />
-        <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 9, color: "rgba(26,26,46,.25)", letterSpacing: ".1em", textTransform: "uppercase" }}>
-          TLS 1.3 · EVARA Smart Inventory
-        </span>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "20px", fontFamily: "'DM Mono',monospace", fontSize: "9.5px", color: "rgba(26,26,46,.25)", letterSpacing: ".1em", textTransform: "uppercase", animation: "fadeUp .5s ease .3s both" }}>
+        <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "rgba(22,163,74,.55)", boxShadow: "0 0 6px rgba(22,163,74,.35)" }} />
+        TLS 1.3 encrypted · Smart Inventory
       </div>
     </div>
   );
