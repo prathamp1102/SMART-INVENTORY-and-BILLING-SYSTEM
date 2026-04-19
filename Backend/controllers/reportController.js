@@ -277,3 +277,78 @@ exports.getPurchaseReport = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+/* ═══════════════════════════════════════════════════════════════
+   GET /api/reports/stock-movements
+   ═══════════════════════════════════════════════════════════════ */
+exports.getStockMovementReport = async (req, res) => {
+  try {
+    const branchFilter = req.branchFilter || {};
+    const scopeMatch = branchFilter.branch
+      ? { $or: [{ branch: branchFilter.branch }, { branch: null }] }
+      : {};
+
+    const [grns, invoices, returns] = await Promise.all([
+      require("../models/GrnModel").find(scopeMatch).populate("items.product", "name").populate("createdBy", "name").lean(),
+      require("../models/InvoiceModel").find(scopeMatch).populate("items.product", "name").populate("cashier", "name").lean(),
+      require("../models/ReturnModel").find(scopeMatch).populate("items.product", "name").populate("processedBy", "name").lean()
+    ]);
+
+    let movements = [];
+
+    grns.forEach(grn => {
+      (grn.items || []).forEach(item => {
+        if (!item.product && !item.productName) return;
+        movements.push({
+          type: "GRN",
+          product: item.product?.name || item.productName,
+          qty: item.qty || 0,
+          date: grn.createdAt,
+          by: grn.createdBy?.name || "Admin",
+          note: grn.grnNumber || "GRN Entry"
+        });
+      });
+    });
+
+    invoices.forEach(inv => {
+      if (inv.status === "CANCELLED") return;
+      (inv.items || []).forEach(item => {
+        if (!item.product && !item.productName) return;
+        movements.push({
+          type: "SALE",
+          product: item.productName || item.product?.name,
+          qty: -(item.qty || 0),
+          date: inv.createdAt,
+          by: inv.cashier?.name || "Staff",
+          note: inv.invoiceNo || "Sale"
+        });
+      });
+    });
+
+    returns.forEach(ret => {
+      if (ret.status !== "APPROVED") return;
+      (ret.items || []).forEach(item => {
+        if (!item.product && !item.productName) return;
+        movements.push({
+          type: "RETURN",
+          product: item.productName || item.product?.name,
+          qty: item.qty || 0,
+          date: ret.createdAt,
+          by: ret.processedBy?.name || "Staff",
+          note: ret.returnNo || "Return"
+        });
+      });
+    });
+
+    movements.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    const formattedMovements = movements.slice(0, 500).map(m => ({
+      ...m,
+      date: new Date(m.date).toLocaleDateString("en-IN", { day: "numeric", month: "short" })
+    }));
+
+    res.json(formattedMovements);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
