@@ -86,14 +86,6 @@ function RecordPurchaseForm({ suppliers, onSuccess }) {
     letterSpacing: ".12em", textTransform: "uppercase", marginBottom: "6px",
   };
 
-  const confirmDelete=async()=>{
-    if(!delModal)return;
-    setDeleting(true); setDelError(null);
-    try{ await axiosInstance.delete(`/supplier-payments/${delModal.id}`); loadPayments(); setDelModal(null); }
-    catch(e){ setDelError(e?.response?.data?.message||"Failed to delete."); }
-    finally{ setDeleting(false); }
-  };
-
   return (
 
     <div style={{ display: "grid", gridTemplateColumns: showPanel ? "1fr 1fr" : "1fr", gap: "20px", alignItems: "start", maxWidth: showPanel ? "960px" : "560px" }}>
@@ -243,10 +235,21 @@ export default function RecordPurchases() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [tab, setTab] = useState("history");
+  const [delModal, setDelModal] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [delError, setDelError] = useState(null);
 
   const loadPayments = () => {
     setLoading(true);
     axiosInstance.get("/supplier-payments").then(r => setPayments(r.data)).catch(() => {}).finally(() => setLoading(false));
+  };
+
+  const confirmDelete=async()=>{
+    if(!delModal)return;
+    setDeleting(true); setDelError(null);
+    try{ await axiosInstance.delete(`/supplier-payments/${delModal.id}`); loadPayments(); setDelModal(null); }
+    catch(e){ setDelError(e?.response?.data?.message||"Failed to delete."); }
+    finally{ setDeleting(false); }
   };
 
   useEffect(() => {
