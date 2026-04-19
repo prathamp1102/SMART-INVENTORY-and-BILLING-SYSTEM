@@ -2,15 +2,7 @@ import { useState, useEffect } from "react";
 import { PageShell } from "../../components/ui/PageShell";
 import axiosInstance from "../../services/axiosInstance";
 
-const movements = [
-  {type:"GRN",    product:"Notebook A4",     qty:+200, date:"14 Jan", by:"Admin",   note:"From Office Hub"},
-  {type:"SALE",   product:"Laptop Pro X1",   qty:-1,   date:"14 Jan", by:"Staff",   note:"INV-1082"},
-  {type:"SALE",   product:"Wireless Mouse",  qty:-3,   date:"14 Jan", by:"Staff",   note:"INV-1081"},
-  {type:"ADJUST", product:"Office Chair",    qty:-1,   date:"13 Jan", by:"Admin",   note:"Damage entry"},
-  {type:"GRN",    product:"USB Hub 7-Port",  qty:+50,  date:"13 Jan", by:"Admin",   note:"From Tata Electronics"},
-  {type:"RETURN", product:"Wireless Mouse",  qty:+1,   date:"12 Jan", by:"Staff",   note:"RET-041"},
-  {type:"SALE",   product:"Notebook A4",     qty:-10,  date:"12 Jan", by:"Staff",   note:"INV-1079"},
-];
+
 
 const TYPE_STYLE = {
   GRN:    {color:"#059669",bg:"rgba(5,150,105,.08)",border:"rgba(5,150,105,.2)",label:"GRN"},
@@ -21,14 +13,21 @@ const TYPE_STYLE = {
 
 export default function InventoryReports() {
   const [products, setProducts] = useState([]);
+  const [movementsData, setMovementsData] = useState([]);
   const [loading, setLoading]   = useState(true);
   const [typeFilter, setTypeFilter] = useState("ALL");
 
   useEffect(()=>{
-    axiosInstance.get("/products").then(r=>setProducts(r.data)).catch(()=>{}).finally(()=>setLoading(false));
+    Promise.allSettled([
+      axiosInstance.get("/products"),
+      axiosInstance.get("/reports/stock-movements")
+    ]).then(([prodRes, movRes]) => {
+      if (prodRes.status === "fulfilled") setProducts(prodRes.value.data);
+      if (movRes.status === "fulfilled") setMovementsData(movRes.value.data);
+    }).finally(()=>setLoading(false));
   },[]);
 
-  const filtered = typeFilter==="ALL" ? movements : movements.filter(m=>m.type===typeFilter);
+  const filtered = typeFilter==="ALL" ? movementsData : movementsData.filter(m=>m.type===typeFilter);
   const totalStock = products.reduce((s,p)=>s+p.stock,0);
   const lowItems   = products.filter(p=>p.stock>0&&p.stock<10);
   const outItems   = products.filter(p=>p.stock===0);
@@ -75,7 +74,7 @@ export default function InventoryReports() {
               </thead>
               <tbody>
                 {filtered.map((m,i)=>{
-                  const st = TYPE_STYLE[m.type];
+                  const st = TYPE_STYLE[m.type] || TYPE_STYLE.ADJUST;
                   return (
                     <tr key={i} style={{borderBottom:i<filtered.length-1?"1px solid rgba(26,26,46,.05)":"none"}}
                       onMouseEnter={e=>e.currentTarget.style.background="rgba(26,26,46,.02)"}

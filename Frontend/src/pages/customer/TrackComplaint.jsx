@@ -40,6 +40,8 @@ export default function TrackComplaint() {
   const [search, setSearch]         = useState("");
   const [statusFilter, setStatus]   = useState("all");
   const [cancelling, setCancelling] = useState(false);
+  const [cancelModal, setCancelModal] = useState(null);
+  const [cancelError, setCancelError] = useState(null);
 
   useEffect(() => { fetchRequests(); }, []);
 
@@ -55,16 +57,9 @@ export default function TrackComplaint() {
     finally { setLoading(false); }
   };
 
-  const handleCancel = async (id) => {
-    setCancelError(null); setCancelModal({id}); return;
-    setCancelling(true);
-    try {
-      await axiosInstance.patch(`/service/requests/${id}/cancel`);
-      await fetchRequests();
-      setSelected(prev => prev?._id === id ? { ...prev, status: "CANCELLED" } : prev);
-    } catch (err) {
-      setCancelError(err?.response?.data?.message || "Failed to cancel request.");
-    } finally { setCancelling(false); }
+  const handleCancel = (id) => {
+    setCancelError(null); 
+    setCancelModal({id});
   };
 
   const formatDate = d => d ? new Date(d).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) : "—";
@@ -84,8 +79,9 @@ export default function TrackComplaint() {
     if(!cancelModal)return;
     setCancelling(true); setCancelError(null);
     try{
-      await axiosInstance.patch(`/service-requests/${cancelModal.id}/cancel`);
+      await axiosInstance.patch(`/service/requests/${cancelModal.id}/cancel`);
       setRequests(prev=>prev.map(r=>r._id===cancelModal.id?{...r,status:"CANCELLED"}:r));
+      if (selected?._id === cancelModal.id) setSelected(prev => ({ ...prev, status: "CANCELLED" }));
       setCancelModal(null);
     }catch(err){ setCancelError(err?.response?.data?.message||"Failed to cancel."); }
     finally{ setCancelling(false); }
